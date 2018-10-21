@@ -112,30 +112,41 @@ def getmap():
     if curmap == 0:
 
         doors = genroom(0, 0, random.choice([2, 4]) * 2 + 1, random.choice([2, 4]) * 2 + 1, 0, roomtraits.index("entrance"))
+        changelist = []
         while len(doors) > 0:
             rwidth = (random.choice([2, 6])) * 2 + 1
             rheight = (random.choice([2, 6])) * 2 + 1
+            dir = [0, 0]
             if doors[0][2] == doors[0][0] - 1:
-                rpos = [doors[0][2], doors[0][3] - 1 + random.choice(0, rwidth - 2)]
+                rpos = [doors[0][2], doors[0][3] - 1]
+                dir[0] = 1
             if doors[0][3] == doors[0][1] - 1:
-                rpos = [doors[0][2] - 1 + random.choice(0, rheight - 2), doors[0][3]]
+                rpos = [doors[0][2] - 1, doors[0][3]]
+                dir[1] = 1
             if doors[0][2] == 0:
+                dir[0] = 1
                 rpos = [doors[0][2] - rwidth + 1, doors[0][3] - 1]
             if doors[0][3] == 0:
                 rpos = [doors[0][2] - 1, doors[0][3] - rheight + 1]
+                dir[1] = 1
 
             print(doors[0])
             print(rpos)
 
-            genroom(rpos[1], rpos[0], rheight, rwidth, 10, roomtraits.index("traproom"))
+            doorxoff = random.randint(0, doors[0][0] - doors[0][2] - 2)
+            dooryoff = random.randint(0, doors[0][1] - doors[0][3] - 2)
+            genroom(rpos[1], rpos[0], rheight, rwidth, 10, roomtraits.index("regular"))
+            changelist.append([doors[0][2] + dir[1] * doorxoff,
+                               doors[0][3] + dir[0] * dooryoff,
+                               items.index("door")])
             doors = doors[1:]
 
         curmap = Map()
         curmap.startpos = [int((roomlist[0].width - 1)/2), int((roomlist[0].height - 1)/2)]
-        offx = 10
-        offy = 10
-        curmap.width = 30
-        curmap.height = 30
+        offx = 50
+        offy = 50
+        curmap.width = 100
+        curmap.height = 100
 
         # set map to all 0s
         curmap.tiles = []
@@ -152,6 +163,10 @@ def getmap():
             for y in range(0, roomlist[i].height):
                 for x in range(0, roomlist[i].width):
                     curmap.tiles[y + offy + roomlist[i].ypos][x + offx + roomlist[i].xpos] = roomlist[i].tiles[y][x]
+
+        # apply final changes
+        for i in range(0, len(changelist)):
+            curmap.tiles[changelist[i][1] + offy][changelist[i][0] + offx] = changelist[i][2]
 
         #for i in range(0, curmap.height):
         #    print(curmap.tiles[i])
