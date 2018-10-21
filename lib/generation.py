@@ -112,8 +112,10 @@ def getmap():
     if curmap == 0:
 
         doors = genroom(0, 0, random.choice([2, 4]) * 2 + 1, random.choice([2, 4]) * 2 + 1, 0, roomtraits.index("entrance"))
-        #while True:
-        #    genroom(random.choice([0, 6]) * 2 + 1, random.choice([0, 6]) * 2 + 1, )
+        while len(doors) > 0:
+            #i
+            break
+            #genroom(random.choice([0, 6]) * 2 + 1, random.choice([0, 6]) * 2 + 1, )
 
         curmap = Map()
         curmap.startpos = [int((roomlist[0].width - 1)/2), int((roomlist[0].height - 1)/2)]
@@ -137,10 +139,5 @@ def getmap():
             for y in range(0, roomlist[i].height):
                 for x in range(0, roomlist[i].width):
                     curmap.tiles[y + offy][x + offx] = roomlist[i].tiles[y][x]
-
-        for i in range(0, curmap.height):
-            print(curmap.tiles[i])
-
-        print(curmap.startpos)
 
     return curmap
