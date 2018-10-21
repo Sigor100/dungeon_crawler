@@ -75,6 +75,6 @@ for p in range(0, len(file_list), 1):
 print(equipment_list)
 for p in range(0, len(equipment_list)):
 	print(equipment_list[p][1])
-	Weapon(p, equipment_list[p][1], equipment_list[p][2], equipment_list[p][3], equipment_list[p][4], equipment_list[p][5]) # todo tu skonczylem
+	equipment_list[p] = Weapon(p, equipment_list[p][1], equipment_list[p][2], equipment_list[p][3], equipment_list[p][4], equipment_list[p][5]) # todo tu skonczylem
 
 print(equipment_list[0].name)
