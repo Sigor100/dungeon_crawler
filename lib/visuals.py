@@ -5,10 +5,10 @@ import os
 direct = os.getcwd()
 # direct = direct[:-4]
 os.path.exists(direct)
-black = (0, 0, 0)
+background = (25, 25, 25)
 white = (255, 255, 255)
-display_width = 800
-display_height = 600
+display_width = 1600
+display_height = 800
 box_size = 32
 hero_x = 0
 hero_y = 0
@@ -37,7 +37,7 @@ for p in range(0, 20):
 
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption("visuals test")
-gameDisplay.fill(black)
+gameDisplay.fill(background)
 
 
 def drawscreen(x, y, box_size=32):
@@ -45,47 +45,7 @@ def drawscreen(x, y, box_size=32):
 		for p1 in range(0, len(map.tiles[0]), 1):
 			gameDisplay.blit(img_list[map.tiles[p][p1]], (-x + (box_size * p1), -y + (box_size * p)))
 	pygame.display.update()
-	gameDisplay.fill(black)
-
-
-def whatobject(x, y):
-	x = int(x / 32)
-	y = int(y / 32)
-	return map.tiles[y][x]
-
-
-def putonmap(x, y):
-	global acc_block
-	acc_block = map.tiles[int(y / box_size)][int(x / box_size)]
-	map.tiles[int(y / box_size)][int(x / box_size)] = hero_id
-
-
-def takeoffmap(x, y):
-	map.tiles[int(y / box_size)][int(x / box_size)] = acc_block
-
-
-def collisions(x, y, d):
-	if d == 0:
-		if generation.collidable(whatobject(x, y - box_size)):
-			return True
-		else:
-			return False
-	elif d == 1:
-		if generation.collidable(whatobject(x + box_size, y)):
-			return True
-		else:
-			return False
-	elif d == 2:
-		if generation.collidable(whatobject(x, y + box_size)):
-			return True
-		else:
-			return False
-	elif d == 3:
-		if generation.collidable(whatobject(x - box_size, y)):
-			return True
-		else:
-			return False
-
+	gameDisplay.fill(background)
 
 """def collision(x, y, d):
 	x = int(x/32)
