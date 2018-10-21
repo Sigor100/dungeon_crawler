@@ -53,7 +53,7 @@ def wallxy(width, height, n):
 
 def doornumber(i, n):
     if i < 2:
-        return 2
+        return 1
     else:
         return 0
 
@@ -77,7 +77,7 @@ def genroom(y, x, height, width, parents, trait):
                 templist.append(items.index("wall"))
             else:
                 if trait == roomtraits.index("traproom"):
-                    templist.append(items.index("trap"))
+                    templist.append(items.index("door"))
                 else:
                     templist.append(items.index("floor"))
         cls.tiles.append(templist)
@@ -96,7 +96,7 @@ def genroom(y, x, height, width, parents, trait):
 
                 co = wallxy(cls.width, cls.height, ch)
                 cls.tiles[co[1]][co[0]] = items.index("door")
-                dco = co[0], co[1]
+                dco = [cls.width, cls.height, co[0], co[1]]
                 doorret.append(dco)
                 break
 
@@ -113,9 +113,24 @@ def getmap():
 
         doors = genroom(0, 0, random.choice([2, 4]) * 2 + 1, random.choice([2, 4]) * 2 + 1, 0, roomtraits.index("entrance"))
         while len(doors) > 0:
-            #i
-            break
-            #genroom(random.choice([0, 6]) * 2 + 1, random.choice([0, 6]) * 2 + 1, )
+            rwidth = (random.choice([2, 6])) * 2 + 1
+            rheight = (random.choice([2, 6])) * 2 + 1
+            rpos = [doors[0][2], doors[0][3]]
+            if rpos[0] == 0:
+                rpos[0] += doors[0][0]
+            if rpos[1] == 0:
+                rpos[1] += doors[0][1]
+
+            if doors[0][3] == 0:
+                rpos = [doors[0][2], - doors[0][1]]
+            elif doors[0][3] == doors[0][0] - 1:
+                rpos = [0, 0]
+
+            print(doors[0])
+            print(rpos)
+
+            genroom(rpos[1], rpos[0], rheight, rwidth, 10, roomtraits.index("traproom"))
+            doors = doors[1:]
 
         curmap = Map()
         curmap.startpos = [int((roomlist[0].width - 1)/2), int((roomlist[0].height - 1)/2)]
@@ -139,5 +154,8 @@ def getmap():
             for y in range(0, roomlist[i].height):
                 for x in range(0, roomlist[i].width):
                     curmap.tiles[y + offy][x + offx] = roomlist[i].tiles[y][x]
+
+        for i in range(0, curmap.height):
+            print(curmap.tiles[i])
 
     return curmap
