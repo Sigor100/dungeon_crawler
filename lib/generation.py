@@ -53,13 +53,42 @@ def wallxy(width, height, n):
 
 def doornumber(i, n):
     if i < 2:
-        return 1
+        return 2
     else:
         return 0
 
 
+def smartrand(start, fin):
+    print(start)
+    print(fin)
+    if start >= fin:
+        return 1
+    else:
+        return random.randint(start, fin)
+
+
+def inside(a, b):
+    if a[0] > b[0] and a[0] < b[0] + b[2] - 1 and a[1] > b[1] and a[1] < b[1] + b[3] - 1:
+        return True
+    return False
+
+
+def intersection(a, b):
+    if inside([a[0], a[1]], b) or inside([a[0] + a[2], a[1]], b)\
+            or inside([a[0], a[1] + a[3]], b) or inside([a[0] + a[2], a[1] + a[3]], b):
+        return True
+    return False
+
 
 def genroom(y, x, height, width, parents, trait):
+    # see if you can make that room
+    for i in range(0, len(roomlist)):
+        if intersection([x, y, width, height],
+                        [roomlist[i].xpos, roomlist[i].ypos, roomlist[i].width, roomlist[i].height]) \
+                or intersection([roomlist[i].xpos, roomlist[i].ypos, roomlist[i].width, roomlist[i].height],
+                                [x, y, width, height]):
+            return 0
+
     # set variables
     cls = Room()
     cls.height = height
@@ -131,15 +160,16 @@ def getmap():
                 dir[1] = 1
 
             print(doors[0])
-            print(rpos)
 
-            doorxoff = random.randint(0, doors[0][0] - doors[0][2] - 2)
-            dooryoff = random.randint(0, doors[0][1] - doors[0][3] - 2)
-            genroom(rpos[1], rpos[0], rheight, rwidth, 10, roomtraits.index("regular"))
-            changelist.append([doors[0][2] + dir[1] * doorxoff,
+            doorxoff = smartrand(int(0), int(doors[0][0] - doors[0][2] - 2))
+            dooryoff = smartrand(int(0), int(doors[0][1] - doors[0][3] - 2))
+            if genroom(rpos[1], rpos[0], rheight, rwidth, 10, roomtraits.index("regular")) == 0:
+                print("something went wrong")
+            else:
+                changelist.append([doors[0][2] + dir[1] * doorxoff,
                                doors[0][3] + dir[0] * dooryoff,
                                items.index("door")])
-            doors = doors[1:]
+                doors = doors[1:]
 
         curmap = Map()
         curmap.startpos = [int((roomlist[0].width - 1)/2), int((roomlist[0].height - 1)/2)]
