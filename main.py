@@ -1,6 +1,6 @@
 import pygame
 import visuals
-
+import collisions
 
 pygame.init()
 
@@ -18,7 +18,7 @@ def gameloop():
 
 	game_exit = False
 	game_over = False
-	direction = 0  # 0 = gora 1 = prawo  2= dol 	3= lewo
+	direction = 0  # 0 = up 1 = right  2= down 	3= left
 	hero_x = 32 * 10
 	hero_y = 32 * 10
 	hero_x_change = 0
@@ -55,23 +55,16 @@ def gameloop():
 					hero_x_change = 0
 				if event.key == pygame.K_w or event.key == pygame.K_s:
 					hero_y_change = 0
-
-		# if visuals.whatobject()
-		"""if not visuals.collision(hero_y, hero_y, direction):
-			hero_y_change = 0
-			hero_x_change = 0
-		else:
-			print(hero_x)"""
-		visuals.takeoffmap(hero_x, hero_y)
+		collisions.takeoffmap(hero_x, hero_y)
 		if visuals.collisions(hero_x, hero_y, direction):
 			hero_x = hero_x + hero_x_change
 			hero_y = hero_y + hero_y_change
 		else:
 			print("kolizja")
 
-		visuals.putonmap(hero_x,hero_y)
+		collisions.putonmap(hero_x,hero_y)
 
-		# EKRAN
+		# SCREEN
 		#visuals.drawscreen(hero_x + xxx, hero_y + yyy, 416 + xxx, 320 + yyy)
 		visuals.drawscreen(hero_x-418, hero_y-320)
 		clock.tick(fps)

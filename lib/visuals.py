@@ -51,7 +51,6 @@ def drawscreen(x, y, box_size=32):
 def whatobject(x, y):
 	x = int(x / 32)
 	y = int(y / 32)
-	#print(map.tiles[y][x])
 	return map.tiles[y][x]
 
 
@@ -66,7 +65,6 @@ def takeoffmap(x, y):
 
 
 def collisions(x, y, d):
-	#print(x,y)
 	if d == 0:
 		if generation.collidable(whatobject(x, y - box_size)):
 			return True
