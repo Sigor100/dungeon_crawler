@@ -1,6 +1,5 @@
 import pygame
 import visuals
-import generation
 
 
 pygame.init()
