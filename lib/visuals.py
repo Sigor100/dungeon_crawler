@@ -2,8 +2,9 @@ import pygame
 import generation
 import os
 
+
 direct = os.getcwd()
-# direct = direct[:-4]
+direct = direct[:-4]
 os.path.exists(direct)
 background = (25, 25, 25)
 white = (255, 255, 255)
@@ -21,8 +22,9 @@ img_list = []
 for num in range(0, 6):
 	path = direct + "/resources/textures/img" + str(num) + ".png"
 	img_list.append(pygame.image.load(path))
+backpack_background = pygame.image.load(direct + "/resources/backpack.png")
 
-map = generation.getmap()
+map = 0  # generation.getmap()
 """map = []
 b = []
 for p in range(0, 15):
@@ -46,3 +48,11 @@ def drawscreen(x, y):
 			gameDisplay.blit(img_list[map.tiles[p][p1]], (-x + (box_size * p1), -y + (box_size * p)))
 	pygame.display.update()
 	gameDisplay.fill(background)
+
+
+def drawbackpack():
+	gameDisplay.blit(backpack_background, 0, 0)
+	pygame.display.update()
+
+
+drawbackpack()
