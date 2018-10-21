@@ -8,7 +8,14 @@ direct = os.getcwd()
 direct = direct[:-4]
 
 file_list = []
-equipment_list = []
+equipment_list = [0]
+a = []
+backpack = []
+for p1 in range(0, 5):
+	a.append(0)
+for p in range(0, 6):
+	backpack.append(a)
+print(backpack)
 
 
 class Item:
@@ -20,7 +27,8 @@ class Item:
 
 class Weapon(Item):
 	def __init__(self, id, name, damage, durability, crit_damage, crit_chance):
-		#Item.__init__(id,0 , name)
+		# Item.__init__(id,0 , name)
+		super().__init__(id, 0, name)
 		self.id = id
 		self.type = 0  # 0 = weapon	1 = potion
 		self.name = name
@@ -42,7 +50,7 @@ class Weapon(Item):
 			return self.crit_chance
 
 
-for num in range(0, 3):
+for num in range(1, 4):
 	equipment_file = open(direct + "/resources/items/item" + str(num) + ".txt")
 	equipment_file = list(equipment_file)
 	equipment_file = str(equipment_file)
@@ -68,13 +76,14 @@ for p in range(0, len(file_list), 1):
 			else:
 				h_list2.append("".join(h_list))
 				h_list = []
-		h_list2.append("".join(h_list))  # todo skonczyc itemy
+		h_list2.append("".join(h_list))
 		h_list = []
 		equipment_list.append(h_list2)
 		h_list2 = []
 print(equipment_list)
-for p in range(0, len(equipment_list)):
+for p in range(1, len(equipment_list)):
 	print(equipment_list[p][1])
-	equipment_list[p] = Weapon(p, equipment_list[p][1], equipment_list[p][2], equipment_list[p][3], equipment_list[p][4], equipment_list[p][5]) # todo tu skonczylem
+	equipment_list[p] = Weapon(p, equipment_list[p][1], equipment_list[p][2], equipment_list[p][3],
+							   equipment_list[p][4], equipment_list[p][5])
 
-print(equipment_list[0].name)
+#print(equipment_list[1].id)

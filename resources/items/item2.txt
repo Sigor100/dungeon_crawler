@@ -1,1 +1,1 @@
-1 potion 0 10 0
+0 big-sword 15 8 30 10
