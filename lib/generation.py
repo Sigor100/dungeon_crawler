@@ -115,16 +115,14 @@ def getmap():
         while len(doors) > 0:
             rwidth = (random.choice([2, 6])) * 2 + 1
             rheight = (random.choice([2, 6])) * 2 + 1
-            rpos = [doors[0][2], doors[0][3]]
-            if rpos[0] == 0:
-                rpos[0] += doors[0][0]
-            if rpos[1] == 0:
-                rpos[1] += doors[0][1]
-
+            if doors[0][2] == doors[0][0] - 1:
+                rpos = [doors[0][2], doors[0][3] - 1 + random.choice(0, rwidth - 2)]
+            if doors[0][3] == doors[0][1] - 1:
+                rpos = [doors[0][2] - 1 + random.choice(0, rheight - 2), doors[0][3]]
+            if doors[0][2] == 0:
+                rpos = [doors[0][2] - rwidth + 1, doors[0][3] - 1]
             if doors[0][3] == 0:
-                rpos = [doors[0][2], - doors[0][1]]
-            elif doors[0][3] == doors[0][0] - 1:
-                rpos = [0, 0]
+                rpos = [doors[0][2] - 1, doors[0][3] - rheight + 1]
 
             print(doors[0])
             print(rpos)
@@ -153,9 +151,11 @@ def getmap():
         for i in range(0, len(roomlist)):
             for y in range(0, roomlist[i].height):
                 for x in range(0, roomlist[i].width):
-                    curmap.tiles[y + offy][x + offx] = roomlist[i].tiles[y][x]
+                    curmap.tiles[y + offy + roomlist[i].ypos][x + offx + roomlist[i].xpos] = roomlist[i].tiles[y][x]
 
-        for i in range(0, curmap.height):
-            print(curmap.tiles[i])
+        #for i in range(0, curmap.height):
+        #    print(curmap.tiles[i])
+
+        #input("xd")
 
     return curmap
