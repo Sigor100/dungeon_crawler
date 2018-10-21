@@ -1,6 +1,7 @@
 import pygame
 import visuals
 import collisions
+import generation
 
 pygame.init()
 
@@ -11,6 +12,7 @@ fps = 30
 white = (255, 255, 255)
 black = (0, 0, 0)
 
+map = generation.getmap()
 
 def gameloop():
 	xxx = 0
@@ -19,8 +21,8 @@ def gameloop():
 	game_exit = False
 	game_over = False
 	direction = 0  # 0 = up 1 = right  2= down 	3= left
-	hero_x = 32 * 10
-	hero_y = 32 * 10
+	hero_x = map.startpos[0]
+	hero_y = map.startpos[1]
 	hero_x_change = 0
 	hero_y_change = 0
 	whileinput = 0
