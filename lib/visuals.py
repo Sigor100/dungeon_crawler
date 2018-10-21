@@ -4,7 +4,7 @@ import os
 
 
 direct = os.getcwd()
-direct = direct[:-4]
+#direct = direct[:-4]
 os.path.exists(direct)
 background = (25, 25, 25)
 white = (255, 255, 255)
@@ -50,9 +50,8 @@ def drawscreen(x, y):
 	gameDisplay.fill(background)
 
 
-def drawbackpack():
-	gameDisplay.blit(backpack_background, 0, 0)
-	pygame.display.update()
+"""def drawbackpack():
+	gameDisplay.fill(background)
+	#gameDisplay.blit(img_list[1], 100, 100)
 
-
-drawbackpack()
+	pygame.display.update()""" # todo kiedys skonczyc
