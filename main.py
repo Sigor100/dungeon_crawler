@@ -9,6 +9,7 @@ clock = pygame.time.Clock()
 box_size = 32
 fps = 30
 
+map = generation.getmap()
 white = (255, 255, 255)
 black = (0, 0, 0)
 
@@ -21,8 +22,13 @@ def gameloop():
 	game_exit = False
 	game_over = False
 	direction = 0  # 0 = up 1 = right  2= down 	3= left
+<<<<<<< HEAD
 	hero_x = map.startpos[0]
 	hero_y = map.startpos[1]
+=======
+	hero_x = 32 * map.startpos[0]
+	hero_y = 32 * map.startpos[1]
+>>>>>>> 604e555807c65fd4938cba564da21a6cc04a56f0
 	hero_x_change = 0
 	hero_y_change = 0
 	whileinput = 0

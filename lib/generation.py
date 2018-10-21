@@ -83,6 +83,7 @@ def genroom(y, x, height, width, parents, trait):
         cls.tiles.append(templist)
     print(cls.tiles)
     # generate doors
+    doorret = []
     if trait == 0 or trait == 1:
         doors = doornumber(parents, trait)
         for i in range(0, doors):
@@ -90,24 +91,27 @@ def genroom(y, x, height, width, parents, trait):
                 ch = random.choice(range(0, 2 * (cls.height + cls.width) - 4))
 
                 if ch == 0 or ch == cls.width - 1\
-                        or ch == cls.width + cls.height - 2 or ch == cls.width + cls.height - 3:
+                        or ch == cls.width + cls.height - 2 or ch == cls.width * 2 + cls.height - 3:
                     continue
 
                 co = wallxy(cls.width, cls.height, ch)
                 cls.tiles[co[1]][co[0]] = items.index("door")
+                dco = co[0], co[1]
+                doorret.append(dco)
                 break
 
     # traits
     if trait == roomtraits.index("entrance"):
         cls.tiles[int(height/2)][int(width/2)] = items.index("upstairs")
     roomlist.append(cls)
+    return doorret
 
 
 def getmap():
     global curmap
     if curmap == 0:
 
-        genroom(0, 0, random.choice([2, 4]) * 2 + 1, random.choice([2, 4]) * 2 + 1, 0, roomtraits.index("entrance"))
+        doors = genroom(0, 0, random.choice([2, 4]) * 2 + 1, random.choice([2, 4]) * 2 + 1, 0, roomtraits.index("entrance"))
         #while True:
         #    genroom(random.choice([0, 6]) * 2 + 1, random.choice([0, 6]) * 2 + 1, )
 
@@ -138,6 +142,5 @@ def getmap():
             print(curmap.tiles[i])
 
         print(curmap.startpos)
-        a = input("continue")
 
     return curmap
