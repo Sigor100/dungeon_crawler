@@ -19,12 +19,20 @@ hero_id = 5
 pygame.init()
 
 img_list = []
-for num in range(0, 6):
+for num in range(0, 7):
 	path = direct + "/resources/textures/img" + str(num) + ".png"
 	img_list.append(pygame.image.load(path))
 backpack_background = pygame.image.load(direct + "/resources/backpack.png")
 
 map = generation.getmap()
+shadow_map = []
+for p in range(0,map.width):
+	a = []
+	for p in range(0,map.height):
+		a.append(1)
+	shadow_map.append(a)
+
+
 """map = []
 b = []
 for p in range(0, 15):
@@ -45,13 +53,32 @@ gameDisplay.fill(background)
 def drawscreen(x, y):
 	for p in range(0, len(map.tiles), 1):
 		for p1 in range(0, len(map.tiles[0]), 1):
-			gameDisplay.blit(img_list[map.tiles[p][p1]], (-x + (box_size * p1), -y + (box_size * p)))
+			if shadow_map[p][p1] == 0:
+				gameDisplay.blit(img_list[map.tiles[p][p1]], (-x + (box_size * p1), -y + (box_size * p)))
+			else:
+				gameDisplay.blit(img_list[6], (-x + (box_size * p1), -y + (box_size * p)))
 	pygame.display.update()
 	gameDisplay.fill(background)
 
+
+def shadowupdate(x, y):
+	print(int(y/box_size), int(x/box_size))
+	shadow_map[int(y/box_size)+1][int(x/box_size)] = 0
+	shadow_map[int(y / box_size)][int(x / box_size)] = 0
+	shadow_map[int(y / box_size)-1][int(x / box_size)] = 0
+	shadow_map[int(y / box_size)][int(x / box_size)+1] = 0
+	shadow_map[int(y / box_size)][int(x / box_size)-1] = 0
+	shadow_map[int(y / box_size)-1][int(x / box_size)+1] = 0
+	shadow_map[int(y / box_size)-1][int(x / box_size)-1] = 0
+	shadow_map[int(y / box_size)+1][int(x / box_size)+1] = 0
+	shadow_map[int(y / box_size)+1][int(x / box_size)-1] = 0
+
+print(shadow_map)
 
 """def drawbackpack():
 	gameDisplay.fill(background)
 	#gameDisplay.blit(img_list[1], 100, 100)
 
 	pygame.display.update()""" # todo kiedys skonczyc
+
+
