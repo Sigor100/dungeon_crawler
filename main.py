@@ -16,7 +16,6 @@ black = (0, 0, 0)
 
 
 def gameloop():
-
 	game_exit = False
 	game_over = False
 	direction = [0, 0]  # 0 - y axis; 1 - z axis
@@ -27,7 +26,7 @@ def gameloop():
 	hero_y = 32 * map.startpos[1]
 	hero_x_change = 0
 	hero_y_change = 0
-#
+	#
 
 	while not game_exit:
 		while game_over:
@@ -48,6 +47,8 @@ def gameloop():
 					direction[1] -= 32
 				if event.key == pygame.K_d:
 					direction[1] += 32
+			# elif event.key == pygame.K_e:
+			# todo: eq/backpack window here
 			elif event.type == pygame.KEYUP:
 				if event.key == pygame.K_w:
 					direction[0] += 32
@@ -63,11 +64,9 @@ def gameloop():
 			hero_y = hero_y + direction[0]
 		else:
 			print("kolizja")
-
 		c.putonmap(hero_x, hero_y)
 
 		# SCREEN
-		# visuals.drawscreen(hero_x + xxx, hero_y + yyy, 416 + xxx, 320 + yyy)
 		visuals.drawscreen(hero_x - 418, hero_y - 320)
 		clock.tick(fps)
 
