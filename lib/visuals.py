@@ -24,7 +24,7 @@ for num in range(0, 6):
 	img_list.append(pygame.image.load(path))
 backpack_background = pygame.image.load(direct + "/resources/backpack.png")
 
-map = 0  # generation.getmap()
+map = generation.getmap()
 """map = []
 b = []
 for p in range(0, 15):

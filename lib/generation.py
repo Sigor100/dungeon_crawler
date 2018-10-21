@@ -136,12 +136,14 @@ def genroom(y, x, height, width, parents, trait):
     return doorret
 
 
-def getmap():
+def getmap(update = False):
     global curmap
-    if curmap == 0:
-
+    global roomlist
+    if curmap == 0 or update:
+        roomlist = []
         doors = genroom(0, 0, random.choice([2, 4]) * 2 + 1, random.choice([2, 4]) * 2 + 1, 0, roomtraits.index("entrance"))
         changelist = []
+        tries = 1
         while len(doors) > 0:
             rwidth = (random.choice([2, 6])) * 2 + 1
             rheight = (random.choice([2, 6])) * 2 + 1
@@ -164,7 +166,10 @@ def getmap():
             doorxoff = smartrand(int(0), int(doors[0][0] - doors[0][2] - 2))
             dooryoff = smartrand(int(0), int(doors[0][1] - doors[0][3] - 2))
             if genroom(rpos[1], rpos[0], rheight, rwidth, 10, roomtraits.index("regular")) == 0:
-                print("something went wrong")
+                print("attemt " + str(tries) + "/10")
+                tries += 1
+                if tries > 10:
+                    return getmap(True)
             else:
                 changelist.append([doors[0][2] + dir[1] * doorxoff,
                                doors[0][3] + dir[0] * dooryoff,
