@@ -112,7 +112,7 @@ def getmap():
         #    genroom(random.choice([0, 6]) * 2 + 1, random.choice([0, 6]) * 2 + 1, )
 
         curmap = Map()
-        curmap.startpos = [7, 7]
+        curmap.startpos = [int((roomlist[0].width - 1)/2), int((roomlist[0].height - 1)/2)]
         offx = 10
         offy = 10
         curmap.width = 30
@@ -133,5 +133,11 @@ def getmap():
             for y in range(0, roomlist[i].height):
                 for x in range(0, roomlist[i].width):
                     curmap.tiles[y + offy][x + offx] = roomlist[i].tiles[y][x]
+
+        for i in range(0, curmap.height):
+            print(curmap.tiles[i])
+
+        print(curmap.startpos)
+        a = input("continue")
 
     return curmap
