@@ -23,6 +23,7 @@ def gameloop():
 	hero_y = 32 * 10
 	hero_x_change = 0
 	hero_y_change = 0
+	whileinput = 0
 
 	while not game_exit:
 		while game_over:
@@ -34,7 +35,8 @@ def gameloop():
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				game_exit = True
-			if event.type == pygame.KEYDOWN:
+			if event.type == pygame.KEYDOWN and whileinput == 0:
+				whileinput = 1
 				if event.key == pygame.K_a:
 					hero_x_change = -box_size
 					direction = 3
@@ -48,6 +50,7 @@ def gameloop():
 					hero_y_change = box_size
 					direction = 2
 			elif event.type == pygame.KEYUP:
+				whileinput = 0
 				if event.key == pygame.K_a or event.key == pygame.K_d:
 					hero_x_change = 0
 				if event.key == pygame.K_w or event.key == pygame.K_s:
