@@ -1,6 +1,6 @@
 import generation
 
-disablecollisions = False
+disablecollisions = False  # set to true for debug
 
 box_size = 32
 hero_id = 5

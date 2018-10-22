@@ -2,6 +2,7 @@ import random
 
 
 r = "nodebug"
+rooms = 5
 
 
 curmap = 0
@@ -256,7 +257,6 @@ def getmap(update=False):
 
         # generate rooms
         roomlist = []
-        rooms = 5
         genroom(0, 0, curmap.height - 2, curmap.width - 2, roomtraits.index("entrance"))
         for i in range(0, rooms - 1):
             generatevalidroom()

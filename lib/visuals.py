@@ -3,7 +3,7 @@ import generation
 import os
 
 
-shadow_mode = 0
+shadow_mode = 1  # set to 0 for the whole map to be visible from the start
 
 
 direct = os.getcwd()
@@ -65,7 +65,7 @@ def drawscreen(x, y):
 
 def shadowupdate(x, y):
 	print(int(y/box_size), int(x/box_size))
-	'''shadow_map[int(y/box_size)+1][int(x/box_size)] = 0
+	shadow_map[int(y/box_size)+1][int(x/box_size)] = 0
 	shadow_map[int(y / box_size)][int(x / box_size)] = 0
 	shadow_map[int(y / box_size)-1][int(x / box_size)] = 0
 	shadow_map[int(y / box_size)][int(x / box_size)+1] = 0
@@ -73,7 +73,7 @@ def shadowupdate(x, y):
 	shadow_map[int(y / box_size)-1][int(x / box_size)+1] = 0
 	shadow_map[int(y / box_size)-1][int(x / box_size)-1] = 0
 	shadow_map[int(y / box_size)+1][int(x / box_size)+1] = 0
-	shadow_map[int(y / box_size)+1][int(x / box_size)-1] = 0'''
+	shadow_map[int(y / box_size)+1][int(x / box_size)-1] = 0
 
 print(shadow_map)
 
