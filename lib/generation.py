@@ -2,6 +2,7 @@ import random
 
 
 r = "nodebug"
+debug = True
 rooms = 5
 
 
@@ -16,10 +17,10 @@ offy = 1
 class Map:
     height = 0
     width = 0
-    roomno = 0
     tiles = []
     startpos = [0, 0]
     endpos = [0, 0]
+    rooms = []
 
 
 class Room:
@@ -138,29 +139,13 @@ def genroom(y, x, height, width, trait):
                     templist.append(items.index("door"))
                 else:
                     templist.append(items.index("floor"))
-        cls.tiles.append(templist)
-    '''# generate doors
-    if trait == 0 or trait == 1:
-        doors = doornumber(parents, trait)
-        for i in range(0, doors):
-            while True:
-                ch = random.choice(range(0, 2 * (cls.height + cls.width) - 4))
-
-                if ch == 0 or ch == cls.width - 1\
-                        or ch == cls.width + cls.height - 2 or ch == cls.width * 2 + cls.height - 3:
-                    continue
-
-                co = wallxy(cls.width, cls.height, ch)
-                cls.tiles[co[1]][co[0]] = items.index("door")
-                break
-
-    # traits'''
     if trait == roomtraits.index("entrance"):
         cls.tiles[int(height/2)][int(width/2)] = items.index("upstairs")
     for y in range(0, cls.height):
         for x in range(0, cls.width):
             curmap.tiles[y + offy + cls.ypos][x + offx + cls.xpos] = cls.tiles[y][x]
     roomlist.append(cls)
+    curmap.rooms.append([x + offx, y + offy, width, height])
 
 
 def generatevalidroom():
@@ -243,6 +228,7 @@ def getmap(update=False):
         curmap = Map()
         curmap.width = random.choice([3, 5]) * 2 + 1
         curmap.height = random.choice([3, 5]) * 2 + 1
+        curmap.rooms = []
         offx = 1
         offy = 1
         curmap.startpos = [int((curmap.width - 1) / 2) - offx, int((curmap.height - 1) / 2) - offy]
@@ -260,46 +246,15 @@ def getmap(update=False):
         genroom(0, 0, curmap.height - 2, curmap.width - 2, roomtraits.index("entrance"))
         for i in range(0, rooms - 1):
             generatevalidroom()
-        '''genroom(0, 0, random.choice([2, 4]) * 2 + 1, random.choice([2, 4]) * 2 + 1, 0, roomtraits.index("entrance"))
-        tries = 1
-        while len(doors) > 0:
-            rwidth = (random.choice([2, 6])) * 2 + 1
-            rheight = (random.choice([2, 6])) * 2 + 1
-            dir = [0, 0]
-            if doors[0][2] == doors[0][0] - 1:
-                rpos = [doors[0][2], doors[0][3] - 1]
-                dir[0] = 1
-            if doors[0][3] == doors[0][1] - 1:
-                rpos = [doors[0][2] - 1, doors[0][3]]
-                dir[1] = 1
-            if doors[0][2] == 0:
-                dir[0] = 1
-                rpos = [doors[0][2] - rwidth + 1, doors[0][3] - 1]
-            if doors[0][3] == 0:
-                rpos = [doors[0][2] - 1, doors[0][3] - rheight + 1]
-                dir[1] = 1
 
-            print(doors[0])
-
-            doorxoff = smartrand(int(0), int(doors[0][0] - doors[0][2] - 2))
-            dooryoff = smartrand(int(0), int(doors[0][1] - doors[0][3] - 2))
-            if genroom(rpos[1], rpos[0], rheight, rwidth, 0, roomtraits.index("regular")) == 0:
-                print("attemt " + str(tries) + "/10")
-                tries += 1
-                if tries > 10:
-                    return getmap(True)
-            else:
-                changelist.append([doors[0][2] + dir[1] * doorxoff,
-                               doors[0][3] + dir[0] * dooryoff,
-                               items.index("door")])
-                doors = doors[1:]'''
         # apply final changes
         curmap.startpos[0] = curmap.startpos[0] + offx
         curmap.startpos[1] = curmap.startpos[1] + offy
 
-        for i in range(0, curmap.height):
-            print(curmap.tiles[i])
-
-        #input("xd")
+        if debug:
+            for i in range(0, curmap.height):
+                print(curmap.tiles[i])
+            for i in range(0, len(curmap.rooms)):
+                print(curmap.rooms[i])
 
     return curmap
