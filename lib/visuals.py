@@ -3,6 +3,9 @@ import generation
 import os
 
 
+shadow_mode = 0
+
+
 direct = os.getcwd()
 #direct = direct[:-4]
 os.path.exists(direct)
@@ -15,7 +18,6 @@ hero_x = 0
 hero_y = 0
 acc_block = 4
 hero_id = 5
-
 pygame.init()
 
 img_list = []
@@ -26,10 +28,10 @@ backpack_background = pygame.image.load(direct + "/resources/backpack.png")
 
 map = generation.getmap()
 shadow_map = []
-for p in range(0,map.width):
+for p in range(0, map.height):
 	a = []
-	for p in range(0,map.height):
-		a.append(1)
+	for q in range(0, map.width):
+		a.append(shadow_mode)
 	shadow_map.append(a)
 
 
@@ -63,7 +65,7 @@ def drawscreen(x, y):
 
 def shadowupdate(x, y):
 	print(int(y/box_size), int(x/box_size))
-	shadow_map[int(y/box_size)+1][int(x/box_size)] = 0
+	'''shadow_map[int(y/box_size)+1][int(x/box_size)] = 0
 	shadow_map[int(y / box_size)][int(x / box_size)] = 0
 	shadow_map[int(y / box_size)-1][int(x / box_size)] = 0
 	shadow_map[int(y / box_size)][int(x / box_size)+1] = 0
@@ -71,7 +73,7 @@ def shadowupdate(x, y):
 	shadow_map[int(y / box_size)-1][int(x / box_size)+1] = 0
 	shadow_map[int(y / box_size)-1][int(x / box_size)-1] = 0
 	shadow_map[int(y / box_size)+1][int(x / box_size)+1] = 0
-	shadow_map[int(y / box_size)+1][int(x / box_size)-1] = 0
+	shadow_map[int(y / box_size)+1][int(x / box_size)-1] = 0'''
 
 print(shadow_map)
 

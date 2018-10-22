@@ -242,8 +242,6 @@ def getmap(update=False):
         roomlist = []
         rooms = 2
         genroom(0, 0, curmap.height - 2, curmap.width - 2, roomtraits.index("entrance"))
-        for y in range(0, curmap.height):
-            print(curmap.tiles[y])
         for i in range(0, rooms - 1):
             generatevalidroom()
         '''genroom(0, 0, random.choice([2, 4]) * 2 + 1, random.choice([2, 4]) * 2 + 1, 0, roomtraits.index("entrance"))
@@ -283,8 +281,8 @@ def getmap(update=False):
         curmap.startpos[0] = curmap.startpos[0] + offx
         curmap.startpos[1] = curmap.startpos[1] + offy
 
-        #for i in range(0, curmap.height):
-        #    print(curmap.tiles[i])
+        for i in range(0, curmap.height):
+            print(curmap.tiles[i])
 
         #input("xd")
 
