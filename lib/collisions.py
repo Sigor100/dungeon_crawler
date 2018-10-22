@@ -1,5 +1,7 @@
 import generation
 
+disablecollisions = False
+
 box_size = 32
 hero_id = 5
 acc_block = 4
@@ -7,7 +9,7 @@ map = generation.getmap()
 
 
 def collisions(x, y, d):
-	if generation.collidable(whatobject(x + d[1], y + d[0])):
+	if generation.collidable(whatobject(x + d[1], y + d[0])) or disablecollisions:
 		return True
 	else:
 		return False

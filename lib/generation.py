@@ -1,5 +1,9 @@
 import random
 
+
+r = "nodebug"
+
+
 curmap = 0
 items = ["void", "wall", "floor", "door", "upstairs", "downstairs", "trap", "hero"]
 roomtraits = ["entrance", "corridor", "regular", "traproom"]
@@ -64,9 +68,14 @@ def doornumber(i, n):
 
 def smartrand(start, fin):
     if start >= fin:
-        return 0
+        return start
     else:
-        return random.randint(start, fin)
+        if r == "floor":
+            return start
+        elif r == "ceiling":
+            return fin
+        else:
+            return random.randint(start, fin)
 
 
 def inside(a, b):
@@ -154,8 +163,8 @@ def genroom(y, x, height, width, trait):
 
 
 def generatevalidroom():
-    pos = [0, 0]
-    room_no = 0
+    pos = 0
+    direc = 0
     while True:
         while True:
             room_no = smartrand(0, len(roomlist) - 1)
@@ -164,12 +173,20 @@ def generatevalidroom():
             if troom.tiles[pos[1]][pos[0]] == items.index("wall") and\
                     (troom.trait == roomtraits.index("corridor") or troom.trait == roomtraits.index("regular") or
                      troom.trait == roomtraits.index("entrance")):
+                pos[0] += troom.xpos
+                pos[1] += troom.ypos
                 break
         a = []
-        a.append(curmap.tiles[pos[1] - 1][pos[0]])
-        a.append(curmap.tiles[pos[1]][pos[0] + 1])
-        a.append(curmap.tiles[pos[1] + 1][pos[0]])
-        a.append(curmap.tiles[pos[1]][pos[0] - 1])
+        print("map: ", curmap.height, curmap.width)
+        print(pos[1] + offy, pos[0] + offx)
+        print(pos[1] + offy - 1, pos[0] + offx)
+        a.append(curmap.tiles[pos[1] + offy - 1][pos[0] + offx])
+        print(pos[1] + offy, pos[0] + offx + 1)
+        a.append(curmap.tiles[pos[1] + offy][pos[0] + offx + 1])
+        print(pos[1] + offy + 1, pos[0] + offx)
+        a.append(curmap.tiles[pos[1] + offy + 1][pos[0] + offx])
+        print(pos[1] + offy, pos[0] + offx - 2)
+        a.append(curmap.tiles[pos[1] + offy][pos[0] + offx - 1])
         twalls = 0
         tfloors = 0
         tvoids = 0
@@ -180,26 +197,25 @@ def generatevalidroom():
                 tfloors += 1
             if a[i] == items.index("void"):
                 tvoids += 1
-                dir = i
+                direc = i
+        print(pos)
+        print(direc)
         if twalls == 2 and tfloors == 1 and tvoids == 1:
             break
     # set target tile
     print("following is imortaint")
-    print(pos)
-    print(dir)
     rwidth = (random.choice([2, 6])) * 2 + 1
     rheight = (random.choice([2, 6])) * 2 + 1
     rpos = [0, 0]
-    if dir == 0:
-        rpos = [pos[0], pos[1] - rheight]
-    elif dir == 1:
-        rpos = [pos[0], pos[1]]
-    elif dir == 2:
-        rpos = [pos[0] - rwidth, pos[1] - rheight]
-    elif dir == 3:
-        rpos = [pos[0] - rwidth, pos[1]]
-    print(rpos[0])
-    print(rpos[1])
+    if direc == 0:
+        rpos = [pos[0] - smartrand(1, rwidth - 2), pos[1] - rheight + 1]
+    elif direc == 1:
+        rpos = [pos[0], pos[1] - smartrand(1, rheight - 2)]
+    elif direc == 2:
+        rpos = [pos[0] - smartrand(1, rwidth - 2), pos[1]]
+    elif direc == 3:
+        rpos = [pos[0] + 1 - rwidth, pos[1] - smartrand(1, rheight - 2)]
+    print(rpos)
     print(rwidth)
     print(rheight)
     # stretch the map if necessary
@@ -207,13 +223,13 @@ def generatevalidroom():
         addmaprow([-1, 0])
     while rpos[1] + offy < 1:
         addmaprow([0, -1])
-    while rpos[0] + offx + rwidth > curmap.width - 2:
+    while rpos[0] + offx + rwidth > curmap.width - 1:
         addmaprow([1, 0])
-    while rpos[1] + offy + rheight > curmap.height - 2:
+    while rpos[1] + offy + rheight > curmap.height - 1:
         addmaprow([0, 1])
 
     # generate!
-    genroom(rpos[1], rpos[0], rwidth, rheight, roomtraits.index("regular"))
+    genroom(rpos[1], rpos[0], rheight, rwidth, roomtraits.index("regular"))
     curmap.tiles[pos[1] + offy][pos[0] + offx] = items.index("door")
     return 0
 
@@ -240,7 +256,7 @@ def getmap(update=False):
 
         # generate rooms
         roomlist = []
-        rooms = 2
+        rooms = 5
         genroom(0, 0, curmap.height - 2, curmap.width - 2, roomtraits.index("entrance"))
         for i in range(0, rooms - 1):
             generatevalidroom()
