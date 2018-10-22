@@ -71,14 +71,14 @@ def gameloop():
         if c.collisions(hero_x, hero_y, direction):
             hero_x = hero_x + direction[1]
             hero_y = hero_y + direction[0]
-        else:
-            print("kolizja")
+        #else:
+            # print("kolizja")
         c.putonmap(hero_x, hero_y)
         if turn == False:
-            print("twoja kolej")
+            #print("twoja kolej")
             turn = True
         # SCREEN
-        visuals.shadowupdate(hero_x, hero_y)
+        visuals.countplayervisibility(hero_x, hero_y)
         visuals.drawscreen(hero_x - 418, hero_y - 320)
         clock.tick(fps)
 
