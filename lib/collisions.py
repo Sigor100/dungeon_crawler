@@ -29,3 +29,15 @@ def whatobject(x, y):
 	x = int(x / 32)
 	y = int(y / 32)
 	return map.tiles[y][x]
+
+
+def getpath(spos, epos):
+	curmap = generation.getmap()
+	if spos[0] < 0 or spos[1] < 0 or epos[0] < 0 or epos[1] < 0 or\
+		spos[0] >= curmap.width or spos[1] >= curmap.height or\
+		epos[0] >= curmap.width or epos[1] >= curmap.height:
+		return 0
+	if not generation.collidable(curmap.tiles[spos[1], spos[0]])\
+		or not generation.collidable(curmap.tiles[spos[1], spos[0]]):
+		return 0
+	return 1

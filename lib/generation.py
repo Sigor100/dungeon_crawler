@@ -117,7 +117,6 @@ def addmaprow(dir):
         curmap.width += 1
         offx += 1
 
-
 def genroom(y, x, height, width, trait):
     # set variables
     cls = Room()
@@ -139,8 +138,11 @@ def genroom(y, x, height, width, trait):
                     templist.append(items.index("door"))
                 else:
                     templist.append(items.index("floor"))
+        cls.tiles.append(templist)
+
     if trait == roomtraits.index("entrance"):
         cls.tiles[int(height/2)][int(width/2)] = items.index("upstairs")
+    print(y + offy + cls.ypos, x + offx + cls.xpos)
     for y in range(0, cls.height):
         for x in range(0, cls.width):
             curmap.tiles[y + offy + cls.ypos][x + offx + cls.xpos] = cls.tiles[y][x]
