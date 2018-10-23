@@ -2,6 +2,7 @@ import pygame
 import generation
 import os
 import collisions
+from math import sqrt
 
 shadow_mode = 1  # set to 0 for the whole map to be visible from the start
 
@@ -69,6 +70,13 @@ def drawscreen(x, y):
 def shadowupdate(x, y):
     visible_list = []
 
+def check_distance(x1, y1, x2, y2):
+    a = int(abs(x1 - x2)**2)
+    b = int(abs(y1 - y2)**2)
+    c = int(sqrt(a+b))
+    print("distance: ", c)
+    return c
+
 
 def refill_shadow_map():
     shadow_map = []
@@ -88,10 +96,12 @@ def countplayervisibility(x, y):
     global visible_thru
     global visible_thru2
     global not_visible_thru
+    global acc_block
+    acc_block = collisions.acc_block
     visibility_list = [[x, y]]
     # list2 = []
-    print(collisions.get_acc_block())
-    print(map.tiles[y][x])
+    #print(collisions.get_acc_block())
+    #print(map.tiles[y][x])
     if 0 == 0:  # todo: remove this if
         end = False
         c = 1
@@ -257,6 +267,16 @@ def countplayervisibility(x, y):
                 #qlist = [[y, x + c], [y, x - c], [y + c, x], [y - c, x]]"""
     # else:
     # print("error: not acceptable acc_block: ", acc_block)
+    if acc_block == door_index:
+        print("door")
+        a = []
+        for p in range(0,len(visibility_list),1):  # todo finish this
+            if check_distance(x, y, visibility_list[p][0], visibility_list[p][1]) < 4:
+                a.append(visibility_list[p])
+        visibility_list = []
+        visibility_list = a
+    else:
+        print(acc_block, door_index)
 
     shadow_map = refill_shadow_map()
     for p in range(0, len(visibility_list)):
