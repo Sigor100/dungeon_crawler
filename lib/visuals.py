@@ -23,11 +23,11 @@ visible_thru = [2, 4]
 visible_thru2 = [2, 4]
 not_visible_thru = [1, 3, 4]
 door_index = 3
-
+visibility_list = []
+shadow_map = []
 
 view_range = 4
-view_mode = 0  # 0 or 1
-
+view_mode = 2  # 0 or 1
 
 pygame.init()
 
@@ -38,12 +38,12 @@ for num in range(0, 7):
 backpack_background = pygame.image.load(direct + "/resources/backpack.png")
 
 map = generation.getmap()
-shadow_map = []
+"""shadow_map = []
 for p in range(0, map.height):
     a = []
     for q in range(0, map.width):
         a.append(shadow_mode)
-    shadow_map.append(a)
+    shadow_map.append(a)"""
 
 """map = []
 b = []
@@ -63,6 +63,8 @@ gameDisplay.fill(background)
 
 
 def drawscreen(x, y):
+    shadow_map = shadowupdate()
+    print(shadow_map)
     for p in range(0, len(map.tiles), 1):
         for p1 in range(0, len(map.tiles[0]), 1):
             if shadow_map[p][p1] == 0:
@@ -71,10 +73,6 @@ def drawscreen(x, y):
                 gameDisplay.blit(img_list[6], (-x + (box_size * p1), -y + (box_size * p)))
     pygame.display.update()
     gameDisplay.fill(background)
-
-
-def shadowupdate(x, y):
-    visible_list = []
 
 
 def check_distance(x1, y1, x2, y2):
@@ -96,7 +94,7 @@ def refill_shadow_map():
     return shadow_map
 
 
-def countplayervisibility(x, y):
+def countplayervisibility(x, y, n):
     x = int(x / box_size)
     y = int(y / box_size)
     global shadow_map
@@ -105,8 +103,9 @@ def countplayervisibility(x, y):
     global not_visible_thru
     global acc_block
     global view_range
-    acc_block = collisions.acc_block
+    global visibility_list
     visibility_list = [[x, y]]
+    acc_block = collisions.acc_block
     # list2 = []
     # print(collisions.get_acc_block())
     # print(map.tiles[y][x])
@@ -283,7 +282,14 @@ def countplayervisibility(x, y):
                 for p1 in range(0, len(map.tiles[0])):
                     if check_distance(x, y, p1, p) < view_range:
                         visibility_list.append([p1, p])
-        elif view_mode == 1:
+        elif view_mode == 2:
+            if n == 1:
+                if map.tiles[y][x + c] in visible_thru:
+                    countplayervisibility(x * box_size + box_size, y, 0)
+                    countplayervisibility(x * box_size - box_size, y, 0)
+                else:
+                    countplayervisibility(x, y * box_size - box_size, 0)
+                    countplayervisibility(x, y * box_size + box_size, 0)
             for p in range(0, len(visibility_list), 1):  # todo finish this
                 if check_distance(x, y, visibility_list[p][0], visibility_list[p][1]) < view_range:
                     a.append(visibility_list[p])
@@ -291,13 +297,28 @@ def countplayervisibility(x, y):
             visibility_list = a
     else:
         print(acc_block, door_index)
+    # shadowupdate()
 
+    """shadow_map = refill_shadow_map()
+    for p in range(0, len(visibility_list)):
+        try:
+            shadow_map[visibility_list[p][1]][visibility_list[p][0]] = 0
+        except:
+            print("error: shadow_map index out of range: ", visibility_list[p][0], visibility_list[p][1])"""
+
+
+def shadowupdate():
+    global visibility_list
+    print(visibility_list)
     shadow_map = refill_shadow_map()
     for p in range(0, len(visibility_list)):
         try:
             shadow_map[visibility_list[p][1]][visibility_list[p][0]] = 0
         except:
             print("error: shadow_map index out of range: ", visibility_list[p][0], visibility_list[p][1])
+    # print(shadow_map)
+    visibility_list = []
+    return shadow_map
 
 
 # print("shadowmap", shadow_map)

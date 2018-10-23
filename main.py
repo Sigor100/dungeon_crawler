@@ -97,7 +97,7 @@ def gameloop():
             #print("twoja kolej")
             turn = True
         # SCREEN
-        visuals.countplayervisibility(hero_x, hero_y)
+        visuals.countplayervisibility(hero_x, hero_y, 0)
         visuals.drawscreen(hero_x - 800, hero_y - 400)
         clock.tick(fps)
 
