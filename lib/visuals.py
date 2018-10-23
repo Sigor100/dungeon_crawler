@@ -18,7 +18,7 @@ acc_block = 4
 hero_id = 5
 visible_thru = [2, 4]
 visible_thru2 = [2, 4]
-not_visible_thru = [2, 3, 4]
+not_visible_thru = [1, 3, 4]
 pygame.init()
 
 img_list = []
@@ -117,7 +117,7 @@ def countplayervisibility(x, y):
             visibility_list.append([x + c, y])
             end = True
         else:
-            # visibility_list.append([x + c, y])
+            visibility_list.append([x + c, y])
             end = True
         c = c + 1
     end = False
