@@ -9,7 +9,7 @@ shadow_mode = 1  # set to 0 for the whole map to be visible from the start
 direct = os.getcwd()
 # direct = direct[:-4]
 os.path.exists(direct)
-#background = (25, 25, 25)
+# background = (25, 25, 25)
 background = (0, 0, 0)
 white = (255, 255, 255)
 display_width = 1600
@@ -23,6 +23,12 @@ visible_thru = [2, 4]
 visible_thru2 = [2, 4]
 not_visible_thru = [1, 3, 4]
 door_index = 3
+
+
+view_range = 4
+view_mode = 0  # 0 or 1
+
+
 pygame.init()
 
 img_list = []
@@ -70,10 +76,11 @@ def drawscreen(x, y):
 def shadowupdate(x, y):
     visible_list = []
 
+
 def check_distance(x1, y1, x2, y2):
-    a = int(abs(x1 - x2)**2)
-    b = int(abs(y1 - y2)**2)
-    c = int(sqrt(a+b))
+    a = int(abs(x1 - x2) ** 2)
+    b = int(abs(y1 - y2) ** 2)
+    c = int(sqrt(a + b))
     print("distance: ", c)
     return c
 
@@ -97,12 +104,13 @@ def countplayervisibility(x, y):
     global visible_thru2
     global not_visible_thru
     global acc_block
+    global view_range
     acc_block = collisions.acc_block
     visibility_list = [[x, y]]
     # list2 = []
-    #print(collisions.get_acc_block())
-    #print(map.tiles[y][x])
-    if 0 == 0:  # todo: remove this if
+    # print(collisions.get_acc_block())
+    # print(map.tiles[y][x])
+    if acc_block != door_index:  # todo: don't remove this if
         end = False
         c = 1
         while not end:
@@ -270,11 +278,17 @@ def countplayervisibility(x, y):
     if acc_block == door_index:
         print("door")
         a = []
-        for p in range(0,len(visibility_list),1):  # todo finish this
-            if check_distance(x, y, visibility_list[p][0], visibility_list[p][1]) < 4:
-                a.append(visibility_list[p])
-        visibility_list = []
-        visibility_list = a
+        if view_mode == 0:
+            for p in range(0, len(map.tiles)):
+                for p1 in range(0, len(map.tiles[0])):
+                    if check_distance(x, y, p1, p) < view_range:
+                        visibility_list.append([p1, p])
+        elif view_mode == 1:
+            for p in range(0, len(visibility_list), 1):  # todo finish this
+                if check_distance(x, y, visibility_list[p][0], visibility_list[p][1]) < view_range:
+                    a.append(visibility_list[p])
+            visibility_list = []
+            visibility_list = a
     else:
         print(acc_block, door_index)
 
