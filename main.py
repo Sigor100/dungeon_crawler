@@ -2,6 +2,7 @@ import pygame
 import visuals
 import collisions as c
 import generation
+import random
 
 
 pygame.init()
@@ -10,7 +11,7 @@ clock = pygame.time.Clock()
 box_size = 32
 fps = 30
 
-map = generation.getmap()
+curmap = generation.getmap()
 white = (255, 255, 255)
 black = (0, 0, 0)
 
@@ -19,11 +20,11 @@ def gameloop():
     game_exit = False
     game_over = False
     direction = [0, 0]  # 0 - y axis; 1 - z axis
-    hero_x = map.startpos[0]
-    hero_y = map.startpos[1]
+    hero_x = curmap.startpos[0]
+    hero_y = curmap.startpos[1]
 
-    hero_x = 32 * map.startpos[0]
-    hero_y = 32 * map.startpos[1]
+    hero_x = 32 * curmap.startpos[0]
+    hero_y = 32 * curmap.startpos[1]
     hero_x_change = 0
     hero_y_change = 0
     turn = True # true = my turn   false = enemy turn
@@ -54,6 +55,23 @@ def gameloop():
                     if event.key == pygame.K_d:
                         turn = False
                         direction[1] += 32
+                    if event.key == pygame.K_p:
+                        print("burza")
+                        spos = [0, 0]
+                        epos = [0, 0]
+                        while True:
+                            spos[0] = random.randint(0, curmap.width - 1)
+                            spos[1] = random.randint(0, curmap.height - 1)
+                            epos[0] = random.randint(0, curmap.width - 1)
+                            epos[1] = random.randint(0, curmap.height - 1)
+                            if curmap.tiles[spos[1]][spos[0]] == 2 and curmap.tiles[epos[1]][epos[0]] == 2:
+                                print(spos)
+                                print(epos)
+                                curmap.tiles[spos[1]][spos[0]] = 4
+                                curmap.tiles[epos[1]][epos[0]] = 4
+                                break
+                        heropath = c.getpath(spos, epos)
+                        print(heropath)
                 # elif event.key == pygame.K_e:
                 # todo: eq/backpack window here
                 elif event.type == pygame.KEYUP:
@@ -65,6 +83,7 @@ def gameloop():
                         direction[1] += 32
                     if event.key == pygame.K_d:
                         direction[1] -= 32
+
             if game_exit:
                 break
         c.takeoffmap(hero_x, hero_y)

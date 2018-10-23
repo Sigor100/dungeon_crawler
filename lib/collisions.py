@@ -1,11 +1,23 @@
 import generation
 
 disablecollisions = False  # set to true for debug
+pathfindingdebug = False
+
+curmap = generation.getmap()
+colmap = []
+for i in range(0, curmap.height):
+    a = []
+    for j in range(0, curmap.width):
+        a.append(0)
+    colmap.append(a)
+dirx = [0, 1, 1, 1, 0, -1, -1, -1]
+diry = [-1, -1, 0, 1, 1, 1, 0, -1]
+iii = 0
 
 box_size = 32
 hero_id = 5
 acc_block = 4
-map = generation.getmap()
+curmap = generation.getmap()
 
 
 def collisions(x, y, d):
@@ -17,12 +29,12 @@ def collisions(x, y, d):
 
 def putonmap(x, y):
     global acc_block
-    acc_block = map.tiles[int(y / box_size)][int(x / box_size)]
-    map.tiles[int(y / box_size)][int(x / box_size)] = hero_id
+    acc_block = curmap.tiles[int(y / box_size)][int(x / box_size)]
+    curmap.tiles[int(y / box_size)][int(x / box_size)] = hero_id
 
 
 def takeoffmap(x, y):
-    map.tiles[int(y / box_size)][int(x / box_size)] = acc_block
+    curmap.tiles[int(y / box_size)][int(x / box_size)] = acc_block
 
 
 def get_acc_block():
@@ -32,16 +44,36 @@ def get_acc_block():
 def whatobject(x, y):
     x = int(x / 32)
     y = int(y / 32)
-    return map.tiles[y][x]
+    return curmap.tiles[y][x]
+
+
+def findpath(spos, epos):
+    global iii
+    if pathfindingdebug:
+        print('wow ' + str(iii))
+        print(spos)
+    iii += 1
+    colmap[spos[1]][spos[0]] = 1
+    for i in range(0, len(dirx)):
+        if [spos[0] + dirx[i], spos[1] + diry[i]] == epos:
+            return [i]
+        elif colmap[spos[1] + diry[i]][spos[0] + dirx[i]] == 0 and generation.collidable(curmap.tiles[spos[1] + diry[i]][spos[0] + dirx[i]]):
+            ret = findpath([spos[0] + dirx[i], spos[1] + diry[i]], epos)
+            if ret != -1:
+                ret.insert(0, i)
+                return ret
+    return -1
 
 
 def getpath(spos, epos):
-    curmap = generation.getmap()
+    iii = 0
     if spos[0] < 0 or spos[1] < 0 or epos[0] < 0 or epos[1] < 0 or \
             spos[0] >= curmap.width or spos[1] >= curmap.height or \
             epos[0] >= curmap.width or epos[1] >= curmap.height:
+        print("out of range")
         return 0
-    if not generation.collidable(curmap.tiles[spos[1], spos[0]]) \
-            or not generation.collidable(curmap.tiles[spos[1], spos[0]]):
+    if not generation.collidable(curmap.tiles[spos[1]][spos[0]]) \
+            or not generation.collidable(curmap.tiles[spos[1]][spos[0]]):
+        print("collision error")
         return 0
-    return 1
+    return findpath(spos, epos)
