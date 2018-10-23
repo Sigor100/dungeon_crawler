@@ -3,7 +3,7 @@ import random
 
 r = "nodebug"
 debug = True
-rooms = 5
+rooms = 6
 
 
 curmap = 0
