@@ -4,7 +4,7 @@ import os
 import collisions
 from math import sqrt
 
-shadow_mode = 1  # set to 0 for the whole map to be visible from the start
+shadow_mode = 0  # set to 0 for the whole map to be visible from the start
 
 direct = os.getcwd()
 # direct = direct[:-4]
@@ -27,7 +27,7 @@ visibility_list = []
 shadow_map = []
 
 view_range = 4
-view_mode = 2  # 0 or 1
+view_mode = 1  # 0 or 1
 
 pygame.init()
 
@@ -37,7 +37,7 @@ for num in range(0, 7):
     img_list.append(pygame.image.load(path))
 backpack_background = pygame.image.load(direct + "/resources/backpack.png")
 
-map = generation.getmap()
+curmap = generation.getmap()
 """shadow_map = []
 for p in range(0, map.height):
     a = []
@@ -65,10 +65,10 @@ gameDisplay.fill(background)
 def drawscreen(x, y):
     shadow_map = shadowupdate()
     print(shadow_map)
-    for p in range(0, len(map.tiles), 1):
-        for p1 in range(0, len(map.tiles[0]), 1):
+    for p in range(0, len(curmap.tiles), 1):
+        for p1 in range(0, len(curmap.tiles[0]), 1):
             if shadow_map[p][p1] == 0:
-                gameDisplay.blit(img_list[map.tiles[p][p1]], (-x + (box_size * p1), -y + (box_size * p)))
+                gameDisplay.blit(img_list[curmap.tiles[p][p1]], (-x + (box_size * p1), -y + (box_size * p)))
             else:
                 gameDisplay.blit(img_list[6], (-x + (box_size * p1), -y + (box_size * p)))
     pygame.display.update()
@@ -86,9 +86,9 @@ def check_distance(x1, y1, x2, y2):
 def refill_shadow_map():
     shadow_map = []
     global shadow_mode
-    for p in range(0, map.height):
+    for p in range(0, curmap.height):
         a = []
-        for q in range(0, map.width):
+        for q in range(0, curmap.width):
             a.append(shadow_mode)
         shadow_map.append(a)
     return shadow_map
@@ -113,31 +113,31 @@ def countplayervisibility(x, y, n):
         end = False
         c = 1
         while not end:
-            if map.tiles[y][x + c] in visible_thru:
+            if curmap.tiles[y][x + c] in visible_thru:
                 visibility_list.append([x + c, y])
                 end1 = False
                 end2 = False
                 c1 = 1
                 c2 = 1
                 while not end1:
-                    if map.tiles[y + c1][x + c] in visible_thru2:
+                    if curmap.tiles[y + c1][x + c] in visible_thru2:
                         visibility_list.append([x + c, y + c1])
-                    elif map.tiles[y + c1][x + c] in not_visible_thru:
+                    elif curmap.tiles[y + c1][x + c] in not_visible_thru:
                         visibility_list.append([x + c, y + c1])
                         end1 = True
                     else:
                         end1 = True
                     c1 = c1 + 1
                 while not end2:
-                    if map.tiles[y - c2][x + c] in visible_thru2:
+                    if curmap.tiles[y - c2][x + c] in visible_thru2:
                         visibility_list.append([x + c, y - c2])
-                    elif map.tiles[y - c2][x + c] in not_visible_thru:
+                    elif curmap.tiles[y - c2][x + c] in not_visible_thru:
                         visibility_list.append([x + c, y - c2])
                         end2 = True
                     else:
                         end2 = True
                     c2 = c2 + 1
-            elif map.tiles[y][x + c] in not_visible_thru:
+            elif curmap.tiles[y][x + c] in not_visible_thru:
                 visibility_list.append([x + c, y])
                 end = True
             else:
@@ -147,31 +147,31 @@ def countplayervisibility(x, y, n):
         end = False
         c = 1
         while not end:
-            if map.tiles[y][x - c] in visible_thru:
+            if curmap.tiles[y][x - c] in visible_thru:
                 visibility_list.append([x - c, y])
                 end1 = False
                 end2 = False
                 c1 = 1
                 c2 = 1
                 while not end1:
-                    if map.tiles[y + c1][x - c] in visible_thru2:
+                    if curmap.tiles[y + c1][x - c] in visible_thru2:
                         visibility_list.append([x - c, y + c1])
-                    elif map.tiles[y + c1][x - c] in not_visible_thru:
+                    elif curmap.tiles[y + c1][x - c] in not_visible_thru:
                         visibility_list.append([x - c, y + c1])
                         end1 = True
                     else:
                         end1 = True
                     c1 = c1 + 1
                 while not end2:
-                    if map.tiles[y - c2][x - c] in visible_thru2:
+                    if curmap.tiles[y - c2][x - c] in visible_thru2:
                         visibility_list.append([x - c, y - c2])
-                    elif map.tiles[y - c2][x - c] in not_visible_thru:
+                    elif curmap.tiles[y - c2][x - c] in not_visible_thru:
                         visibility_list.append([x - c, y - c2])
                         end2 = True
                     else:
                         end2 = True
                     c2 = c2 + 1
-            elif map.tiles[y][x - c] in not_visible_thru:
+            elif curmap.tiles[y][x - c] in not_visible_thru:
                 visibility_list.append([x - c, y])
                 end = True
             else:
@@ -181,31 +181,31 @@ def countplayervisibility(x, y, n):
         end = False
         c = 1
         while not end:
-            if map.tiles[y - c][x] in visible_thru:
+            if curmap.tiles[y - c][x] in visible_thru:
                 visibility_list.append([x, y - c])
                 end1 = False
                 end2 = False
                 c1 = 1
                 c2 = 1
                 while not end1:
-                    if map.tiles[y - c][x + c1] in visible_thru2:
+                    if curmap.tiles[y - c][x + c1] in visible_thru2:
                         visibility_list.append([x + c1, y - c])
-                    elif map.tiles[y - c][x + c1] in not_visible_thru:
+                    elif curmap.tiles[y - c][x + c1] in not_visible_thru:
                         visibility_list.append([x + c1, y - c])
                         end1 = True
                     else:
                         end1 = True
                     c1 = c1 + 1
                 while not end2:
-                    if map.tiles[y - c][x - c2] in visible_thru2:
+                    if curmap.tiles[y - c][x - c2] in visible_thru2:
                         visibility_list.append([x - c2, y - c])
-                    elif map.tiles[y - c][x - c2] in not_visible_thru:
+                    elif curmap.tiles[y - c][x - c2] in not_visible_thru:
                         visibility_list.append([x - c2, y - c])
                         end2 = True
                     else:
                         end2 = True
                     c2 = c2 + 1
-            elif map.tiles[y - c][x] in not_visible_thru:
+            elif curmap.tiles[y - c][x] in not_visible_thru:
                 visibility_list.append([x, y - c])
                 end = True
             else:
@@ -215,31 +215,31 @@ def countplayervisibility(x, y, n):
         end = False
         c = 1
         while not end:
-            if map.tiles[y + c][x] in visible_thru:
+            if curmap.tiles[y + c][x] in visible_thru:
                 visibility_list.append([x, y + c])
                 end1 = False
                 end2 = False
                 c1 = 1
                 c2 = 1
                 while not end1:
-                    if map.tiles[y + c][x + c1] in visible_thru2:
+                    if curmap.tiles[y + c][x + c1] in visible_thru2:
                         visibility_list.append([x + c1, y + c])
-                    elif map.tiles[y + c][x + c1] in not_visible_thru:
+                    elif curmap.tiles[y + c][x + c1] in not_visible_thru:
                         visibility_list.append([x + c1, y + c])
                         end1 = True
                     else:
                         end1 = True
                     c1 = c1 + 1
                 while not end2:
-                    if map.tiles[y + c][x - c2] in visible_thru2:
+                    if curmap.tiles[y + c][x - c2] in visible_thru2:
                         visibility_list.append([x - c2, y + c])
-                    elif map.tiles[y + c][x - c2] in not_visible_thru:
+                    elif curmap.tiles[y + c][x - c2] in not_visible_thru:
                         visibility_list.append([x - c2, y + c])
                         end2 = True
                     else:
                         end2 = True
                     c2 = c2 + 1
-            elif map.tiles[y + c][x] in not_visible_thru:
+            elif curmap.tiles[y + c][x] in not_visible_thru:
                 visibility_list.append([x, y + c])
                 end = True
             else:
@@ -278,13 +278,13 @@ def countplayervisibility(x, y, n):
         print("door")
         a = []
         if view_mode == 0:
-            for p in range(0, len(map.tiles)):
-                for p1 in range(0, len(map.tiles[0])):
+            for p in range(0, len(curmap.tiles)):
+                for p1 in range(0, len(curmap.tiles[0])):
                     if check_distance(x, y, p1, p) < view_range:
                         visibility_list.append([p1, p])
         elif view_mode == 2:
             if n == 1:
-                if map.tiles[y][x + c] in visible_thru:
+                if curmap.tiles[y][x + c] in visible_thru:
                     countplayervisibility(x * box_size + box_size, y, 0)
                     countplayervisibility(x * box_size - box_size, y, 0)
                 else:
