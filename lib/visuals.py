@@ -1,24 +1,27 @@
 import pygame
 import generation
 import os
+import collisions
 
 shadow_mode = 1  # set to 0 for the whole map to be visible from the start
 
 direct = os.getcwd()
 # direct = direct[:-4]
 os.path.exists(direct)
-background = (25, 25, 25)
+#background = (25, 25, 25)
+background = (0, 0, 0)
 white = (255, 255, 255)
 display_width = 1600
 display_height = 800
 box_size = 32
 hero_x = 0
 hero_y = 0
-acc_block = 4
+acc_block = collisions.acc_block
 hero_id = 5
 visible_thru = [2, 4]
 visible_thru2 = [2, 4]
 not_visible_thru = [1, 3, 4]
+door_index = 3
 pygame.init()
 
 img_list = []
@@ -85,149 +88,182 @@ def countplayervisibility(x, y):
     global visible_thru
     global visible_thru2
     global not_visible_thru
-    end = False
     visibility_list = [[x, y]]
-    c = 1
-    while not end:
-        if map.tiles[y][x + c] in visible_thru:
-            visibility_list.append([x + c, y])
-            end1 = False
-            end2 = False
-            c1 = 1
-            c2 = 1
-            while not end1:
-                if map.tiles[y + c1][x + c] in visible_thru2:
-                    visibility_list.append([x + c, y + c1])
-                elif map.tiles[y + c1][x + c] in not_visible_thru:
-                    visibility_list.append([x + c, y + c1])
-                    end1 = True
-                else:
-                    end1 = True
-                c1 = c1 + 1
-            while not end2:
-                if map.tiles[y - c2][x + c] in visible_thru2:
-                    visibility_list.append([x + c, y - c2])
-                elif map.tiles[y - c2][x + c] in not_visible_thru:
-                    visibility_list.append([x + c, y - c2])
-                    end2 = True
-                else:
-                    end2 = True
-                c2 = c2 + 1
-        elif map.tiles[y][x + c] in not_visible_thru:
-            visibility_list.append([x + c, y])
-            end = True
-        else:
-            visibility_list.append([x + c, y])
-            end = True
-        c = c + 1
-    end = False
-    c = 1
-    while not end:
-        if map.tiles[y][x - c] in visible_thru:
-            visibility_list.append([x - c, y])
-            end1 = False
-            end2 = False
-            c1 = 1
-            c2 = 1
-            while not end1:
-                if map.tiles[y + c1][x - c] in visible_thru2:
-                    visibility_list.append([x - c, y + c1])
-                elif map.tiles[y + c1][x - c] in not_visible_thru:
-                    visibility_list.append([x - c, y + c1])
-                    end1 = True
-                else:
-                    end1 = True
-                c1 = c1 + 1
-            while not end2:
-                if map.tiles[y - c2][x - c] in visible_thru2:
-                    visibility_list.append([x - c, y - c2])
-                elif map.tiles[y - c2][x - c] in not_visible_thru:
-                    visibility_list.append([x - c, y - c2])
-                    end2 = True
-                else:
-                    end2 = True
-                c2 = c2 + 1
-        elif map.tiles[y][x - c] in not_visible_thru:
-            visibility_list.append([x - c, y])
-            end = True
-        else:
-            # visibility_list.append([x - c, y])
-            end = True
-        c = c + 1
-    end = False
-    c = 1
-    while not end:
-        if map.tiles[y - c][x] in visible_thru:
-            visibility_list.append([x, y - c])
-            end1 = False
-            end2 = False
-            c1 = 1
-            c2 = 1
-            while not end1:
-                if map.tiles[y - c][x + c1] in visible_thru2:
-                    visibility_list.append([x + c1, y - c])
-                elif map.tiles[y - c][x + c1] in not_visible_thru:
-                    visibility_list.append([x + c1, y - c])
-                    end1 = True
-                else:
-                    end1 = True
-                c1 = c1 + 1
-            while not end2:
-                if map.tiles[y - c][x - c2] in visible_thru2:
-                    visibility_list.append([x - c2, y - c])
-                elif map.tiles[y - c][x - c2] in not_visible_thru:
-                    visibility_list.append([x - c2, y - c])
-                    end2 = True
-                else:
-                    end2 = True
-                c2 = c2 + 1
-        elif map.tiles[y - c][x] in not_visible_thru:
-            visibility_list.append([x, y - c])
-            end = True
-        else:
+    # list2 = []
+    print(collisions.get_acc_block())
+    print(map.tiles[y][x])
+    if 0 == 0:  # todo: remove this if
+        end = False
+        c = 1
+        while not end:
+            if map.tiles[y][x + c] in visible_thru:
+                visibility_list.append([x + c, y])
+                end1 = False
+                end2 = False
+                c1 = 1
+                c2 = 1
+                while not end1:
+                    if map.tiles[y + c1][x + c] in visible_thru2:
+                        visibility_list.append([x + c, y + c1])
+                    elif map.tiles[y + c1][x + c] in not_visible_thru:
+                        visibility_list.append([x + c, y + c1])
+                        end1 = True
+                    else:
+                        end1 = True
+                    c1 = c1 + 1
+                while not end2:
+                    if map.tiles[y - c2][x + c] in visible_thru2:
+                        visibility_list.append([x + c, y - c2])
+                    elif map.tiles[y - c2][x + c] in not_visible_thru:
+                        visibility_list.append([x + c, y - c2])
+                        end2 = True
+                    else:
+                        end2 = True
+                    c2 = c2 + 1
+            elif map.tiles[y][x + c] in not_visible_thru:
+                visibility_list.append([x + c, y])
+                end = True
+            else:
+                visibility_list.append([x + c, y])
+                end = True
+            c = c + 1
+        end = False
+        c = 1
+        while not end:
+            if map.tiles[y][x - c] in visible_thru:
+                visibility_list.append([x - c, y])
+                end1 = False
+                end2 = False
+                c1 = 1
+                c2 = 1
+                while not end1:
+                    if map.tiles[y + c1][x - c] in visible_thru2:
+                        visibility_list.append([x - c, y + c1])
+                    elif map.tiles[y + c1][x - c] in not_visible_thru:
+                        visibility_list.append([x - c, y + c1])
+                        end1 = True
+                    else:
+                        end1 = True
+                    c1 = c1 + 1
+                while not end2:
+                    if map.tiles[y - c2][x - c] in visible_thru2:
+                        visibility_list.append([x - c, y - c2])
+                    elif map.tiles[y - c2][x - c] in not_visible_thru:
+                        visibility_list.append([x - c, y - c2])
+                        end2 = True
+                    else:
+                        end2 = True
+                    c2 = c2 + 1
+            elif map.tiles[y][x - c] in not_visible_thru:
+                visibility_list.append([x - c, y])
+                end = True
+            else:
+                # visibility_list.append([x - c, y])
+                end = True
+            c = c + 1
+        end = False
+        c = 1
+        while not end:
+            if map.tiles[y - c][x] in visible_thru:
+                visibility_list.append([x, y - c])
+                end1 = False
+                end2 = False
+                c1 = 1
+                c2 = 1
+                while not end1:
+                    if map.tiles[y - c][x + c1] in visible_thru2:
+                        visibility_list.append([x + c1, y - c])
+                    elif map.tiles[y - c][x + c1] in not_visible_thru:
+                        visibility_list.append([x + c1, y - c])
+                        end1 = True
+                    else:
+                        end1 = True
+                    c1 = c1 + 1
+                while not end2:
+                    if map.tiles[y - c][x - c2] in visible_thru2:
+                        visibility_list.append([x - c2, y - c])
+                    elif map.tiles[y - c][x - c2] in not_visible_thru:
+                        visibility_list.append([x - c2, y - c])
+                        end2 = True
+                    else:
+                        end2 = True
+                    c2 = c2 + 1
+            elif map.tiles[y - c][x] in not_visible_thru:
+                visibility_list.append([x, y - c])
+                end = True
+            else:
 
-            end = True
-        c = c + 1
-    end = False
-    c = 1
-    while not end:
-        if map.tiles[y + c][x] in visible_thru:
-            visibility_list.append([x, y + c])
-            end1 = False
-            end2 = False
-            c1 = 1
-            c2 = 1
-            while not end1:
-                if map.tiles[y + c][x + c1] in visible_thru2:
-                    visibility_list.append([x + c1, y + c])
-                elif map.tiles[y + c][x + c1] in not_visible_thru:
-                    visibility_list.append([x + c1, y + c])
-                    end1 = True
-                else:
-                    end1 = True
-                c1 = c1 + 1
-            while not end2:
-                if map.tiles[y + c][x - c2] in visible_thru2:
-                    visibility_list.append([x - c2, y + c])
-                elif map.tiles[y + c][x - c2] in not_visible_thru:
-                    visibility_list.append([x - c2, y + c])
-                    end2 = True
-                else:
-                    end2 = True
-                c2 = c2 + 1
-        elif map.tiles[y + c][x] in not_visible_thru:
-            visibility_list.append([x, y + c])
-            end = True
-        else:
-            end = True
-        c = c + 1
+                end = True
+            c = c + 1
+        end = False
+        c = 1
+        while not end:
+            if map.tiles[y + c][x] in visible_thru:
+                visibility_list.append([x, y + c])
+                end1 = False
+                end2 = False
+                c1 = 1
+                c2 = 1
+                while not end1:
+                    if map.tiles[y + c][x + c1] in visible_thru2:
+                        visibility_list.append([x + c1, y + c])
+                    elif map.tiles[y + c][x + c1] in not_visible_thru:
+                        visibility_list.append([x + c1, y + c])
+                        end1 = True
+                    else:
+                        end1 = True
+                    c1 = c1 + 1
+                while not end2:
+                    if map.tiles[y + c][x - c2] in visible_thru2:
+                        visibility_list.append([x - c2, y + c])
+                    elif map.tiles[y + c][x - c2] in not_visible_thru:
+                        visibility_list.append([x - c2, y + c])
+                        end2 = True
+                    else:
+                        end2 = True
+                    c2 = c2 + 1
+            elif map.tiles[y + c][x] in not_visible_thru:
+                visibility_list.append([x, y + c])
+                end = True
+            else:
+                end = True
+            c = c + 1
+        """elif collisions.acc_block == door_index:
+        print("door")
+        qlist = []
+        end = False
+        c = 1
+        #qlist = [[y, x + c], [y, x - c], [y + c, x], [y - c, x]]
+        qlist = []
+        for p in range(0, 4, 1):
+            print("p: ", p)
+            if p == 0:
+                qlist = []
+                qlist.append(y)
+                qlist.append(int(x + c))
+            elif p == 1:
+                qlist = [y, int(x - c)]
+            elif p == 1:
+                qlist = [int(y + c), x]
+            elif p == 1:
+                qlist = [int(y - c), x]
+            while not end:
+                if map.tiles[qlist[0], qlist[1]] in visible_thru:
+                    visibility_list.append([qlist[1], qlist[0]])
+                elif map.tiles[qlist[0], qlist[1]] in not_visible_thru:
+                    visibility_list.append([qlist[1], qlist[0]])
+                    end = True
+                c = c + 1
+                #qlist = [[y, x + c], [y, x - c], [y + c, x], [y - c, x]]"""
+    # else:
+    # print("error: not acceptable acc_block: ", acc_block)
 
     shadow_map = refill_shadow_map()
     for p in range(0, len(visibility_list)):
         try:
             shadow_map[visibility_list[p][1]][visibility_list[p][0]] = 0
         except:
-            print("błąd: ", visibility_list[p][0], visibility_list[p][1])
+            print("error: shadow_map index out of range: ", visibility_list[p][0], visibility_list[p][1])
 
 
 # print("shadowmap", shadow_map)
@@ -250,4 +286,4 @@ shadow_map[int(y/box_size)+1][int(x/box_size)] = 0
 gameDisplay.fill(background)
 	#gameDisplay.blit(img_list[1], 100, 100)
 
-	pygame.display.update()"""  # todo kiedys skonczyc
+	pygame.display.update()"""  # todo fix this sometime

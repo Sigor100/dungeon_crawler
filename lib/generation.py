@@ -2,7 +2,7 @@ import random
 
 
 r = "nodebug"
-debug = True
+debug = False
 rooms = 6
 
 

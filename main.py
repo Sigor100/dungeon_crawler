@@ -79,7 +79,7 @@ def gameloop():
             turn = True
         # SCREEN
         visuals.countplayervisibility(hero_x, hero_y)
-        visuals.drawscreen(hero_x - 418, hero_y - 320)
+        visuals.drawscreen(hero_x - 800, hero_y - 400)
         clock.tick(fps)
 
     pygame.quit()
