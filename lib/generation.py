@@ -34,8 +34,25 @@ class Room:
     wtiles = 0
 
 
+def inroom(pos, i):
+    if pos[0] > curmap.rooms[i].xpos\
+        and pos[0] < (curmap.rooms[i].xpos + curmap.rooms[i].width - 1)\
+        and pos[1] > curmap.rooms[i].ypos\
+        and pos[1] < (curmap.rooms[i].ypos + curmap.rooms[i].height - 1):
+        return True
+    return False
+
+
+def onroom(pos, i):
+    if (pos[0] == curmap.rooms[i].xpos
+            or pos[0] == curmap.rooms[i].xpos + curmap.rooms[i].width - 1)\
+        and (pos[1] == curmap.rooms[i].ypos
+            or pos[1] == curmap.rooms[i].ypos + curmap.rooms[i].height - 1):
+        return True
+    return False
+
+
 def collidable(n):
-    #n = curmap.tiles[coords[0], coords[1]]
     if n == items.index("floor") or n == items.index("door")\
         or n == items.index("upstairs") or n == items.index("downstairs")\
             or n == items.index("trap") or n == 0:
