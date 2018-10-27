@@ -25,8 +25,9 @@ def gameloop():
 
     hero_x = 32 * curmap.startpos[0]
     hero_y = 32 * curmap.startpos[1]
-    hero_x_change = 0
-    hero_y_change = 0
+    camera_x_change = 0
+    camera_y_change = 0
+
     turn = True # true = my turn   false = enemy turn
     #
 
@@ -55,6 +56,24 @@ def gameloop():
                     if event.key == pygame.K_d:
                         turn = False
                         direction[1] += 32
+
+                    if event.key == pygame.K_RIGHT:
+                        turn = False
+                        camera_x_change = camera_x_change + box_size
+                    if event.key == pygame.K_LEFT:
+                        turn = False
+                        camera_x_change = camera_x_change - box_size
+                    if event.key == pygame.K_UP:
+                        turn = False
+                        camera_y_change = camera_y_change - box_size
+                    if event.key == pygame.K_DOWN:
+                        turn = False
+                        camera_y_change = camera_y_change + box_size
+                    if event.key == pygame.K_SPACE:
+                        turn = False
+                        camera_x_change = 0
+                        camera_y_change = 0
+
                     if event.key == pygame.K_z:
                         print(visuals.get_discoverymap())
                     if event.key == pygame.K_p:
@@ -100,7 +119,7 @@ def gameloop():
             turn = True
         # SCREEN
         visuals.countplayervisibility(hero_x, hero_y, 1)
-        visuals.drawscreen(hero_x - 800, hero_y - 400)
+        visuals.drawscreen((hero_x - 800) + camera_x_change, (hero_y - 400) + camera_y_change)
         clock.tick(fps)
 
     pygame.quit()
