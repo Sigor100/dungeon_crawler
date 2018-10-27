@@ -40,27 +40,22 @@ def whatobject(x, y):
     return curmap.tiles[y][x]
 
 
-def inroom(pos, i):
-    if pos[0] > curmap.rooms[i][0]\
-        and pos[0] < (curmap.rooms[i][0] + curmap.rooms[i][2] - 1)\
-        and pos[1] > curmap.rooms[i][1]\
-        and pos[1] < (curmap.rooms[i][1] + curmap.rooms[i][3] - 1):
-        return True
-    return False
-
-
-def onroom(pos, i):
-
-    if (pos[0] == curmap.rooms[i][0]
-            or pos[0] == curmap.rooms[i][0] + curmap.rooms[i][2] - 1)\
-        and (pos[1] == curmap.rooms[i][1]
-            or pos[1] == curmap.rooms[i][1] + curmap.rooms[i][3] - 1):
-        return True
-    return False
-
 def findpath(spos, epos):
-    return -1
-
+    diffx = spos[0] - epos[0]
+    diffy = spos[1] - epos[1]
+    ret = []
+    while not diffx == 0 or not diffy == 0:
+        if diffx == 0:
+            ret.append([0, diffy / abs(diffy)])
+            diffy -= diffy / abs(diffy)
+        elif diffy == 0:
+            ret.append([diffx / abs(diffx), 0])
+            diffx -= diffx / abs(diffx)
+        else:
+            ret.append([diffx / abs(diffx), diffy / abs(diffy)])
+            diffx -= diffx / abs(diffx)
+            diffy -= diffy / abs(diffy)
+    return ret
 
 def getpath(spos, epos):
     sroom = -1
