@@ -40,6 +40,24 @@ def whatobject(x, y):
     return curmap.tiles[y][x]
 
 
+def inroom(pos, i):
+    if pos[0] > curmap.rooms[i][0]\
+        and pos[0] < (curmap.rooms[i][0] + curmap.rooms[i][2] - 1)\
+        and pos[1] > curmap.rooms[i][1]\
+        and pos[1] < (curmap.rooms[i][1] + curmap.rooms[i][3] - 1):
+        return True
+    return False
+
+
+def onroom(pos, i):
+
+    if (pos[0] == curmap.rooms[i][0]
+            or pos[0] == curmap.rooms[i][0] + curmap.rooms[i][2] - 1)\
+        and (pos[1] == curmap.rooms[i][1]
+            or pos[1] == curmap.rooms[i][1] + curmap.rooms[i][3] - 1):
+        return True
+    return False
+
 def findpath(spos, epos):
     return -1
 
