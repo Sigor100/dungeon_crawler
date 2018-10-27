@@ -109,12 +109,13 @@ def spawn_enemy(x=-1, y=-1, id=-1, lvl=-1):
 
 
 def enemy_turn(x, y):
-    for q in range(0, len(alive_enemies_list), 1):
+    for q in range(0, len(alive_enemies_list)-1, 1):
         print("p: ", q, len(alive_enemies_list), alive_enemies_list)
         """if alive_enemies_list[p][2] <= 0:
             alive_enemies_list.remove(alive_enemies_list[p]) """           #HP
-        """if alive_enemies_list[p][1] == 0:
-            print(collisions.legacygetpath([alive_enemies_list[q][0], alive_enemies_list[q][1]], [x, y]))"""
+        #if alive_enemies_list[p][1] == 0:
+            #print(collisions.legacygetpath([alive_enemies_list[q][0], alive_enemies_list[q][1]], [x, y]))
+            #temp = 0
 
 
 init()

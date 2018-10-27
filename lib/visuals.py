@@ -69,7 +69,7 @@ gameDisplay.fill(background)
 
 def drawscreen(x, y):
     global discovered_map
-    print("enemies map x and y: ", len(enemies.enemies_map), len(enemies.enemies_map[0]))
+    print("enemies map x and y: ", len(enemies.enemies_map), len(enemies.enemies_map[0]), len(curmap.tiles), len(curmap.tiles[0]))
     shadow_map = shadowupdate()
     # print("shadow map in drawscreen", shadow_map)
     for p in range(0, len(curmap.tiles), 1):
@@ -77,7 +77,7 @@ def drawscreen(x, y):
             if shadow_map[p][p1] == 0:
                 gameDisplay.blit(img_list[curmap.tiles[p][p1]], (-x + (box_size * p1), -y + (box_size * p)))
                 try:
-                    if enemies.enemies_map[p1][p] != 0:
+                    if enemies.enemies_map[p][p1] != 0:
                         gameDisplay.blit(img_list[8], (-x + (box_size * p1), -y + (box_size * p)))   # todo: still working on it
                 except:
                     print("ERROR: ",p,p1)
