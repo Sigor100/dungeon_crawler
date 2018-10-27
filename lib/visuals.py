@@ -37,7 +37,7 @@ view_mode = 2  # 0 or 1
 pygame.init()
 
 img_list = []
-for num in range(0, 8):
+for num in range(0, 9):
     path = direct + "/resources/textures/img" + str(num) + ".png"
     img_list.append(pygame.image.load(path))
 backpack_background = pygame.image.load(direct + "/resources/backpack.png")
@@ -69,14 +69,18 @@ gameDisplay.fill(background)
 
 def drawscreen(x, y):
     global discovered_map
+    print("enemies map x and y: ", len(enemies.enemies_map), len(enemies.enemies_map[0]))
     shadow_map = shadowupdate()
     # print("shadow map in drawscreen", shadow_map)
     for p in range(0, len(curmap.tiles), 1):
         for p1 in range(0, len(curmap.tiles[0]), 1):
             if shadow_map[p][p1] == 0:
                 gameDisplay.blit(img_list[curmap.tiles[p][p1]], (-x + (box_size * p1), -y + (box_size * p)))
-                # if enemies.enemies_map[p1][p] != 0:
-                # gameDisplay.blit(8, (-x + (box_size * p1), -y + (box_size * p)))   # todo: still working on it
+                try:
+                    if enemies.enemies_map[p1][p] != 0:
+                        gameDisplay.blit(img_list[8], (-x + (box_size * p1), -y + (box_size * p)))   # todo: still working on it
+                except:
+                    print("ERROR: ",p,p1)
             else:
                 # print([int(x/box_size), int(y/box_size)])
                 if [p1, p] in discovered_map:

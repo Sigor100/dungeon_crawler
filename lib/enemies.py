@@ -84,11 +84,9 @@ def spawn_enemy(x=-1, y=-1, id=-1, lvl=-1):
         done = False
         print("losuje x i y")
         while not done:
-            x = random.randint(0, int(curmap.width / box_size))
-            y = random.randint(0, int(curmap.height / box_size))
-            if [y, x] not in visuals.get_discoverymap():
-                # x = x*box_size
-                # y = y*box_size
+            x = random.randint(0, curmap.width-1)
+            y = random.randint(0, curmap.height-1)
+            if [y, x] not in visuals.get_discoverymap() and curmap.tiles[y][x] == 2:
                 done = True
     print("x,y: ", x, y)
     if lvl == -1 and id != -1:

@@ -76,8 +76,9 @@ def gameloop():
                         camera_y_change = 0
 
                     if event.key == pygame.K_z:
-                        #print(visuals.get_discoverymap())
-                        print(len(e.alive_enemies_list))
+                        # print(visuals.get_discoverymap())
+                        #print(len(e.alive_enemies_list))
+                        print(hero_x/32, hero_y/32)
                     if event.key == pygame.K_p:
                         print("burza")
                         spos = [0, 0]
@@ -116,10 +117,10 @@ def gameloop():
         # else:
         # print("kolizja")
         c.putonmap(hero_x, hero_y)
-        #if random.randint(0, 100) < 100:
-            # e.spawn_enemy(-1, -1, 1, 1) # todo: still working on it
+        if random.randint(0, 100) < 50:
+            e.spawn_enemy(-1, -1, 1, 1)  # todo: still working on it
         if not turn:
-            # e.enemy_turn(hero_x, hero_y)   # todo: still working on it
+            e.enemy_turn(hero_x, hero_y)  # todo: still working on it
             turn = True
         # SCREEN
         visuals.countplayervisibility(hero_x, hero_y)
