@@ -35,19 +35,20 @@ class Room:
 
 
 def inroom(pos, i):
-    if pos[0] > curmap.rooms[i].xpos\
-        and pos[0] < (curmap.rooms[i].xpos + curmap.rooms[i].width - 1)\
-        and pos[1] > curmap.rooms[i].ypos\
-        and pos[1] < (curmap.rooms[i].ypos + curmap.rooms[i].height - 1):
+    if pos[0] > curmap.rooms[i][0]\
+        and pos[0] < (curmap.rooms[i][0] + curmap.rooms[i][2] - 1)\
+        and pos[1] > curmap.rooms[i][1]\
+        and pos[1] < (curmap.rooms[i][1] + curmap.rooms[i][3] - 1):
         return True
     return False
 
 
 def onroom(pos, i):
-    if (pos[0] == curmap.rooms[i].xpos
-            or pos[0] == curmap.rooms[i].xpos + curmap.rooms[i].width - 1)\
-        and (pos[1] == curmap.rooms[i].ypos
-            or pos[1] == curmap.rooms[i].ypos + curmap.rooms[i].height - 1):
+
+    if (pos[0] == curmap.rooms[i][0]
+            or pos[0] == curmap.rooms[i][0] + curmap.rooms[i][2] - 1)\
+        and (pos[1] == curmap.rooms[i][1]
+            or pos[1] == curmap.rooms[i][1] + curmap.rooms[i][3] - 1):
         return True
     return False
 
