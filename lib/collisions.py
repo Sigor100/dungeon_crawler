@@ -117,4 +117,5 @@ def legacygetpath(spos, epos):
             or not generation.collidable(curmap.tiles[spos[1]][spos[0]]):
         print("collision error")
         return 0
+    print(legacyfindpath(spos, epos, colmap))
     return legacyfindpath(spos, epos, colmap)

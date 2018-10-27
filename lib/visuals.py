@@ -3,8 +3,12 @@ import generation
 import os
 import collisions
 from math import sqrt
+import enemies
+import settings as s
 
 shadow_mode = 1  # set to 0 for the whole map to be visible from the start
+
+# IMPORTANT: Don't delete comments in this file
 
 direct = os.getcwd()
 # direct = direct[:-4]
@@ -12,9 +16,9 @@ os.path.exists(direct)
 # background = (25, 25, 25)
 background = (0, 0, 0)
 white = (255, 255, 255)
-display_width = 1600
-display_height = 800
-box_size = 32
+display_width = s.display_width
+display_height = s.display_height
+box_size = s.box_size
 hero_x = 0
 hero_y = 0
 acc_block = collisions.acc_block
@@ -24,7 +28,7 @@ visible_thru2 = [2, 4]
 not_visible_thru = [1, 3, 4]
 door_index = 3
 visibility_list = []
-discovered_map = []
+discovered_map = []  # todo: discovered_map is now list, need to be map
 # shadow_map = []
 
 view_range = 4
@@ -33,7 +37,7 @@ view_mode = 2  # 0 or 1
 pygame.init()
 
 img_list = []
-for num in range(0, 7):
+for num in range(0, 8):
     path = direct + "/resources/textures/img" + str(num) + ".png"
     img_list.append(pygame.image.load(path))
 backpack_background = pygame.image.load(direct + "/resources/backpack.png")
@@ -62,20 +66,23 @@ gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption("visuals test")
 gameDisplay.fill(background)
 
+
 def drawscreen(x, y):
     global discovered_map
     shadow_map = shadowupdate()
-    #print("shadow map in drawscreen", shadow_map)
+    # print("shadow map in drawscreen", shadow_map)
     for p in range(0, len(curmap.tiles), 1):
         for p1 in range(0, len(curmap.tiles[0]), 1):
             if shadow_map[p][p1] == 0:
                 gameDisplay.blit(img_list[curmap.tiles[p][p1]], (-x + (box_size * p1), -y + (box_size * p)))
+                # if enemies.enemies_map[p1][p] != 0:
+                # gameDisplay.blit(8, (-x + (box_size * p1), -y + (box_size * p)))   # todo: still working on it
             else:
-                #print([int(x/box_size), int(y/box_size)])
+                # print([int(x/box_size), int(y/box_size)])
                 if [p1, p] in discovered_map:
-                    print("yes")
+                    # print("yes")
                     blit_alpha(gameDisplay, img_list[curmap.tiles[p][p1]],
-                                           [(-x + (box_size * p1)), (-y + (box_size * p))], 50)
+                               [(-x + (box_size * p1)), (-y + (box_size * p))], 50)
                 else:
                     gameDisplay.blit(img_list[6], (-x + (box_size * p1), -y + (box_size * p)))
     pygame.display.update()
@@ -96,11 +103,15 @@ def get_discoverymap():
     return discovered_map
 
 
+def get_box_size():
+    return box_size
+
+
 def check_distance(x1, y1, x2, y2):
     a = int(abs(x1 - x2) ** 2)
     b = int(abs(y1 - y2) ** 2)
     c = int(sqrt(a + b))
-    #print("distance: ", c)
+    # print("distance: ", c)
     return c
 
 
@@ -115,9 +126,9 @@ def refill_shadow_map():
     return shadow_map
 
 
-def countplayervisibility(x, y, n):
-    #if n == 0:
-        #print("error: funcja z parametrem 0")
+def countplayervisibility(x, y):
+    # if n == 0:
+    # print("error: funcja z parametrem 0")
     x = int(x / box_size)
     y = int(y / box_size)
     # global shadow_map
@@ -296,10 +307,10 @@ def countplayervisibility(x, y, n):
                     end = True
                 c = c + 1
                 #qlist = [[y, x + c], [y, x - c], [y + c, x], [y - c, x]]"""
-    # else:
-    # #print("error: not acceptable acc_block: ", acc_block)
-        #if n == 0:
-            #print("n == 0, visibility list: ", visibility_list)
+        # else:
+        # #print("error: not acceptable acc_block: ", acc_block)
+        # if n == 0:
+        # print("n == 0, visibility list: ", visibility_list)
         """elif acc_block == door_index and n == 1:
         #print("door")
         a = []
@@ -330,9 +341,9 @@ def countplayervisibility(x, y, n):
                 #print("a: ", a)
                 a = []
                 #print("visibility list po funkcji: ", visibility_list)"""
-    #else:
-        #print("error: unknown index", acc_block)
-    for p in range(0,len(visibility_list),1):
+    # else:
+    # print("error: unknown index", acc_block)
+    for p in range(0, len(visibility_list), 1):
         if visibility_list[p] not in discovered_map:
             discovered_map.append(visibility_list[p])
         if check_distance(x, y, visibility_list[p][0], visibility_list[p][1]) < view_range:
@@ -350,17 +361,17 @@ def countplayervisibility(x, y, n):
 
 def shadowupdate():
     global visibility_list
-    #print("visibility list in shadowUpDate: ", visibility_list)
+    # print("visibility list in shadowUpDate: ", visibility_list)
     shadow_map = refill_shadow_map()
     for p in range(0, len(visibility_list)):
         try:
             shadow_map[visibility_list[p][1]][visibility_list[p][0]] = 0
-        except:
+        except IndexError:
             print("error: shadow_map index out of range: ", visibility_list[p][0], visibility_list[p][1])
     # #print(shadow_map)
-    #for p in range(0,len(shadow_map)):
-        #if 0 in shadow_map[p]:
-            #print("0 w visilisity list  #4")
+    # for p in range(0,len(shadow_map)):
+    # if 0 in shadow_map[p]:
+    # print("0 w visilisity list  #4")
     visibility_list = []
     return shadow_map
 

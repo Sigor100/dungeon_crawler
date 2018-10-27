@@ -1,55 +1,122 @@
 import os
 import generation
+import settings as s
+import collisions
+import random
+import visuals
 
 
-class Enemie():
-	def __init__(self, id, type, name, damage, hp, drop_min, drop_max):
-		self.id = id
-		self.type = type  # 0 = melee	1 = ranged  2 = both
-		self.name = name
-		self.damage = damage
-		self.hp = hp
-		self.drop_min = drop_min
-		self.drop_max = drop_max
+class Enemy:
+    def __init__(self, id, lvl, type, name, damage, hp, drop_min, drop_max):
+        self.id = id
+        self.lvl = lvl
+        self.type = type  # 0 = melee	1 = ranged  2 = both
+        self.name = name
+        self.damage = damage
+        self.hp = hp
+        self.drop_min = drop_min
+        self.drop_max = drop_max
+
+
+alive_enemies_list = []  # [id, active, hp, x, y]
+enemies_map = []
+curmap = generation.getmap()
+max_lvl = 1
+box_size = s.box_size
+enemy_list = []
+a = []
+for p in range(0, len(curmap.tiles)):
+    a = []
+    for q in range(0, len(curmap.tiles[0])):
+        a.append(0)
+    enemies_map.append(a)
+print("enemies map: ", len(enemies_map), len(enemies_map[0]))
 
 
 def init():
-	direct = os.getcwd()
-	direct = direct[:-4]
+    direct = os.getcwd()
+    # direct = direct[:-4]
 
-	enemie_file = []
-	file_list = []
-	enemie_list = []
+    global enemies_map
+    global enemy_list
+    file_list = []
+
+    for p in range(1, 2):
+        enemy_file = open(direct + "/resources/enemies/enemy" + str(p) + ".txt")
+        enemy_file = list(enemy_file)
+        enemy_file = str(enemy_file)
+        enemy_file = list(enemy_file)
+        file_list.append(enemy_file)
+
+    for p in range(0, len(file_list), 1):
+        file_list[p] = file_list[p][2:]
+        file_list[p] = file_list[p][:-2]
+
+    h_list = []
+    h_list2 = []
+
+    for p in range(0, len(file_list), 1):
+        if file_list[p][0] == "0":
+            for p1 in range(0, len(file_list[p])):
+                if file_list[p][p1] != " ":
+                    h_list.append(file_list[p][p1])
+                else:
+                    h_list2.append("".join(h_list))
+                    h_list = []
+            h_list2.append("".join(h_list))
+            h_list = []
+            enemy_list.append(h_list2)
+            h_list2 = []
+    print(enemy_list)
+    for p in range(1, len(enemy_list)):
+        print(enemy_list[p][1])
+        enemy_list[p] = Enemy(enemy_list[p][0], enemy_list[p][1], enemy_list[p][2], enemy_list[p][3],
+                              enemy_list[p][4], enemy_list[p][5], enemy_list[p][6], enemy_list[p][7])
 
 
-	for p in range(0, 1):
-		enemie_file = open(direct + "/resources/enemies/enemie" + str(p) + ".txt")
-		enemie_file = list(enemie_file)
-		enemie_file = str(enemie_file)
-		enemie_file = list(enemie_file)
-		file_list.append(enemie_file)
+def spawn_enemy(x=-1, y=-1, id=-1, lvl=-1):
+    global enemies_map
+    temp = []
+    """if x == -1 and y == -1:
+        x = random.randint(0, s.display_width)
+        y = random.randint(0, s.display_height)"""
+    if x == -1 and y == -1:
+        done = False
+        print("losuje x i y")
+        while not done:
+            x = random.randint(0, int(curmap.width / box_size))
+            y = random.randint(0, int(curmap.height / box_size))
+            if [y, x] not in visuals.get_discoverymap():
+                # x = x*box_size
+                # y = y*box_size
+                done = True
+    print("x,y: ", x, y)
+    if lvl == -1 and id != -1:
+        enemies_map[y][x] = id
+        alive_enemies_list.append([id, 0, enemy_list[id + 1][5], x, y])
+    elif lvl == -1 and id == -1:
+        lvl = random.randint(1, max_lvl)
+        for p in range(0, len(enemy_list), 1):
+            if enemy_list[p][1] == lvl:
+                temp.append(enemy_list[p][0])
+        enemies_map[y][x] = temp[random.randint(0, len(temp))]
+    elif lvl != -1 and id != -1:
+        enemies_map[y][x] = id
+        alive_enemies_list.append([id, 0, x, y])
+    elif lvl != -1 and id == -1:
+        for p in range(0, len(enemy_list), 1):
+            if enemy_list[p][1] == lvl:
+                temp.append(enemy_list[p][0])
+        enemies_map[y][x] = temp[random.randint(0, len(temp))]
 
-	for p in range(0, len(file_list), 1):
-		file_list[p] = file_list[p][2:]
-		file_list[p] = file_list[p][:-2]
 
-	h_list = []
-	h_list2 = []
+def enemy_turn(x, y):
+    for q in range(0, len(alive_enemies_list), 1):
+        print("p: ", q, len(alive_enemies_list), alive_enemies_list)
+        """if alive_enemies_list[p][2] <= 0:
+            alive_enemies_list.remove(alive_enemies_list[p]) """           #HP
+        """if alive_enemies_list[p][1] == 0:
+            print(collisions.legacygetpath([alive_enemies_list[q][0], alive_enemies_list[q][1]], [x, y]))"""
 
-	for p in range(0, len(file_list), 1):
-		if file_list[p][0] == "0":
-			for p1 in range(0, len(file_list[p])):
-				if file_list[p][p1] != " ":
-					h_list.append(file_list[p][p1])
-				else:
-					h_list2.append("".join(h_list))
-					h_list = []
-			h_list2.append("".join(h_list))
-			h_list = []
-			enemie_list.append(h_list2)
-			h_list2 = []
-	print(enemie_list)
-	for p in range(1, len(enemie_list)):
-		print(enemie_list[p][1])
-		enemie_list[p] = Enemie(enemie_list[p][0], enemie_list[p][1], enemie_list[p][2], enemie_list[p][3],
-								enemie_list[p][4], enemie_list[p][5], enemie_list[p][6])
+
+init()

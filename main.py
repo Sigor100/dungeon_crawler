@@ -3,7 +3,7 @@ import visuals
 import collisions as c
 import generation
 import random
-
+import enemies as e
 
 pygame.init()
 
@@ -20,16 +20,17 @@ def gameloop():
     game_exit = False
     game_over = False
     direction = [0, 0]  # 0 - y axis; 1 - z axis
-    hero_x = curmap.startpos[0]
-    hero_y = curmap.startpos[1]
+    # hero_x = curmap.startpos[0]
+    # hero_y = curmap.startpos[1]
 
     hero_x = 32 * curmap.startpos[0]
     hero_y = 32 * curmap.startpos[1]
     camera_x_change = 0
     camera_y_change = 0
 
-    turn = True # true = my turn   false = enemy turn
-    #
+    turn = True  # true = my turn   false = enemy turn
+
+    e.init()
 
     while not game_exit:
         while game_over:
@@ -75,7 +76,8 @@ def gameloop():
                         camera_y_change = 0
 
                     if event.key == pygame.K_z:
-                        print(visuals.get_discoverymap())
+                        #print(visuals.get_discoverymap())
+                        print(len(e.alive_enemies_list))
                     if event.key == pygame.K_p:
                         print("burza")
                         spos = [0, 0]
@@ -111,14 +113,16 @@ def gameloop():
         if c.collisions(hero_x, hero_y, direction):
             hero_x = hero_x + direction[1]
             hero_y = hero_y + direction[0]
-        #else:
-            # print("kolizja")
+        # else:
+        # print("kolizja")
         c.putonmap(hero_x, hero_y)
-        if turn == False:
-            #print("twoja kolej")
+        #if random.randint(0, 100) < 100:
+            # e.spawn_enemy(-1, -1, 1, 1) # todo: still working on it
+        if not turn:
+            # e.enemy_turn(hero_x, hero_y)   # todo: still working on it
             turn = True
         # SCREEN
-        visuals.countplayervisibility(hero_x, hero_y, 1)
+        visuals.countplayervisibility(hero_x, hero_y)
         visuals.drawscreen((hero_x - 800) + camera_x_change, (hero_y - 400) + camera_y_change)
         clock.tick(fps)
 
