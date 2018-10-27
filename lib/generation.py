@@ -1,10 +1,8 @@
 import random
 
-
 r = "nodebug"
 debug = False
 rooms = 10
-
 
 curmap = 0
 items = ["void", "wall", "floor", "door", "upstairs", "downstairs", "trap", "hero"]
@@ -29,33 +27,32 @@ class Room:
     height = 0
     width = 0
     doors = []
-    trait = 0   # 0 - corridor, 1 - regular room, 2 - trap room
+    trait = 0  # 0 - corridor, 1 - regular room, 2 - trap room
     tiles = []
     wtiles = 0
 
 
 def inroom(pos, i):
-    if pos[0] > curmap.rooms[i][0]\
-        and pos[0] < (curmap.rooms[i][0] + curmap.rooms[i][2] - 1)\
-        and pos[1] > curmap.rooms[i][1]\
-        and pos[1] < (curmap.rooms[i][1] + curmap.rooms[i][3] - 1):
+    if pos[0] > curmap.rooms[i][0] \
+            and pos[0] < (curmap.rooms[i][0] + curmap.rooms[i][2] - 1) \
+            and pos[1] > curmap.rooms[i][1] \
+            and pos[1] < (curmap.rooms[i][1] + curmap.rooms[i][3] - 1):
         return True
     return False
 
 
 def onroom(pos, i):
-
     if (pos[0] == curmap.rooms[i][0]
-            or pos[0] == curmap.rooms[i][0] + curmap.rooms[i][2] - 1)\
-        and (pos[1] == curmap.rooms[i][1]
-            or pos[1] == curmap.rooms[i][1] + curmap.rooms[i][3] - 1):
+        or pos[0] == curmap.rooms[i][0] + curmap.rooms[i][2] - 1) \
+            and (pos[1] == curmap.rooms[i][1]
+                 or pos[1] == curmap.rooms[i][1] + curmap.rooms[i][3] - 1):
         return True
     return False
 
 
 def collidable(n):
-    if n == items.index("floor") or n == items.index("door")\
-        or n == items.index("upstairs") or n == items.index("downstairs")\
+    if n == items.index("floor") or n == items.index("door") \
+            or n == items.index("upstairs") or n == items.index("downstairs") \
             or n == items.index("trap") or n == 0:
         return True
     return False
@@ -105,7 +102,7 @@ def inside(a, b):
 
 
 def intersection(a, b):
-    if inside([a[0], a[1]], b) or inside([a[0] + a[2], a[1]], b)\
+    if inside([a[0], a[1]], b) or inside([a[0] + a[2], a[1]], b) \
             or inside([a[0], a[1] + a[3]], b) or inside([a[0] + a[2], a[1] + a[3]], b):
         return True
     return False
@@ -135,6 +132,7 @@ def addmaprow(dir):
         curmap.width += 1
         offx += 1
 
+
 def genroom(y, x, height, width, trait):
     # set variables
     cls = Room()
@@ -159,7 +157,7 @@ def genroom(y, x, height, width, trait):
         cls.tiles.append(templist)
 
     if trait == roomtraits.index("entrance"):
-        cls.tiles[int(height/2)][int(width/2)] = items.index("upstairs")
+        cls.tiles[int(height / 2)][int(width / 2)] = items.index("upstairs")
     print(y + offy + cls.ypos, x + offx + cls.xpos)
     for y in range(0, cls.height):
         for x in range(0, cls.width):
@@ -176,7 +174,7 @@ def generatevalidroom():
             room_no = smartrand(0, len(roomlist) - 1)
             troom = roomlist[room_no]
             pos = wallxy(troom.width, troom.height, random.randint(0, 2 * troom.width + 2 * troom.height - 4))
-            if troom.tiles[pos[1]][pos[0]] == items.index("wall") and\
+            if troom.tiles[pos[1]][pos[0]] == items.index("wall") and \
                     (troom.trait == roomtraits.index("corridor") or troom.trait == roomtraits.index("regular") or
                      troom.trait == roomtraits.index("entrance")):
                 pos[0] += troom.xpos

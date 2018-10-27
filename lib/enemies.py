@@ -6,7 +6,7 @@ import random
 import visuals
 
 
-class Enemy:
+"""class Enemy:
     def __init__(self, id, lvl, type, name, damage, hp, drop_min, drop_max):
         self.id = id
         self.lvl = lvl
@@ -15,10 +15,11 @@ class Enemy:
         self.damage = damage
         self.hp = hp
         self.drop_min = drop_min
-        self.drop_max = drop_max
+        self.drop_max = drop_max"""
 
 
 alive_enemies_list = []  # [id, active, hp, x, y]
+active_enemies = []
 enemies_map = []
 curmap = generation.getmap()
 max_lvl = 1
@@ -67,11 +68,11 @@ def init():
             h_list = []
             enemy_list.append(h_list2)
             h_list2 = []
-    print(enemy_list)
+    print("enemy_list: ", enemy_list)
     for p in range(1, len(enemy_list)):
         print(enemy_list[p][1])
-        enemy_list[p] = Enemy(enemy_list[p][0], enemy_list[p][1], enemy_list[p][2], enemy_list[p][3],
-                              enemy_list[p][4], enemy_list[p][5], enemy_list[p][6], enemy_list[p][7])
+        #enemy_list[p] = Enemy(enemy_list[p][0], enemy_list[p][1], enemy_list[p][2], enemy_list[p][3],
+                              #enemy_list[p][4], enemy_list[p][5], enemy_list[p][6], enemy_list[p][7])
 
 
 def spawn_enemy(x=-1, y=-1, id=-1, lvl=-1):
@@ -81,41 +82,51 @@ def spawn_enemy(x=-1, y=-1, id=-1, lvl=-1):
         x = random.randint(0, s.display_width)
         y = random.randint(0, s.display_height)"""
     if x == -1 and y == -1:
-        done = False
+        #done = False
         print("losuje x i y")
-        while not done:
-            x = random.randint(0, curmap.width-1)
-            y = random.randint(0, curmap.height-1)
-            if [y, x] not in visuals.get_discoverymap() and curmap.tiles[y][x] == 2:
-                done = True
-    print("x,y: ", x, y)
-    if lvl == -1 and id != -1:
-        enemies_map[y][x] = id
-        alive_enemies_list.append([id, 0, enemy_list[id + 1][5], x, y])
-    elif lvl == -1 and id == -1:
-        lvl = random.randint(1, max_lvl)
-        for p in range(0, len(enemy_list), 1):
-            if enemy_list[p][1] == lvl:
-                temp.append(enemy_list[p][0])
-        enemies_map[y][x] = temp[random.randint(0, len(temp))]
-    elif lvl != -1 and id != -1:
-        enemies_map[y][x] = id
-        alive_enemies_list.append([id, 0, x, y])
-    elif lvl != -1 and id == -1:
-        for p in range(0, len(enemy_list), 1):
-            if enemy_list[p][1] == lvl:
-                temp.append(enemy_list[p][0])
-        enemies_map[y][x] = temp[random.randint(0, len(temp))]
+        # while not done:    #todo: can do this better
+        x = random.randint(0, curmap.width - 1)
+        y = random.randint(0, curmap.height - 1)
+    if [x, y] not in visuals.get_discoverymap() and curmap.tiles[y][x] == 2:
+        # done = True
+        print("x,y: ", x, y)
+        if lvl == -1 and id != -1:
+            enemies_map[y][x] = id
+            alive_enemies_list.append([id, 0, enemy_list[id + 1][5], x, y])
+        elif lvl == -1 and id == -1:
+            lvl = random.randint(1, max_lvl)
+            for p in range(0, len(enemy_list), 1):
+                if enemy_list[p][1] == lvl:
+                    temp.append(enemy_list[p][0])
+            enemies_map[y][x] = temp[random.randint(0, len(temp))]
+        elif lvl != -1 and id != -1:
+            enemies_map[y][x] = id
+            alive_enemies_list.append([id, 0, int(enemy_list[id-1][5]), x, y])
+        elif lvl != -1 and id == -1:
+            for p in range(0, len(enemy_list), 1):
+                if enemy_list[p][1] == lvl:
+                    temp.append(enemy_list[p][0])
+            enemies_map[y][x] = temp[random.randint(0, len(temp))]
+
+
+def give_active_enemies(temp_list):
+    for p in range(0, len(temp_list),1):
+        if temp_list[p] == [alive_enemies_list[p][3], alive_enemies_list[p][4]]:
+            active_enemies.append(alive_enemies_list[p][0], alive_enemies_list[p][3], alive_enemies_list[p][4])
 
 
 def enemy_turn(x, y):
-    for q in range(0, len(alive_enemies_list)-1, 1):
-        print("p: ", q, len(alive_enemies_list), alive_enemies_list)
-        """if alive_enemies_list[p][2] <= 0:
-            alive_enemies_list.remove(alive_enemies_list[p]) """           #HP
-        #if alive_enemies_list[p][1] == 0:
-            #print(collisions.legacygetpath([alive_enemies_list[q][0], alive_enemies_list[q][1]], [x, y]))
-            #temp = 0
-
-
-init()
+    #if len(alive_enemies_list) > 0:
+    for p in range(0, len(alive_enemies_list), 1):
+        try:
+            print(collisions.getpath([alive_enemies_list[p][3], alive_enemies_list[p][4]], [x, y]))
+        except:
+            print("ERROR: p: ", p, len(alive_enemies_list), alive_enemies_list)
+        if alive_enemies_list[p][2] <= 0:
+            enemies_map[alive_enemies_list[p][4]][alive_enemies_list[p][3]] = 0
+            active_enemies.remove(alive_enemies_list[p])
+            del alive_enemies_list[p]
+        """"#print("p: ", q, len(alive_enemies_list), alive_enemies_list)
+        if alive_enemies_list[p][2] <= 0:
+            alive_enemies_list.remove(alive_enemies_list[p])           #HP
+            #temp = 0"""

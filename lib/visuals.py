@@ -69,7 +69,7 @@ gameDisplay.fill(background)
 
 def drawscreen(x, y):
     global discovered_map
-    print("enemies map x and y: ", len(enemies.enemies_map), len(enemies.enemies_map[0]), len(curmap.tiles), len(curmap.tiles[0]))
+    #print("enemies map x and y: ", len(enemies.enemies_map), len(enemies.enemies_map[0]), len(curmap.tiles), len(curmap.tiles[0]))
     shadow_map = shadowupdate()
     # print("shadow map in drawscreen", shadow_map)
     for p in range(0, len(curmap.tiles), 1):
