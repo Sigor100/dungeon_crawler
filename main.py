@@ -55,6 +55,8 @@ def gameloop():
                     if event.key == pygame.K_d:
                         turn = False
                         direction[1] += 32
+                    if event.key == pygame.K_z:
+                        print(visuals.get_discoverymap())
                     if event.key == pygame.K_p:
                         print("burza")
                         spos = [0, 0]
@@ -97,7 +99,7 @@ def gameloop():
             #print("twoja kolej")
             turn = True
         # SCREEN
-        visuals.countplayervisibility(hero_x, hero_y, 0)
+        visuals.countplayervisibility(hero_x, hero_y, 1)
         visuals.drawscreen(hero_x - 800, hero_y - 400)
         clock.tick(fps)
 
