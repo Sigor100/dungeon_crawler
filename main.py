@@ -77,8 +77,8 @@ def gameloop():
                     if event.key == py.K_z:
                         # print(v.get_discoverymap())
                         # print(len(e.alive_enemies_list))
-                        # print(hero_x / 32, hero_y / 32)
-                        print(len(e.alive_enemies_list))
+                        print(hero_x / 32, hero_y / 32)
+                        #print(len(e.alive_enemies_list))
                     if event.key == py.K_p:
                         print("burza")
                         spos = [0, 0]
@@ -129,8 +129,8 @@ def gameloop():
         # print("kolizja")
         c.putonmap(hero_x, hero_y)
         if not turn:  # and len(e.alive_enemies_list) > 0:
-            print("enemy turn")
-            #print("alive: ", len(e.alive_enemies_list))
+            #print("enemy turn")
+            # print("alive: ", len(e.alive_enemies_list))
             if r.randint(0, 100) < 35:
                 e.spawn_enemy(-1, -1, 1, 1)
             e.enemy_turn(hero_x, hero_y)  # todo: still working on it

@@ -2,9 +2,9 @@ import pygame
 import generation
 import os
 import collisions
-from math import sqrt
 import enemies
 import settings as s
+from math import sqrt
 
 shadow_mode = 1  # set to 0 for the whole map to be visible from the start
 
@@ -370,6 +370,7 @@ def shadowupdate():
     global visibility_list
     # print("visibility list in shadowUpDate: ", visibility_list)
     shadow_map = refill_shadow_map()
+    enemies.give_active_enemies(visibility_list)
     for p in range(0, len(visibility_list)):
         try:
             shadow_map[visibility_list[p][1]][visibility_list[p][0]] = 0
