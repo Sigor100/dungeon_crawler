@@ -31,7 +31,7 @@ for p in range(0, len(curmap.tiles)):
     for q in range(0, len(curmap.tiles[0])):
         a.append(0)
     enemies_map.append(a)
-print("enemies map: ", len(enemies_map), len(enemies_map[0]))
+#print("enemies map: ", len(enemies_map), len(enemies_map[0]))
 
 
 def init():
@@ -68,14 +68,15 @@ def init():
             h_list = []
             enemy_list.append(h_list2)
             h_list2 = []
-    print("enemy_list: ", enemy_list)
-    for p in range(1, len(enemy_list)):
-        print(enemy_list[p][1])
+    #print("enemy_list: ", enemy_list)
+    #for p in range(1, len(enemy_list)):
+        #print(enemy_list[p][1])
         #enemy_list[p] = Enemy(enemy_list[p][0], enemy_list[p][1], enemy_list[p][2], enemy_list[p][3],
                               #enemy_list[p][4], enemy_list[p][5], enemy_list[p][6], enemy_list[p][7])
 
 
 def spawn_enemy(x=-1, y=-1, id=-1, lvl=-1):
+
     global enemies_map
     temp = []
     """if x == -1 and y == -1:
@@ -83,7 +84,7 @@ def spawn_enemy(x=-1, y=-1, id=-1, lvl=-1):
         y = random.randint(0, s.display_height)"""
     if x == -1 and y == -1:
         #done = False
-        print("losuje x i y")
+        #print("losuje x i y")
         # while not done:    #todo: can do this better
         x = random.randint(0, curmap.width - 1)
         y = random.randint(0, curmap.height - 1)
@@ -107,6 +108,7 @@ def spawn_enemy(x=-1, y=-1, id=-1, lvl=-1):
                 if enemy_list[p][1] == lvl:
                     temp.append(enemy_list[p][0])
             enemies_map[y][x] = temp[random.randint(0, len(temp))]
+    print("alive: ", len(alive_enemies_list))
 
 
 def give_active_enemies(temp_list):
@@ -118,10 +120,10 @@ def give_active_enemies(temp_list):
 def enemy_turn(x, y):
     #if len(alive_enemies_list) > 0:
     for p in range(0, len(alive_enemies_list), 1):
-        try:
-            print(collisions.getpath([alive_enemies_list[p][3], alive_enemies_list[p][4]], [x, y]))
-        except:
-            print("ERROR: p: ", p, len(alive_enemies_list), alive_enemies_list)
+        #try:
+            #print(collisions.getpath([alive_enemies_list[p][3], alive_enemies_list[p][4]], [x, y]))
+        #except:
+            #print("ERROR: p: ", p, len(alive_enemies_list), alive_enemies_list)
         if alive_enemies_list[p][2] <= 0:
             enemies_map[alive_enemies_list[p][4]][alive_enemies_list[p][3]] = 0
             active_enemies.remove(alive_enemies_list[p])
