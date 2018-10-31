@@ -1,4 +1,5 @@
 import random
+from pathfinding.core.grid import Grid
 
 r = "nodebug"
 debug = False
@@ -19,6 +20,8 @@ class Map:
     startpos = [0, 0]
     endpos = [0, 0]
     rooms = []
+    grid = 0
+    clean = True
 
 
 class Room:
@@ -32,30 +35,19 @@ class Room:
     wtiles = 0
 
 
-def inroom(pos, i):
-    if pos[0] > curmap.rooms[i][0] \
-            and pos[0] < (curmap.rooms[i][0] + curmap.rooms[i][2] - 1) \
-            and pos[1] > curmap.rooms[i][1] \
-            and pos[1] < (curmap.rooms[i][1] + curmap.rooms[i][3] - 1):
-        return True
-    return False
-
-
-def onroom(pos, i):
-    if (pos[0] == curmap.rooms[i][0]
-        or pos[0] == curmap.rooms[i][0] + curmap.rooms[i][2] - 1) \
-            and (pos[1] == curmap.rooms[i][1]
-                 or pos[1] == curmap.rooms[i][1] + curmap.rooms[i][3] - 1):
-        return True
-    return False
-
-
 def collidable(n):
     if n == items.index("floor") or n == items.index("door") \
             or n == items.index("upstairs") or n == items.index("downstairs") \
             or n == items.index("trap") or n == 0:
         return True
     return False
+
+def weight(n):
+    if n == items.index("floor") or n == items.index("door") \
+            or n == items.index("upstairs") or n == items.index("downstairs") \
+            or n == items.index("trap") or n == 0:
+        return 1
+    return 0
 
 
 def wallxy(width, height, n):
@@ -158,7 +150,6 @@ def genroom(y, x, height, width, trait):
 
     if trait == roomtraits.index("entrance"):
         cls.tiles[int(height / 2)][int(width / 2)] = items.index("upstairs")
-    print(y + offy + cls.ypos, x + offx + cls.xpos)
     for y in range(0, cls.height):
         for x in range(0, cls.width):
             curmap.tiles[y + offy + cls.ypos][x + offx + cls.xpos] = cls.tiles[y][x]
@@ -181,15 +172,9 @@ def generatevalidroom():
                 pos[1] += troom.ypos
                 break
         a = []
-        print("map: ", curmap.height, curmap.width)
-        print(pos[1] + offy, pos[0] + offx)
-        print(pos[1] + offy - 1, pos[0] + offx)
         a.append(curmap.tiles[pos[1] + offy - 1][pos[0] + offx])
-        print(pos[1] + offy, pos[0] + offx + 1)
         a.append(curmap.tiles[pos[1] + offy][pos[0] + offx + 1])
-        print(pos[1] + offy + 1, pos[0] + offx)
         a.append(curmap.tiles[pos[1] + offy + 1][pos[0] + offx])
-        print(pos[1] + offy, pos[0] + offx - 2)
         a.append(curmap.tiles[pos[1] + offy][pos[0] + offx - 1])
         twalls = 0
         tfloors = 0
@@ -202,12 +187,9 @@ def generatevalidroom():
             if a[i] == items.index("void"):
                 tvoids += 1
                 direc = i
-        print(pos)
-        print(direc)
         if twalls == 2 and tfloors == 1 and tvoids == 1:
             break
     # set target tile
-    print("following is imortaint")
     rwidth = (random.choice([2, 6])) * 2 + 1
     rheight = (random.choice([2, 6])) * 2 + 1
     rpos = [0, 0]
@@ -219,9 +201,6 @@ def generatevalidroom():
         rpos = [pos[0] - smartrand(1, rwidth - 2), pos[1]]
     elif direc == 3:
         rpos = [pos[0] + 1 - rwidth, pos[1] - smartrand(1, rheight - 2)]
-    print(rpos)
-    print(rwidth)
-    print(rheight)
     # stretch the map if necessary
     while rpos[0] + offx < 1:
         addmaprow([-1, 0])
@@ -274,5 +253,14 @@ def getmap(update=False):
                 print(curmap.tiles[i])
             for i in range(0, len(curmap.rooms)):
                 print(curmap.rooms[i])
+
+        matrix = []
+        for i in range(0, curmap.height):
+            temp = []
+            for j in range(0, curmap.width):
+                temp.append(weight(curmap.tiles[i][j]))
+            matrix.append(temp)
+        curmap.grid = Grid(matrix=matrix)
+        curmap.clean = True
 
     return curmap
