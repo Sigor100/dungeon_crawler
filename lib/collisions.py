@@ -5,7 +5,7 @@ from pathfinding.finder.a_star import AStarFinder
 
 disablecollisions = False  # set to true for debug
 pathfindingdebug = False
-debug = True
+debug = False
 
 curmap = generation.getmap()
 dirx = [0, 1, 1, 1, 0, -1, -1, -1]

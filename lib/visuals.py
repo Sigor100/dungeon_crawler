@@ -15,7 +15,10 @@ direct = os.getcwd()
 os.path.exists(direct)
 # background = (25, 25, 25)
 background = (0, 0, 0)
+black = (0, 0, 0)
+gray = (50, 50, 50)
 white = (255, 255, 255)
+red = (255, 0, 0)
 display_width = s.display_width
 display_height = s.display_height
 box_size = s.box_size
@@ -29,38 +32,19 @@ not_visible_thru = [1, 3, 4]
 door_index = 3
 visibility_list = []
 discovered_map = []  # todo: discovered_map is now list, need to be map
-# shadow_map = []
+curmap = generation.getmap()
 
 view_range = 4
 view_mode = 2  # 0 or 1
 
 pygame.init()
 
+# IMG IMPORT
 img_list = []
 for num in range(0, 9):
     path = direct + "/resources/textures/img" + str(num) + ".png"
     img_list.append(pygame.image.load(path))
 backpack_background = pygame.image.load(direct + "/resources/backpack.png")
-
-curmap = generation.getmap()
-"""shadow_map = []
-for p in range(0, map.height):
-    a = []
-    for q in range(0, map.width):
-        a.append(shadow_mode)
-    shadow_map.append(a)"""
-
-"""map = []
-b = []
-for p in range(0, 15):
-	for p1 in range(0, 20):
-		b.append(2)
-	map.append(b)
-	b = []
-for p in range(0, 20):
-	map[0][p] = 1
-for p in range(0, 20):
-	map[14][p] = 1"""
 
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption("visuals test")
@@ -91,6 +75,8 @@ def drawscreen(x, y):
                                [(-x + (box_size * p1)), (-y + (box_size * p))], 50)
                 else:
                     gameDisplay.blit(img_list[6], (-x + (box_size * p1), -y + (box_size * p)))
+    # another draw functions
+    draw_hud()
     pygame.display.update()
     gameDisplay.fill(background)
 
@@ -384,24 +370,15 @@ def shadowupdate():
     return shadow_map
 
 
-# #print("shadowmap", shadow_map)
+def draw_hud():  # todo
+    pygame.draw.rect(gameDisplay, gray, (245, 95, 235, 30))  # x, y, height, width
+    pygame.draw.rect(gameDisplay, red, (250, 100, 225, 20))  # x, y, height, width
+    # pygame.draw.rect(gameDisplay, red, (250, 100, 2.25*player_hp, 20))  # x, y, height, width
+    # pygame.draw.circle(gameDisplay, white, (100, 100), 100)  # x, y, radius
 
-
-"""#print(int(y/box_size), int(x/box_size))
-shadow_map[int(y/box_size)+1][int(x/box_size)] = 0
-	shadow_map[int(y / box_size)][int(x / box_size)] = 0
-	shadow_map[int(y / box_size)-1][int(x / box_size)] = 0
-	shadow_map[int(y / box_size)][int(x / box_size)+1] = 0
-	shadow_map[int(y / box_size)][int(x / box_size)-1] = 0
-	shadow_map[int(y / box_size)-1][int(x / box_size)+1] = 0
-	shadow_map[int(y / box_size)-1][int(x / box_size)-1] = 0
-	shadow_map[int(y / box_size)+1][int(x / box_size)+1] = 0
-	shadow_map[int(y / box_size)+1][int(x / box_size)-1] = 0"""
-
-# #print(shadow_map)
 
 """def drawbackpack():
 gameDisplay.fill(background)
 	#gameDisplay.blit(img_list[1], 100, 100)
 
-	pygame.display.update()"""  # todo fix this sometime
+	pygame.display.update()"""  # todo this sometime

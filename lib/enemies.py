@@ -150,18 +150,25 @@ def get_active_enemies():
 def enemy_turn(x, y):
     global active_enemies
     global alive_enemies_list
+    x = int(x/box_size)
+    y = int(y/box_size)
     # if len(alive_enemies_list) > 0:
     for p in range(0, len(active_enemies), 1):
         try:
-            print("path: ", collisions.getpath([active_enemies[p][3], active_enemies[p][4]], [x, y]))
+            """print("path: ", collisions.getpath([active_enemies[p][3], active_enemies[p][4]], [x, y]))
             enemies_map[active_enemies[p][4]][active_enemies[p][3]] = 0
             active_enemies[p][3] = int(
                 active_enemies[p][3] + collisions.getpath([active_enemies[p][3], active_enemies[p][4]], [x, y])[0][0])
             active_enemies[p][4] = int(
                 active_enemies[p][4] + collisions.getpath([active_enemies[p][3], active_enemies[p][4]], [x, y])[0][1])
+            enemies_map[active_enemies[p][4]][active_enemies[p][3]] = active_enemies[p][0]"""
+            print("path: ", collisions.getpath([active_enemies[p][3], active_enemies[p][4]], [x, y]))
+            enemies_map[active_enemies[p][4]][active_enemies[p][3]] = 0
+            active_enemies[p][3] = collisions.getpath([active_enemies[p][3], active_enemies[p][4]], [x, y])[0][0]
+            active_enemies[p][4] = collisions.getpath([active_enemies[p][3], active_enemies[p][4]], [x, y])[0][1]
             enemies_map[active_enemies[p][4]][active_enemies[p][3]] = active_enemies[p][0]
         except:
-            print("ERROR: p: ", p, len(alive_enemies_list), alive_enemies_list)
+            print("ERROR: p: ", p, len(active_enemies), active_enemies, x, y)
     for p in range(0, len(alive_enemies_list), 1):
         if alive_enemies_list[p][3] <= 0:
             enemies_map[alive_enemies_list[p][5]][alive_enemies_list[p][4]] = 0
