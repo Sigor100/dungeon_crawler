@@ -7,9 +7,9 @@ from collisions import getpath
 
 entitiesprot = []
 entitynames = []
-entities = []
+alive = []
 player = 0
-
+curmap = generation.curmap
 
 class EntityPrototype:
     def __init__(self):
@@ -38,21 +38,21 @@ class Entity:
         self.moves = []
         self.x = x
         self.y = y
-        generation.curmap.entities[y][x] = self.id
-        entities.append(self)
+        generation.curmap.alive[y][x] = self.id
+        alive.append(self)
 
     def goto(self, x, y):
-        generation.curmap.entities[self.y][self.x] = -1
+        generation.curmap.alive[self.y][self.x] = -1
         self.moves = getpath([self.x, self.y], [x, y])
-        generation.curmap.entities[self.y][self.x] = self.id
+        generation.curmap.alive[self.y][self.x] = self.id
 
     def step(self):
         print(self.moves)
-        if not len(self.moves) == 0:  # and not generation.curmap.entities[self.moves[1]][self.moves[0]] == 0:
-            generation.curmap.entities[self.y][self.x] = -1
+        if not len(self.moves) == 0:  # and not generation.curmap.alive[self.moves[1]][self.moves[0]] == 0:
+            generation.curmap.alive[self.y][self.x] = -1
             self.x = self.moves[0][0]
             self.y = self.moves[0][1]
-            generation.curmap.entities[self.y][self.x] = self.id
+            generation.curmap.alive[self.y][self.x] = self.id
             del self.moves[0]
 
 
@@ -65,16 +65,16 @@ class Player(Entity):
         self.lvl = 1
         self.x = generation.curmap.startpos[0]
         self.y = generation.curmap.startpos[1]
-        generation.curmap.entities[self.y][self.x] = self.id
+        generation.curmap.alive[self.y][self.x] = self.id
         player = self
 
     def move(self, pos):
         if not generation.tilesprot[generation.curmap.tiles[self.y + pos[1]][self.x + pos[0]]].collision == 0 \
-                and generation.curmap.entities[self.y + pos[1]][self.x + pos[0]] == -1:
-            generation.curmap.entities[self.y][self.x] = -1
+                and generation.curmap.alive[self.y + pos[1]][self.x + pos[0]] == -1:
+            generation.curmap.alive[self.y][self.x] = -1
             self.x += pos[0]
             self.y += pos[1]
-            generation.curmap.entities[self.y][self.x] = 0
+            generation.curmap.alive[self.y][self.x] = 0
 
 
 def loadenemies(path):
@@ -122,7 +122,7 @@ def loadenemies(path):
 
 
 def turn():
-    for i in entities:
+    for i in alive:
         generation.curmap.generategrid()
         if visuals.shadow_map[i.y][i.x] == 2:
             i.goto(player.x, player.y)
@@ -132,3 +132,21 @@ def turn():
 def init():
     projectpath = os.getcwd()  # .split('\\', 1)[0]
     loadenemies(projectpath + '/resources/enemies')
+
+
+def random_spawn(id):
+    spawnrange = 7
+    while True:
+        x = random.randint(0, generation.curmap.width)
+        y = random.randint(0, generation.curmap.height)
+        for a in alive:
+            if visuals.check_distance(x, y, alive[a][2], alive[a][3]) > spawnrange and curmap.tiles[y][x] == 2:
+                Entity(id, x, y)
+                break
+            else:
+                if spawnrange == 0:
+                    print("couldn't randomly spawn enemy")
+                    break
+                spawnrange -= 1
+
+
