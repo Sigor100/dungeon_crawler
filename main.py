@@ -142,11 +142,8 @@ def gameloop():
         # todo: do turn shit
         if not turn:  # and len(e.alive_enemies_list) > 0:
             #if r.randint(0,100) < 10:
-<<<<<<< HEAD
             #    e.random_spawn(1)
-=======
                 #e.random_spawn(1)
->>>>>>> ba9143340e806231e9115f6df9c5d3e25bcccbec
             # print("enemy turn")
             # print("alive: ", len(e.alive_enemies_list))
             e.turn()  # todo: still working on it (or am I)
