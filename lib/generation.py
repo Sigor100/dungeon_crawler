@@ -36,6 +36,18 @@ class Map:
         self.grid = 0
         self.clean = True
 
+    def generategrid(self):
+        matrix = []
+        for i in range(0, curmap.height):
+            temp = []
+            for j in range(0, curmap.width):
+                if curmap.entities[i][j] == -1:
+                    temp.append(tilesprot[curmap.tiles[i][j]].collision)
+                else:
+                    temp.append(0)
+            matrix.append(temp)
+        curmap.grid = Grid(matrix=matrix)
+
 
 class Room:
     xpos = 0
@@ -261,15 +273,6 @@ def genmap():
             temp2.append(-1)
         curmap.items.append(temp1)
         curmap.entities.append(temp2)
-
-    matrix = []
-    for i in range(0, curmap.height):
-        temp = []
-        for j in range(0, curmap.width):
-            temp.append(tilesprot[curmap.tiles[i][j]].collision)
-        matrix.append(temp)
-    curmap.grid = Grid(matrix=matrix)
-    curmap.clean = True
 
 
 def loadtiles(path):
