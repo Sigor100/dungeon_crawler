@@ -36,13 +36,13 @@ def drawscreen(x, y):
             texture = []
             if shadow_map[i][j] != 0:
                 texture.append(generation.tilesprot[generation.curmap.tiles[i][j]].texture)
-                if not generation.curmap.entities[i][j] == -1:
+                if not generation.curmap.entities[i][j] == -1 and shadow_map[i][j] == 2:
                     texture.append(entities.entitiesprot[generation.curmap.entities[i][j]].texture)
             else:
                 texture.append(shadow_texture)
             for t in texture:
                 if shadow_map[i][j] == 1:
-                    print("alpha")
+                    #print("alpha")
                     blit_alpha(gameDisplay, t, [(j * s.box_size - x), i * s.box_size - y], 50)
                 else:
                     gameDisplay.blit(t, [(j * s.box_size - x), i * s.box_size - y])
@@ -73,8 +73,7 @@ def calculateshadows():
                 shadow_map[p][p1] = 1
     tocheck = []
     for i in range(0, len(dirx)):
-        if check_distance(x, y, x + dirx[i], y + diry[i]) < view_range:
-            print("dziala")
+        if check_distance(x, y, x + dirx[i], y + diry[i]) < view_range:x
             tocheck.append([x + dirx[i], y + diry[i]])
         else:
             print(x, y, x + dirx[i], y + diry[i])

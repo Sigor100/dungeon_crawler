@@ -1,11 +1,10 @@
-import pygame as py
-import visuals as v
-import collisions as c
-import generation as g
 import random as r
+import pygame as py
+import collisions as c
 import entities as e
-from time import sleep
+import generation as g
 import settings as s
+import visuals as v
 
 py.init()
 g.init()
@@ -67,7 +66,7 @@ def gameloop():
                     elif event.key == py.K_DOWN:
                         cam_dir[1] += box_size
 
-                    #reset camera
+                    # reset camera
                     elif event.key == py.K_SPACE:
                         cam_offset = [0, 0]
 
@@ -133,7 +132,7 @@ def gameloop():
 
         # do turn shit
         if not turn:  # and len(e.alive_enemies_list) > 0:
-            #print("enemy turn")
+            # print("enemy turn")
             # print("alive: ", len(e.alive_enemies_list))
             if r.randint(0, 100) < 10:
                 while True:
@@ -145,8 +144,8 @@ def gameloop():
             e.turn()  # todo: still working on it
             turn = True
         # SCREEN
-        v.drawscreen(e.player.x * box_size + box_size / 2 + cam_offset[0] - s.display_width/2,
-                     e.player.y * box_size + box_size / 2 + cam_offset[1] - s.display_height/2)
+        v.drawscreen(e.player.x * box_size + box_size / 2 + cam_offset[0] - s.display_width / 2,
+                     e.player.y * box_size + box_size / 2 + cam_offset[1] - s.display_height / 2)
         clock.tick(s.fps)
     py.quit()
     quit()
