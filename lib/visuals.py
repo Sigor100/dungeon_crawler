@@ -42,10 +42,10 @@ def drawscreen(x, y):
                 texture.append(shadow_texture)
             for t in texture:
                 if shadow_map[i][j] == 1:
-                    #print("alpha")
+                    # print("alpha")
                     blit_alpha(gameDisplay, t, [(j * s.box_size - x), i * s.box_size - y], 50)
                 else:
-                    gameDisplay.blit(t, [(j * s.box_size - x), i * s.box_size - y])
+                    blit_alpha(gameDisplay, t, [(j * s.box_size - x), i * s.box_size - y], 200)
 
     draw_hud()
     pygame.display.update()
@@ -58,6 +58,7 @@ def blit_alpha(target, source, location, opacity):
     temp = pygame.Surface((source.get_width(), source.get_height())).convert()
     temp.blit(target, (-x, -y))
     temp.blit(source, (0, 0))
+    temp.set_colorkey((0, 226, 0))
     temp.set_alpha(opacity)
     target.blit(temp, location)
 
@@ -73,7 +74,7 @@ def calculateshadows():
                 shadow_map[p][p1] = 1
     tocheck = []
     for i in range(0, len(dirx)):
-        if check_distance(x, y, x + dirx[i], y + diry[i]) < view_range:x
+        if check_distance(x, y, x + dirx[i], y + diry[i]) < view_range:
             tocheck.append([x + dirx[i], y + diry[i]])
         else:
             print(x, y, x + dirx[i], y + diry[i])
