@@ -50,6 +50,7 @@ def drawscreen(x, y):
                     gameDisplay.blit(t, [(j * s.box_size - x), i * s.box_size - y])
 
     draw_hud()
+    draw_enemie_hp(x, y)
     pygame.display.update()
     gameDisplay.fill(s.background)
 
@@ -112,6 +113,14 @@ def draw_hud():  # todo
     pygame.draw.rect(gameDisplay, s.red, (250, 100, 225, 20))  # x, y, height, width
     # pygame.draw.rect(gameDisplay, red, (250, 100, 2.25*player_hp, 20))  # x, y, height, width
     # pygame.draw.circle(gameDisplay, white, (100, 100), 100)  # x, y, radius
+
+
+def draw_enemie_hp(camx, camy):
+    for p in entities.active:
+        x = p.x * s.box_size - camx
+        y = (p.y * s.box_size - camy) + s.box_size
+        pygame.draw.rect(gameDisplay, s.black, (x - 2, y - 2, 44, 8))  # x, y, height, width
+        pygame.draw.rect(gameDisplay, s.red, (x, y, 40, 4))  # x, y, height, width
 
 
 """def drawbackpack():
