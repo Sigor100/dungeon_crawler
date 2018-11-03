@@ -121,7 +121,7 @@ def draw_hud():  # todo
 def draw_selection(x, y):
     for i in range(0, 3):
         for j in range(0, 3):
-            if entities.player.choice == [i, j]:
+            if entities.player.choice == [i + entities.player.minchoice[0], j + entities.player.minchoice[1]]:
                 gameDisplay.blit(UI_textures[0][1], [x + i * s.box_size, y + j * s.box_size])
             else:
                 gameDisplay.blit(UI_textures[0][0], [x + i * s.box_size, y + j * s.box_size])
@@ -148,6 +148,10 @@ def loadresinlist(l):
             loadresinlist(l[i])
         else:
             l[i] = pygame.image.load(projectpath + '/resources/textures/UI/' + l[i] + '.png')
+
+
+def exitmenu():
+    return 1
 
 
 def init():

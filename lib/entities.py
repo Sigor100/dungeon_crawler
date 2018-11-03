@@ -3,6 +3,7 @@ import visuals
 import generation
 import pygame
 import random
+import settings as s
 from collisions import getpath
 
 entitiesprot = []
@@ -74,35 +75,26 @@ class Player(Entity):
         global player
         self.id = 0
         self.moves = []
-        self.hp = 15
+        self.hp = 25
         self.lvl = 1
-        self.primaryWeapon = []
-        self.secondaryWeapon = []
-        self.headArmor = []
-        self.bodyArmor = []
-        self.boots = []
-        self.firstUsable = []
-        self.secondUsable = []
-        self.thirdUsable = []
         self.charm = []
         self.hunger = 100  # from 0 to 100
-        self.Weapon = [0, 0]
-        self.headArmor = 0
-        self.bodyArmor = 0
-        self.boots = 0
-        self.Usable = [0, 0, 0]
+        self.Armor = [0, 0, 0]
+        self.Usable = [1, 2, 3, 4, 5] # main weapon, off-hand weapon, slots 1 - 3
         self.charm = 0
         self.hunger = 100  # from 0 to 100
         self.x = generation.curmap.startpos[0]
         self.y = generation.curmap.startpos[1]
+
         self.state = 0  # 0 - walking, 1 - choosing weapon, 2 - aiming
-        self.choice = [1, 1]
+        self.choice = [0, 0]
         self.maxchoice = [1, 1]
         self.minchoice = [-1, -1]
-        self.choices = [[0, 0, 0],
-                        [0, 0, 0],
-                        [0, 0, 0]]
+        self.choices = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.using = 0
+        self.pressed = False
+        self.target = [self.x, self.y]
+
         generation.curmap.entities[self.y][self.x] = self
         player = self
 
@@ -115,33 +107,79 @@ class Player(Entity):
             generation.curmap.entities[self.y][self.x] = self
 
     def resolve(self, direction):
-        if self.state == 0:
-            self.choice = [direction[0] - self.minchoice[0], direction[1] - self.minchoice[1]]
-            self.move(direction)
-        elif self.state == 1:
-            self.choice[0] += direction[0]
-            self.choice[1] += direction[1]
-            if self.choice[0] > self.maxchoice[0]:
-                self.choice[0] = self.maxchoice[0]
-            elif self.choice[0] < self.minchoice[0]:
-                self.choice[0] = self.minchoice[0]
-            if self.choice[1] > self.maxchoice[1]:
-                self.choice[1] = self.maxchoice[1]
-            elif self.choice[1] < self.minchoice[1]:
-                self.choice[1] = self.minchoice[1]
+        if direction == [0, 0]:
+            self.pressed = False
+            if self.state == 0:
+                self.choice = [0, 0]
+        else:
+            if self.state == 0:
+                self.choice = direction
+                self.move(direction)
+            # elif self.state == 1:
+            #    self.choice = [direction[0] - self.minchoice[0], direction[1] - self.minchoice[1]]
+            elif self.state == 1:
+                if not self.pressed:
+                    self.choice[0] += direction[0]
+                    self.choice[1] += direction[1]
+                    if self.choice[0] > self.maxchoice[0]:
+                        self.choice[0] = self.maxchoice[0]
+                    elif self.choice[0] < self.minchoice[0]:
+                        self.choice[0] = self.minchoice[0]
+                    if self.choice[1] > self.maxchoice[1]:
+                        self.choice[1] = self.maxchoice[1]
+                    elif self.choice[1] < self.minchoice[1]:
+                        self.choice[1] = self.minchoice[1]
+                    self.pressed = True
+            elif self.state == 2:
+                self.choice = direction
+                self.move(direction)
+                self.choice[0] += direction[0]
+                self.choice[1] += direction[1]
+
+    def changestate(self, n):
+        if n == 0:
+            self.state = 0
+            self.choice = [0, 0]
+            self.maxchoice = [1, 1]
+            self.minchoice = [-1, -1]
+            self.choices = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            self.using = 0
+        elif n == 1:
+            self.choices = [0, 0, 0, self.Usable[0], 0, self.Usable[1], self.Usable[2], self.Usable[3], self.Usable[4]]
+            self.choice = [0, 0]
+            self.state = 1
+        if n == 2:
+            self.choices = self.using.choices
+            self.choice = [0, 0]
+            self.target = [0, 0]
+            self.state = 2
+        print(self.state)
 
     def action(self, n):
         if n == 1:
             if self.state == 0:
-                self.choices = [[0, 0, 0], [self.Weapon[0], -1, self.Weapon[1]],
-                                [self.Usable[0], self.Usable[1], self.Usable[2]]]
-                self.choice = [0, 0]
-                self.state = 1
+                self.changestate(1)
             elif self.state == 1:
-                self.using = self.choices[self.choice[1] - self.minchoice[1]][self.choice[0] - self.minchoice[0]]
-                print(self.using)
+                print(self.choice)
+                self.using = self.choices[s.directions.index(self.choice)]
+                if not self.using == 0:
+                    self.changestate(2)
+                    print(self.using)
+            elif self.state == 2:
+                a = self.using.choose(self.choice)
+                if not a == 0:
+                    self.using.attacks[a].use(self.target[0], self.target[1], self.calculateforce())
+                    self.changestate(0)
         if n == 2:
-            self.state -= 1
+            if self.state == 0:
+                visuals.exitmenu()
+            elif self.state == 1:
+                self.changestate(0)
+            elif self.state == 2:
+                self.changestate(1)
+
+    def calculateforce(self):
+        return 1
 
 
 def loadenemies(path):
