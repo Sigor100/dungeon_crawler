@@ -18,7 +18,8 @@ projectpath = os.getcwd()
 os.path.exists(projectpath)
 shadow_texture = pygame.image.load(projectpath + directory + '/resources/textures/void.png')
 UI_textures = [['slot', 'slot_selected'],
-               [['move_NW', 'move_N', 'move_NE'], ['move_W', 'move_stay', 'move_E'], ['move_SW', 'move_S', 'move_SE']]]
+               [['move_NW', 'move_N', 'move_NE'], ['move_W', 'move_stay', 'move_E'], ['move_SW', 'move_S', 'move_SE']],
+               [['blank', 'blank', 'blank'], ['sword', 'blankds', 'shield'], ['potion', 'potion', 'potion']]]
 
 view_range = 4
 
@@ -125,6 +126,10 @@ def draw_selection(x, y):
                 gameDisplay.blit(UI_textures[0][1], [x + i * s.box_size, y + j * s.box_size])
             else:
                 gameDisplay.blit(UI_textures[0][0], [x + i * s.box_size, y + j * s.box_size])
+            if entities.player.state == 0 or entities.player.state == 2:
+                gameDisplay.blit(UI_textures[1][j][i], [x + i * s.box_size, y + j * s.box_size])
+            elif entities.player.state == 1:
+                gameDisplay.blit(UI_textures[2][j][i], [x + i * s.box_size, y + j * s.box_size])
 
 
 def draw_enemie_hp(camx, camy):
