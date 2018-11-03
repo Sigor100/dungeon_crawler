@@ -62,6 +62,12 @@ class Entity:
             generation.curmap.entities[self.y][self.x] = self
             del self.moves[0]
 
+    def hurt(self, hp):
+        self.hp -= hp
+        if self.hp <= 0:
+            generation.curmap.entities[self.y][self.x] = 0
+            alive.remove(self)
+
 
 class Player(Entity):
     def __init__(self):
