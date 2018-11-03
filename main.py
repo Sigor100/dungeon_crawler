@@ -74,6 +74,14 @@ def gameloop():
                     elif event.key == py.K_q:
                         turn = False
 
+                    elif event.key == py.K_c:
+                        while True:
+                            x = r.randint(0, g.curmap.width - 1)
+                            y = r.randint(0, g.curmap.height - 1)
+                            if g.tilesprot[g.curmap.tiles[y][x]].name == 'floor':
+                                break
+                        e.Entity(1, x, y)
+
                     # pathfinding test
                     elif event.key == py.K_p:
                         print("burza")
@@ -134,13 +142,6 @@ def gameloop():
         if not turn:  # and len(e.alive_enemies_list) > 0:
             # print("enemy turn")
             # print("alive: ", len(e.alive_enemies_list))
-            if r.randint(0, 100) < 10:
-                while True:
-                    x = r.randint(0, g.curmap.width - 1)
-                    y = r.randint(0, g.curmap.height - 1)
-                    if g.tilesprot[g.curmap.tiles[y][x]].name == 'floor':
-                        break
-                e.Entity(1, x, y)
             e.turn()  # todo: still working on it
             turn = True
         # SCREEN

@@ -41,17 +41,18 @@ class Entity:
         entities.append(self)
 
     def goto(self, x, y):
+        generation.curmap.entities[self.y][self.x] = -1
         self.moves = getpath([self.x, self.y], [x, y])
+        generation.curmap.entities[self.y][self.x] = self.id
 
     def step(self):
         print(self.moves)
         if not len(self.moves) == 0:
-            if generation.curmap.entities[self.moves[0][1]][self.moves[0][0]] == -1:
-                generation.curmap.entities[self.y][self.x] = -1
-                self.x = self.moves[0][0]
-                self.y = self.moves[0][1]
-                generation.curmap.entities[self.y][self.x] = self.id
-                del self.moves[0]
+            generation.curmap.entities[self.y][self.x] = -1
+            self.x = self.moves[0][0]
+            self.y = self.moves[0][1]
+            generation.curmap.entities[self.y][self.x] = self.id
+            del self.moves[0]
 
 
 class Player(Entity):
@@ -118,11 +119,9 @@ def loadenemies(path):
 
 
 def turn():
-    print('turn')
     for i in entities:
         generation.curmap.generategrid()
         if visuals.shadow_map[i.y][i.x] == 2:
-            print(i.x, i.y)
             i.goto(player.x, player.y)
         i.step()
 
