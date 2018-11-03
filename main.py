@@ -64,6 +64,12 @@ def gameloop():
                             turn = False
                         direction[1] += 1
 
+                    # actions
+                    elif event.key == py.K_q:
+                        e.player.action(1)
+                    elif event.key == py.K_e:
+                        e.player.action(2)
+
                     # begin camera movement
                     elif event.key == py.K_RIGHT:
                         cam_dir[0] += box_size
@@ -139,8 +145,7 @@ def gameloop():
         if direction[0] != 0 or direction[1] != 0:
             turn = False
         # move the player
-        if not direction == [0, 0]:
-            e.player.resolve([direction[1], direction[0]])
+        e.player.resolve([direction[1], direction[0]])
 
         # move the camera
         if not cam_dir == [0, 0]:

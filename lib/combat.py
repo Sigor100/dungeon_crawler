@@ -13,7 +13,7 @@ class Attack:
             damagemap[i[1] + y][i[0] + x] += i[2] * force
 
 
-def setmap(usemap, n):
+def setmap(usemap, n=0):
     usemap = []
     for i in range(0, g.curmap.height):
         temp = []

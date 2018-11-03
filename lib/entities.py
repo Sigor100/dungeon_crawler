@@ -92,13 +92,13 @@ class Player(Entity):
         self.boots = 0
         self.Usable = [0, 0, 0]
         self.charm = 0
-        self.hunger = 100 # from 0 to 100
+        self.hunger = 100  # from 0 to 100
         self.x = generation.curmap.startpos[0]
         self.y = generation.curmap.startpos[1]
         self.state = 0  # 0 - walking, 1 - choosing weapon, 2 - aiming
-        self.choice = [0, 0]
-        self.maxchoice = [-1, -1]
-        self.minchoice = [1, 1]
+        self.choice = [1, 1]
+        self.maxchoice = [1, 1]
+        self.minchoice = [-1, -1]
         self.choices = [[0, 0, 0],
                         [0, 0, 0],
                         [0, 0, 0]]
@@ -116,6 +116,7 @@ class Player(Entity):
 
     def resolve(self, direction):
         if self.state == 0:
+            self.choice = [direction[0] - self.minchoice[0], direction[1] - self.minchoice[1]]
             self.move(direction)
         elif self.state == 1:
             self.choice[0] += direction[0]
