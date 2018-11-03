@@ -7,6 +7,8 @@ r = "nodebug"
 debug = False
 rooms = 10
 
+directory = '/debug'
+
 
 class TilePrototype:
     name = ''
@@ -295,7 +297,7 @@ def loadtiles(path):
                 var = ''
             else:
                 var += ch
-        ret.texture = image.load(os.getcwd() + '/' + var)
+        ret.texture = image.load(os.getcwd() + directory + '/' + var)
         tilesprot.append(ret)
         tilenames.append(ret.name)
 
