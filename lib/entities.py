@@ -10,6 +10,8 @@ entitynames = []
 entities = []
 player = 0
 
+directory = '/debug'
+
 
 class EntityPrototype:
     def __init__(self):
@@ -81,7 +83,7 @@ def loadenemies(path):
     global entitiesprot
 
     ret = EntityPrototype()
-    ret.texture = pygame.image.load(path[:-18] + '/resources/textures/player.png')
+    ret.texture = pygame.image.load(path[:-18] + directory + '/resources/textures/player.png')
     entitiesprot.append(ret)
 
     files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
@@ -109,7 +111,7 @@ def loadenemies(path):
                 elif i == 5:
                     ret.maxac = int(var)
                 elif i == 6:
-                    ret.texture = pygame.image.load(var)
+                    ret.texture = pygame.image.load(os.getcwd() + directory + '/' + var)
                 else:
                     ret.drops.append(int(var))
                 i += 1

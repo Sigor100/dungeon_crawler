@@ -1,98 +1,66 @@
 import pygame
-import generation
 import os
+
+directory = '/debug'
 
 pygame.init()
 
-direct = os.getcwd()
-direct = direct[:-4]
 
-curmap = generation.curmap
-equipment_map = []
-file_list = []
-equipment_list = [0]
-a = []
-backpack = []
-for p1 in range(0, 5):
-    a.append(0)
-for p in range(0, 6):
-    backpack.append(a)
-print(backpack)
+class ItemPrototype:
+    def __init__(self):
+        self.name = ''
+        self.width = 0
+        self.height = 0
+        self.value = 0
+        self.texture = 0
 
 
 class Item:
-    def __init__(self, id, type, name):
+    def __init__(self, id, x, y):
         self.id = id
-        self.type = type  # 0 = weapon	1 = potion
-        self.name = name
+        self.x = x
+        self.y = y
+        self.rotation = False
 
 
-class Weapon(Item):
-    def __init__(self, id, name, damage, durability, crit_damage, crit_chance):
-        # Item.__init__(id,0 , name)
-        super().__init__(id, 0, name)
-        self.id = id
-        self.type = 0  # 0 = weapon	1 = potion
-        self.name = name
-        self.damage = damage
-        self.durability = durability
-        self.crit_damage = crit_damage
-        self.crit_chance = crit_chance
-
-    def getstats(self, n):
-        if n == 0:
-            return [self.damage, self.durability, self.crit_damage, self.crit_chance]
-        elif n == 1:
-            return self.damage
-        elif n == 2:
-            return self.durability
-        elif n == 3:
-            return self.crit_damage
-        elif n == 4:
-            return self.crit_chance
+itemprot = []
+itemnames = []
 
 
-for q in range(0, curmap.height):
-    temp = []
-    for q1 in range(0, curmap.width):
-        temp.append([0])
-    equipment_map.append(temp)
-temp = []
+def loaditems(path):
+    global itemprot, itemnames
 
-for num in range(1, 4):
-    equipment_file = open(direct + "/resources/items/item" + str(num) + ".txt")
-    equipment_file = list(equipment_file)
-    equipment_file = str(equipment_file)
-    equipment_file = list(equipment_file)
-    # print(equipment_file)
-    file_list.append(equipment_file)
+    files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+    for file in files:
+        ret = ItemPrototype()
+        ret.name = file.split('.', 1)[0]
+        with open(path + '/' + file) as f:
+            file = f.read()
 
-for p in range(0, len(file_list), 1):
-    file_list[p] = file_list[p][2:]
-    file_list[p] = file_list[p][:-2]
-# print(file_list)
-
-end = False
-p2 = 0
-h_list = []
-h_list2 = []
-
-for p in range(0, len(file_list), 1):
-    if file_list[p][0] == "0":
-        for p1 in range(0, len(file_list[p])):
-            if file_list[p][p1] != " ":
-                h_list.append(file_list[p][p1])
+        i = 0
+        var = ''
+        for ch in file:
+            if ch == ' ' or ch == '/':
+                if i == 0:
+                    ret.name = var
+                elif i == 1:
+                    ret.width = int(var)
+                elif i == 2:
+                    ret.height = int(var)
+                elif i == 3:
+                    ret.value = int(var)
+                elif i == 4:
+                    ret.texture = pygame.image.load(var)
+                i += 1
+                var = ''
             else:
-                h_list2.append("".join(h_list))
-                h_list = []
-        h_list2.append("".join(h_list))
-        h_list = []
-        equipment_list.append(h_list2)
-        h_list2 = []
-print(equipment_list)
-for p in range(1, len(equipment_list)):
-    print(equipment_list[p][1])
-    equipment_list[p] = Weapon(p, equipment_list[p][1], equipment_list[p][2], equipment_list[p][3],
-                               equipment_list[p][4], equipment_list[p][5])
+                var += ch
+        ret.drops.append(int(var))
+        itemprot.append(ret)
+        itemnames.append(ret.name)
 
-# print(equipment_list[1].id)
+
+def init():
+    projectpath = os.getcwd().split('\\', 1)[0]
+    print(projectpath)
+    loaditems(projectpath + directory + '/resources/items')

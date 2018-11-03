@@ -6,6 +6,8 @@ import entities
 import settings as s
 from math import sqrt
 
+directory = '/debug'
+
 shadow_mode = 0  # set to 2 for the whole map to be visible from the start
 
 # IMPORTANT: Don't delete comments in this file
@@ -14,7 +16,7 @@ dirx = (0, 1, 0, -1)
 diry = (-1, 0, 1, 0)
 projectpath = os.getcwd()
 os.path.exists(projectpath)
-shadow_texture = pygame.image.load(projectpath + '/resources/textures/void.png')
+shadow_texture = pygame.image.load(projectpath + directory + '/resources/textures/void.png')
 
 view_range = 4
 
