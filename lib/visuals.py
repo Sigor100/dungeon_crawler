@@ -41,7 +41,11 @@ def drawscreen(x, y):
             else:
                 texture.append(shadow_texture)
             for t in texture:
-                gameDisplay.blit(t, [(j * s.box_size - x), i * s.box_size - y])
+                if shadow_map[i][j] == 1:
+                    print("alpha")
+                    blit_alpha(gameDisplay, t, [(j * s.box_size - x), i * s.box_size - y], 50)
+                else:
+                    gameDisplay.blit(t, [(j * s.box_size - x), i * s.box_size - y])
 
     draw_hud()
     pygame.display.update()
@@ -72,7 +76,6 @@ def calculateshadows():
             if generation.tilesprot[generation.curmap.tiles[i[1]][i[0]]].name == 'floor':
                 for j in range(0, len(dirx)):
                     tocheck.append([i[0] + dirx[j], i[1] + diry[j]])
-
 
 
 def check_distance(x1, y1, x2, y2):

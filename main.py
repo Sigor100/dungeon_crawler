@@ -69,8 +69,7 @@ def gameloop():
 
                     #reset camera
                     elif event.key == py.K_SPACE:
-                        camera_x = 0
-                        camera_y = 0
+                        cam_offset = [0, 0]
 
                     # skip turn
                     elif event.key == py.K_q:
