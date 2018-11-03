@@ -44,7 +44,7 @@ class Map:
                 if curmap.entities[i][j] == -1:
                     temp.append(tilesprot[curmap.tiles[i][j]].collision)
                 else:
-                    temp.append(0)
+                    temp.append(0.0)
             matrix.append(temp)
         curmap.grid = Grid(matrix=matrix)
 

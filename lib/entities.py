@@ -52,9 +52,6 @@ class Entity:
                 self.y = self.moves[0][1]
                 generation.curmap.entities[self.y][self.x] = self.id
                 del self.moves[0]
-            else:
-        else:
-            print('could not step')
 
 
 class Player(Entity):
@@ -121,9 +118,11 @@ def loadenemies(path):
 
 
 def turn():
+    print('turn')
     for i in entities:
         generation.curmap.generategrid()
         if visuals.shadow_map[i.y][i.x] == 2:
+            print(i.x, i.y)
             i.goto(player.x, player.y)
         i.step()
 
