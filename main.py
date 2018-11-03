@@ -138,11 +138,13 @@ def gameloop():
             cam_offset[0] += cam_dir[0]
             cam_offset[1] += cam_dir[1]
 
-        # do turn shit
+        # todo: do turn shit
         if not turn:  # and len(e.alive_enemies_list) > 0:
+            if r.randint(0,100) < 10:
+                e.random_spawn(1)
             # print("enemy turn")
             # print("alive: ", len(e.alive_enemies_list))
-            e.turn()  # todo: still working on it
+            e.turn()  # todo: still working on it (or am I)
             turn = True
         # SCREEN
         v.drawscreen(e.player.x * box_size + box_size / 2 + cam_offset[0] - s.display_width / 2,
