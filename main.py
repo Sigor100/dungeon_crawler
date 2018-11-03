@@ -17,6 +17,10 @@ box_size = 32
 white = (255, 255, 255)
 black = (0, 0, 0)
 
+'''numpad = (py.K_KP1, py.K_KP2, py.K_KP3,
+          py.K_KP4, py.K_KP5, py.K_KP6,
+          py.K_KP7, py.K_KP8, py.K_KP9)'''
+
 
 def gameloop():
     game_exit = False
@@ -44,16 +48,20 @@ def gameloop():
                 elif event.type == py.KEYDOWN:
                     # begin player movement
                     if event.key == py.K_w:
-                        turn = False
+                        if e.player.state == 0:
+                            turn = False
                         direction[0] -= 1
                     elif event.key == py.K_s:
-                        turn = False
+                        if e.player.state == 0:
+                            turn = False
                         direction[0] += 1
                     elif event.key == py.K_a:
-                        turn = False
+                        if e.player.state == 0:
+                            turn = False
                         direction[1] -= 1
                     elif event.key == py.K_d:
-                        turn = False
+                        if e.player.state == 0:
+                            turn = False
                         direction[1] += 1
 
                     # begin camera movement
@@ -132,7 +140,7 @@ def gameloop():
             turn = False
         # move the player
         if not direction == [0, 0]:
-            e.player.move([direction[1], direction[0]])
+            e.player.resolve([direction[1], direction[0]])
 
         # move the camera
         if not cam_dir == [0, 0]:
