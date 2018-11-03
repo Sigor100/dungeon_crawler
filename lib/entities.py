@@ -9,13 +9,10 @@ entitiesprot = []
 entitynames = []
 alive = []
 player = 0
-<<<<<<< HEAD
 
 directory = '/debug'
 
-=======
 curmap = generation.curmap
->>>>>>> e1e3111fe367f330850df9a4aa65a2928aae8b10
 
 class EntityPrototype:
     def __init__(self):
