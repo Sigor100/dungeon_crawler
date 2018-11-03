@@ -28,7 +28,7 @@ class Map:
         self.height = 0
         self.width = 0
         self.tiles = []
-        self.entities = []
+        self.alive = []
         self.items = []
         self.startpos = [0, 0]
         self.endpos = [0, 0]
@@ -41,7 +41,7 @@ class Map:
         for i in range(0, curmap.height):
             temp = []
             for j in range(0, curmap.width):
-                if curmap.entities[i][j] <= 0:
+                if curmap.alive[i][j] <= 0:
                     temp.append(tilesprot[curmap.tiles[i][j]].collision)
                 else:
                     temp.append(0.0)
@@ -264,7 +264,7 @@ def genmap():
             print(curmap.rooms[i])
 
     curmap.items = []
-    curmap.entities = []
+    curmap.alive = []
     for i in range(0, curmap.height):
         temp1 = []
         temp2 = []
@@ -272,7 +272,7 @@ def genmap():
             temp1.append(-1)
             temp2.append(-1)
         curmap.items.append(temp1)
-        curmap.entities.append(temp2)
+        curmap.alive.append(temp2)
 
 
 def loadtiles(path):
