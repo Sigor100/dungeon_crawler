@@ -43,7 +43,11 @@ class Map:
         for i in range(0, curmap.height):
             temp = []
             for j in range(0, curmap.width):
+<<<<<<< HEAD
                 if curmap.alive[i][j] <= 0:
+=======
+                if curmap.entities[i][j] == -1:
+>>>>>>> parent of 01f6c37... enemies now come towards you
                     temp.append(tilesprot[curmap.tiles[i][j]].collision)
                 else:
                     temp.append(0.0)
