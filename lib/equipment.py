@@ -51,6 +51,15 @@ class Food:
         self.satiation = 0  # from 0 to 100
 
 
+class Usable:
+    def __init__(self, id, x, y):
+        self.id = id
+        self.x = x
+        self.y = y
+        self.type = 0  # 0 = potion (defensive) 1 = spell (offensive)
+        self.effect = 0
+
+
 itemprot = []
 itemnames = []
 

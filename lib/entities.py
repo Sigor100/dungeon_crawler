@@ -8,6 +8,7 @@ from collisions import getpath
 entitiesprot = []
 entitynames = []
 alive = []
+active = []
 player = 0
 
 
@@ -34,15 +35,16 @@ class Entity:
         print(entitiesprot)
         print('entity', id, x, y)
         self.id = id
-        # with entitiesprot[id] as e:
-        #    with random.randint as r:
-        #        self.hp = r(e.minhp, e.maxhp)
-        #        self.dmg = r(e.mindmg, e.maxdmg)
-        #        self.ac = r(e.minac, e.maxac)
-        #    self.drops = e.drops
-        self.moves = []
         self.x = x
         self.y = y
+        # with entitiesprot[id] as e:
+        #    with random.randint as r:
+        self.hp = random.randint(entitiesprot[id].minhp, entitiesprot[id].maxhp)
+        self.dmg = random.randint(entitiesprot[id].mindmg, entitiesprot[id].maxdmg)
+        #self.ac = r(e.minac, e.maxac)
+        #    self.drops = e.drops
+        self.moves = []
+
         generation.curmap.entities[y][x] = self
         alive.append(self)
 
@@ -68,15 +70,15 @@ class Player(Entity):
         self.moves = []
         self.hp = 15
         self.lvl = 1
-        self.primaryWeapon = []
-        self.secondaryWeapon = []
-        self.headArmor = []
-        self.bodyArmor = []
-        self.boots = []
-        self.firstUsable = []
-        self.secondUsable = []
-        self.thirdUsable = []
-        self.charm = []
+        self.primaryWeapon = 0
+        self.secondaryWeapon = 0
+        self.headArmor = 0
+        self.bodyArmor = 0
+        self.boots = 0
+        self.firstUsable = 0
+        self.secondUsable = 0
+        self.thirdUsable = 0
+        self.charm = 0
         self.hunger = 100 # from 0 to 100
         self.x = generation.curmap.startpos[0]
         self.y = generation.curmap.startpos[1]
@@ -137,9 +139,11 @@ def loadenemies(path):
 
 
 def turn():
+    global active
     for i in alive:
         generation.curmap.generategrid()
         if visuals.shadow_map[i.y][i.x] == 2:
+            active.append(i)
             i.goto(player.x, player.y)
         i.step()
 
