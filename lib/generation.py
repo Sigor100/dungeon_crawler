@@ -23,6 +23,7 @@ roomtraits = ["entrance", "corridor", "regular", "traproom"]
 roomlist = []
 offx = 1
 offy = 1
+matrix = []
 
 
 class Map:
@@ -39,13 +40,18 @@ class Map:
         self.clean = True
 
     def generategrid(self):
+        global matrix
+
         matrix = []
         for i in range(0, curmap.height):
             temp = []
             for j in range(0, curmap.width):
-                if curmap.entities[i][j] <= 0:
+                if curmap.entities[i][j] == -1:
                     temp.append(tilesprot[curmap.tiles[i][j]].collision)
+                elif curmap.entities[i][j].id == 0:
+                    temp.append(1.0)
                 else:
+                    print(curmap.entities[i][j])
                     temp.append(0.0)
             matrix.append(temp)
         curmap.grid = Grid(matrix=matrix)
