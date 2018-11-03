@@ -34,7 +34,7 @@ def drawscreen(x, y):
     for i in range(0, generation.curmap.height):
         for j in range(0, generation.curmap.width):
             texture = []
-            if not shadow_map[i][j] == 0:
+            if shadow_map[i][j] != 0:
                 texture.append(generation.tilesprot[generation.curmap.tiles[i][j]].texture)
                 if not generation.curmap.entities[i][j] == -1:
                     texture.append(entities.entitiesprot[generation.curmap.entities[i][j]].texture)
@@ -65,17 +65,27 @@ def blit_alpha(target, source, location, opacity):
 def calculateshadows():
     global shadow_map
     checked = getmap(0)
+    x = entities.player.x
+    y = entities.player.y
+    for p in range(0, len(shadow_map), 1):
+        for p1 in range(0, len(shadow_map[0]), 1):
+            if shadow_map[p][p1] == 2:
+                shadow_map[p][p1] = 1
     tocheck = []
     for i in range(0, len(dirx)):
-        tocheck.append([entities.player.x + dirx[i],
-                        entities.player.y + diry[i]])
+        if check_distance(x, y, x + dirx[i], y + diry[i]) < view_range:
+            print("dziala")
+            tocheck.append([x + dirx[i], y + diry[i]])
+        else:
+            print(x, y, x + dirx[i], y + diry[i])
     for i in tocheck:
         if not checked[i[1]][i[0]] == 1:
             checked[i[1]][i[0]] = 1
             shadow_map[i[1]][i[0]] = 2
             if generation.tilesprot[generation.curmap.tiles[i[1]][i[0]]].name == 'floor':
                 for j in range(0, len(dirx)):
-                    tocheck.append([i[0] + dirx[j], i[1] + diry[j]])
+                    if check_distance(x, y, i[0] + dirx[j], i[1] + diry[j]) < view_range:
+                        tocheck.append([i[0] + dirx[j], i[1] + diry[j]])
 
 
 def check_distance(x1, y1, x2, y2):

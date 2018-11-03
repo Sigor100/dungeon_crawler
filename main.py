@@ -135,7 +135,7 @@ def gameloop():
         if not turn:  # and len(e.alive_enemies_list) > 0:
             #print("enemy turn")
             # print("alive: ", len(e.alive_enemies_list))
-            if r.randint(0, 100) < 35:
+            if r.randint(0, 100) < 10:
                 while True:
                     x = r.randint(0, g.curmap.width - 1)
                     y = r.randint(0, g.curmap.height - 1)
