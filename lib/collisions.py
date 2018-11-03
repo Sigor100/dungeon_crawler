@@ -19,7 +19,9 @@ def collisions(x, y, d):
 
 def getpath(spos, epos):
     generation.curmap.generategrid()
+    print('getpath')
     print(spos, epos)
+    print(generation.matrix[spos[1]][spos[0]], generation.matrix[epos[1]][epos[0]])
     finder = AStarFinder(diagonal_movement=DiagonalMovement.always)
     path, runs = finder.find_path(generation.curmap.grid.node(spos[0], spos[1]),
                                   generation.curmap.grid.node(epos[0], epos[1]),

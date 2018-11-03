@@ -15,6 +15,7 @@ directory = '/debug'
 
 curmap = generation.curmap
 
+
 class EntityPrototype:
     def __init__(self):
         self.name = ''
@@ -42,13 +43,13 @@ class Entity:
         self.moves = []
         self.x = x
         self.y = y
-        generation.curmap.entities[y][x] = self.id
+        generation.curmap.entities[y][x] = self
         alive.append(self)
 
     def goto(self, x, y):
         generation.curmap.entities[self.y][self.x] = -1
         self.moves = getpath([self.x, self.y], [x, y])
-        generation.curmap.entities[self.y][self.x] = self.id
+        generation.curmap.entities[self.y][self.x] = self
 
     def step(self):
         print(self.moves)
@@ -56,7 +57,7 @@ class Entity:
             generation.curmap.entities[self.y][self.x] = -1
             self.x = self.moves[0][0]
             self.y = self.moves[0][1]
-            generation.curmap.entities[self.y][self.x] = self.id
+            generation.curmap.entities[self.y][self.x] = self
             del self.moves[0]
 
 
@@ -79,7 +80,7 @@ class Player(Entity):
         self.hunger = 100 # from 0 to 100
         self.x = generation.curmap.startpos[0]
         self.y = generation.curmap.startpos[1]
-        generation.curmap.entities[self.y][self.x] = self.id
+        generation.curmap.entities[self.y][self.x] = self
         player = self
 
     def move(self, pos):
@@ -88,7 +89,7 @@ class Player(Entity):
             generation.curmap.entities[self.y][self.x] = -1
             self.x += pos[0]
             self.y += pos[1]
-            generation.curmap.entities[self.y][self.x] = 0
+            generation.curmap.entities[self.y][self.x] = self
 
 
 def loadenemies(path):

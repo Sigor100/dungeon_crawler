@@ -39,7 +39,7 @@ def drawscreen(x, y):
             if shadow_map[i][j] != 0:
                 texture.append(generation.tilesprot[generation.curmap.tiles[i][j]].texture)
                 if not generation.curmap.entities[i][j] == -1 and shadow_map[i][j] == 2:
-                    texture.append(entities.entitiesprot[generation.curmap.entities[i][j]].texture)
+                    texture.append(entities.entitiesprot[generation.curmap.entities[i][j].id].texture)
             else:
                 texture.append(shadow_texture)
             for t in texture:
