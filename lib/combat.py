@@ -4,7 +4,8 @@ damagemap = []
 
 
 class Attack:
-    tiles = []
+    def __init__(self, pos):
+        self.tiles = pos
 
     def use(self, x, y, force):
         global damagemap

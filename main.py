@@ -2,6 +2,7 @@ import random as r
 import pygame as py
 import collisions as c
 import entities as e
+import equipment as e2
 import generation as g
 import settings as s
 import visuals as v
@@ -9,6 +10,7 @@ import visuals as v
 py.init()
 g.init()
 e.init()
+e2.init()
 e.Player()
 v.init()
 

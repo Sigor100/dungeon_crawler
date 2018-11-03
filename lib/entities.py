@@ -5,6 +5,7 @@ import pygame
 import random
 import settings as s
 from collisions import getpath
+import equipment
 
 entitiesprot = []
 entitynames = []
@@ -80,7 +81,7 @@ class Player(Entity):
         self.charm = []
         self.hunger = 100  # from 0 to 100
         self.Armor = [0, 0, 0]
-        self.Usable = [1, 2, 3, 4, 5] # main weapon, off-hand weapon, slots 1 - 3
+        self.Usable = [equipment.makeitem(1, 0, 0), 2, 3, 4, 5] # main weapon, off-hand weapon, slots 1 - 3
         self.charm = 0
         self.hunger = 100  # from 0 to 100
         self.x = generation.curmap.startpos[0]
@@ -149,7 +150,7 @@ class Player(Entity):
             self.choice = [0, 0]
             self.state = 1
         if n == 2:
-            self.choices = self.using.choices
+            self.choices = equipment.itemprot[self.using.id].choices
             self.choice = [0, 0]
             self.target = [0, 0]
             self.state = 2

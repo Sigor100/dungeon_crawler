@@ -1,7 +1,10 @@
 import pygame
+from generation import smartrand
+import combat
 import os
 
-directory = '/debug'
+projectpath = ''
+directory = ''
 
 pygame.init()
 
@@ -13,6 +16,9 @@ class ItemPrototype:
         self.height = 0
         self.value = 0
         self.texture = 0
+        self.type = 0
+        self.choices = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.data = []
 
 
 class Item:
@@ -23,19 +29,31 @@ class Item:
         self.rotation = False
 
 
-class PrimaryWeapon:
+class Weapon:
     def __init__(self, id, x, y):
         self.id = id
         self.x = x
         self.y = y
-        self.mindmg = 0
-        self.maxdmg = 0
-        self.dmgtype = 0  # 0 = physical   1 = magical idk more
-        self.range = 0
         self.rotation = False
 
+        self.mindmg = smartrand(int(itemprot[id].data[0]), int(itemprot[id].data[1]))
+        self.maxdmg = smartrand(int(itemprot[id].data[2]), int(itemprot[id].data[3]))
+        self.range = float(itemprot[id].data[4])
+        self.attacks = [combat.Attack([[0, 0]])]
 
-class Armor:
+
+class Usable:
+    def __init__(self, id, x, y):
+        self.id = id
+        self.x = x
+        self.y = y
+        self.rotation = False
+
+        self.effect = 0
+        self.range = 0
+
+
+'''class Armor:
     def __init__(self, id, x, y):
         self.id = id
         self.x = x
@@ -48,25 +66,26 @@ class Food:
         self.id = id
         self.x = x
         self.y = y
-        self.satiation = 0  # from 0 to 100
-
-
-class Usable:
-    def __init__(self, id, x, y):
-        self.id = id
-        self.x = x
-        self.y = y
-        self.type = 0  # 0 = potion (defensive) 1 = spell (offensive)
-        self.effect = 0
+        self.satiation = 0'''  # from 0 to 100
 
 
 itemprot = []
 itemnames = []
 
 
+def makeitem(id, x, y):
+    #if itemprot[id].type == 0:
+    #    return Item(id, x, y)
+    if itemprot[id].type == 1:
+        return Weapon(id, x, y)
+    #elif itemprot[id].type == 2:
+    #    return Usable(id, x, y)
+    else:
+        print('wtf')
+
+
 def loaditems(path):
     global itemprot, itemnames
-
     files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
     for file in files:
         ret = ItemPrototype()
@@ -77,27 +96,35 @@ def loaditems(path):
         i = 0
         var = ''
         for ch in file:
-            if ch == ' ' or ch == '/':
+            if ch == ' ' or ch == '\n':
                 if i == 0:
-                    ret.name = var
+                    ret.type = int(var)
                 elif i == 1:
-                    ret.width = int(var)
+                    ret.name = var
                 elif i == 2:
-                    ret.height = int(var)
+                    ret.width = int(var)
                 elif i == 3:
-                    ret.value = int(var)
+                    ret.height = int(var)
                 elif i == 4:
-                    ret.texture = pygame.image.load(var)
+                    ret.value = int(var)
+                elif i == 5:
+                    ret.texture = pygame.image.load(projectpath + var)
+                else:
+                    ret.data.append(var)
                 i += 1
                 var = ''
+
+                if ch == '\n':
+                    i = 0
+                    itemprot.append(ret)
+                    itemnames.append(ret.name)
             else:
                 var += ch
-        # ret.drops.append(int(var))
-        itemprot.append(ret)
-        itemnames.append(ret.name)
+    print('prototypes: ', itemprot)
 
 
 def init():
-    projectpath = os.getcwd().split('\\', 1)[0]
-    print(projectpath)
+    global projectpath
+
+    projectpath = os.getcwd()#.split('\\', 1)[0]
     loaditems(projectpath + directory + '/resources/items')

@@ -1,0 +1,2 @@
+1 excalibur 2 5 1000 /resources/textures/weapons/excalibur.png 10 10 15 15 1.5
+1 wand 2 5 1000 /resources/textures/weapons/wand.png 10 10 15 15 10
