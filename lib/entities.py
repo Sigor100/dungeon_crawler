@@ -1,5 +1,5 @@
 import os
-import random
+import visuals
 import generation
 import pygame
 from collisions import getpath
@@ -35,21 +35,24 @@ class Entity:
         #        self.ac = r(e.minac, e.maxac)
         #sd    self.drops = e.drops
         self.moves = []
-        self.xpos = x
-        self.ypos = y
+        self.x = x
+        self.y = y
         generation.curmap.entities[y][x] = self.id
         entities.append(self)
 
     def goto(self, x, y):
-        self.moves = getpath([self.xpos, self.ypos], [x, y])
+        self.moves = getpath([self.x, self.y], [x, y])
 
     def step(self):
-        if not len(self.moves) == 0 and generation.curmap[self.moves[0][1]][self.moves[0][0]] == -1:
-            generation.curmap.entities[self.ypos][self.xpos] = -1
-            self.xpos = self.moves[0][0]
-            self.ypos = self.moves[0][1]
-            generation.curmap.entities[self.ypos][self.xpos] = self.id
-            self.moves.remove(0)
+        print(self.moves)
+        if not len(self.moves) == 0:
+            if generation.curmap.entities[self.moves[0][1]][self.moves[0][0]] == -1:
+                generation.curmap.entities[self.y][self.x] = -1
+                self.x = self.moves[0][0]
+                self.y = self.moves[0][1]
+                generation.curmap.entities[self.y][self.x] = self.id
+                del self.moves[0]
+            else:
         else:
             print('could not step')
 
@@ -119,6 +122,9 @@ def loadenemies(path):
 
 def turn():
     for i in entities:
+        generation.curmap.generategrid()
+        if visuals.shadow_map[i.y][i.x] == 2:
+            i.goto(player.x, player.y)
         i.step()
 
 
