@@ -19,7 +19,7 @@ class TilePrototype:
 tilesprot = []
 tilenames = []
 curmap = 0
-roomtraits = ["entrance", "corridor", "regular", "traproom"]
+roomtraits = ["entrance", "corridor", "regular", "traproom", 'exit']
 roomlist = []
 offx = 1
 offy = 1
@@ -168,6 +168,9 @@ def genroom(y, x, height, width, trait):
 
     if trait == roomtraits.index("entrance"):
         cls.tiles[int(height / 2)][int(width / 2)] = tilenames.index("upstairs")
+    if trait == roomtraits.index("exit"):
+        cls.tiles[int(height / 2)][int(width / 2)] = tilenames.index("downstairs")
+        curmap.endpos = [int(height / 2), int(width / 2)]
     for y in range(0, cls.height):
         for x in range(0, cls.width):
             curmap.tiles[y + offy + cls.ypos][x + offx + cls.xpos] = cls.tiles[y][x]
@@ -175,7 +178,7 @@ def genroom(y, x, height, width, trait):
     curmap.rooms.append([x + offx, y + offy, width, height])
 
 
-def generatevalidroom():
+def generatevalidroom(t=roomtraits.index('regular')):
     pos = 0
     direc = 0
     while True:
@@ -230,7 +233,7 @@ def generatevalidroom():
         addmaprow([0, 1])
 
     # generate!
-    genroom(rpos[1], rpos[0], rheight, rwidth, roomtraits.index("regular"))
+    genroom(rpos[1], rpos[0], rheight, rwidth, t)
     curmap.tiles[pos[1] + offy][pos[0] + offx] = tilenames.index("door")
     return 0
 
@@ -258,8 +261,9 @@ def genmap():
     # generate rooms
     roomlist = []
     genroom(0, 0, curmap.height - 2, curmap.width - 2, roomtraits.index("entrance"))
-    for i in range(0, rooms - 1):
+    for i in range(0, rooms - 2):
         generatevalidroom()
+    generatevalidroom(roomtraits.index("exit"))
 
     # apply final changes
     curmap.startpos[0] = curmap.startpos[0] + offx
