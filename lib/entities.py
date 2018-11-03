@@ -76,7 +76,6 @@ class Player(Entity):
         self.moves = []
         self.hp = 15
         self.lvl = 1
-<<<<<<< HEAD
         self.primaryWeapon = []
         self.secondaryWeapon = []
         self.headArmor = []
@@ -87,7 +86,6 @@ class Player(Entity):
         self.thirdUsable = []
         self.charm = []
         self.hunger = 100  # from 0 to 100
-=======
         self.primaryWeapon = 0
         self.secondaryWeapon = 0
         self.headArmor = 0
@@ -98,7 +96,6 @@ class Player(Entity):
         self.thirdUsable = 0
         self.charm = 0
         self.hunger = 100 # from 0 to 100
->>>>>>> 9f1e232527e198b0a3e47f7393d9d1958ae7b353
         self.x = generation.curmap.startpos[0]
         self.y = generation.curmap.startpos[1]
         self.state = 0  # 0 - walking, 1 - choosing weapon, 2 - aiming
