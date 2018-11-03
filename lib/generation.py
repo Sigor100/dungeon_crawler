@@ -44,13 +44,10 @@ class Map:
             temp = []
             for j in range(0, curmap.width):
                 if curmap.entities[i][j] <= 0:
-                    if curmap.entities[i][j] == -1:
-                        temp.append(tilesprot[curmap.tiles[i][j]].collision)
-                    else:
-                        temp.append(0.0)
+                    temp.append(tilesprot[curmap.tiles[i][j]].collision)
+                else:
+                    temp.append(0.0)
             matrix.append(temp)
-        for i in range(0, len(matrix)):
-            print(matrix[i])
         curmap.grid = Grid(matrix=matrix)
 
 
