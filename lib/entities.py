@@ -76,6 +76,7 @@ class Player(Entity):
         self.secondUsable = []
         self.thirdUsable = []
         self.charm = []
+        self.hunger = 100 # from 0 to 100
         self.x = generation.curmap.startpos[0]
         self.y = generation.curmap.startpos[1]
         generation.curmap.entities[self.y][self.x] = self.id

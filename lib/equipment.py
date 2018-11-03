@@ -25,18 +25,30 @@ class Item:
 
 class PrimaryWeapon:
     def __init__(self, id, x, y):
-        self.mindmg = 0
-        self.maxdmg = 1
         self.id = id
         self.x = x
         self.y = y
+        self.mindmg = 0
+        self.maxdmg = 0
+        self.dmgtype = 0  # 0 = physical   1 = magical idk more
+        self.range = 0
         self.rotation = False
 
 
-#class Armor:
-    #def __init__(self):
-        #self.
+class Armor:
+    def __init__(self, id, x, y):
+        self.id = id
+        self.x = x
+        self.y = y
+        self.block = []  # [minblock, maxblock]   from 0 to 100
 
+
+class Food:
+    def __init__(self, id, x, y):
+        self.id = id
+        self.x = x
+        self.y = y
+        self.satiation = 0  # from 0 to 100
 
 
 itemprot = []
@@ -71,7 +83,7 @@ def loaditems(path):
                 var = ''
             else:
                 var += ch
-        ret.drops.append(int(var))
+        # ret.drops.append(int(var))
         itemprot.append(ret)
         itemnames.append(ret.name)
 
