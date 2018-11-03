@@ -9,10 +9,18 @@ entitiesprot = []
 entitynames = []
 alive = []
 player = 0
+<<<<<<< HEAD
+=======
+
+>>>>>>> ba9143340e806231e9115f6df9c5d3e25bcccbec
 
 directory = '/debug'
 
 curmap = generation.curmap
+<<<<<<< HEAD
+=======
+
+>>>>>>> ba9143340e806231e9115f6df9c5d3e25bcccbec
 
 class EntityPrototype:
     def __init__(self):
@@ -147,7 +155,7 @@ def random_spawn(id):
                 Entity(id, x, y)
                 break
             else:
-                if spawnrange == 0:
+                if spawnrange == 5:
                     print("couldn't randomly spawn enemy")
                     break
                 spawnrange -= 1
