@@ -1,12 +1,22 @@
 import random
+from pygame import image
 from pathfinding.core.grid import Grid
+import os
 
 r = "nodebug"
 debug = False
 rooms = 10
 
+
+class TilePrototype:
+    name = ''
+    collision = 0
+    texture = 0
+
+
+tilesprot = []
+tilenames = []
 curmap = 0
-items = ["void", "wall", "floor", "door", "upstairs", "downstairs", "trap", "hero"]
 roomtraits = ["entrance", "corridor", "regular", "traproom"]
 roomlist = []
 offx = 1
@@ -14,14 +24,17 @@ offy = 1
 
 
 class Map:
-    height = 0
-    width = 0
-    tiles = []
-    startpos = [0, 0]
-    endpos = [0, 0]
-    rooms = []
-    grid = 0
-    clean = True
+    def __int__(self):
+        self.height = 0
+        self.width = 0
+        self.tiles = []
+        self.entities = []
+        self.items = []
+        self.startpos = [0, 0]
+        self.endpos = [0, 0]
+        self.rooms = []
+        self.grid = 0
+        self.clean = True
 
 
 class Room:
@@ -33,21 +46,6 @@ class Room:
     trait = 0  # 0 - corridor, 1 - regular room, 2 - trap room
     tiles = []
     wtiles = 0
-
-
-def collidable(n):
-    if n == items.index("floor") or n == items.index("door") \
-            or n == items.index("upstairs") or n == items.index("downstairs") \
-            or n == items.index("trap") or n == 0:
-        return True
-    return False
-
-def weight(n):
-    if n == items.index("floor") or n == items.index("door") \
-            or n == items.index("upstairs") or n == items.index("downstairs") \
-            or n == items.index("trap") or n == 0:
-        return 1
-    return 0
 
 
 def wallxy(width, height, n):
@@ -106,21 +104,21 @@ def addmaprow(dir):
     if dir[1] < 0:
         curmap.tiles.insert(0, [])
         for i in range(0, curmap.width):
-            curmap.tiles[0].append(items.index("void"))
+            curmap.tiles[0].append(tilenames.index("void"))
         curmap.height += 1
         offy += 1
     elif dir[1] > 0:
         curmap.tiles.append([])
         for i in range(0, curmap.width):
-            curmap.tiles[curmap.height].append(items.index("void"))
+            curmap.tiles[curmap.height].append(tilenames.index("void"))
         curmap.height += 1
     if dir[0] > 0:
         for i in range(0, curmap.height):
-            curmap.tiles[i].append(items.index("void"))
+            curmap.tiles[i].append(tilenames.index("void"))
         curmap.width += 1
     elif dir[0] < 0:
         for i in range(0, curmap.height):
-            curmap.tiles[i].insert(0, items.index("void"))
+            curmap.tiles[i].insert(0, tilenames.index("void"))
         curmap.width += 1
         offx += 1
 
@@ -140,16 +138,16 @@ def genroom(y, x, height, width, trait):
         templist = []
         for j in range(0, cls.wtiles):
             if j == 0 or j == cls.width - 1 or i == 0 or i == cls.height - 1:
-                templist.append(items.index("wall"))
+                templist.append(tilenames.index("wall"))
             else:
                 if trait == roomtraits.index("traproom"):
-                    templist.append(items.index("door"))
+                    templist.append(tilenames.index("door"))
                 else:
-                    templist.append(items.index("floor"))
+                    templist.append(tilenames.index("floor"))
         cls.tiles.append(templist)
 
     if trait == roomtraits.index("entrance"):
-        cls.tiles[int(height / 2)][int(width / 2)] = items.index("upstairs")
+        cls.tiles[int(height / 2)][int(width / 2)] = tilenames.index("upstairs")
     for y in range(0, cls.height):
         for x in range(0, cls.width):
             curmap.tiles[y + offy + cls.ypos][x + offx + cls.xpos] = cls.tiles[y][x]
@@ -165,7 +163,7 @@ def generatevalidroom():
             room_no = smartrand(0, len(roomlist) - 1)
             troom = roomlist[room_no]
             pos = wallxy(troom.width, troom.height, random.randint(0, 2 * troom.width + 2 * troom.height - 4))
-            if troom.tiles[pos[1]][pos[0]] == items.index("wall") and \
+            if troom.tiles[pos[1]][pos[0]] == tilenames.index("wall") and \
                     (troom.trait == roomtraits.index("corridor") or troom.trait == roomtraits.index("regular") or
                      troom.trait == roomtraits.index("entrance")):
                 pos[0] += troom.xpos
@@ -180,11 +178,11 @@ def generatevalidroom():
         tfloors = 0
         tvoids = 0
         for i in range(0, 4):
-            if a[i] == items.index("wall"):
+            if a[i] == tilenames.index("wall"):
                 twalls += 1
-            if a[i] == items.index("floor"):
+            if a[i] == tilenames.index("floor"):
                 tfloors += 1
-            if a[i] == items.index("void"):
+            if a[i] == tilenames.index("void"):
                 tvoids += 1
                 direc = i
         if twalls == 2 and tfloors == 1 and tvoids == 1:
@@ -213,54 +211,97 @@ def generatevalidroom():
 
     # generate!
     genroom(rpos[1], rpos[0], rheight, rwidth, roomtraits.index("regular"))
-    curmap.tiles[pos[1] + offy][pos[0] + offx] = items.index("door")
+    curmap.tiles[pos[1] + offy][pos[0] + offx] = tilenames.index("door")
     return 0
 
 
-def getmap(update=False):
+def genmap():
     global curmap
     global roomlist
     global offx, offy
-    if curmap == 0 or update:
-        curmap = Map()
-        curmap.width = random.choice([3, 5]) * 2 + 1
-        curmap.height = random.choice([3, 5]) * 2 + 1
-        curmap.rooms = []
-        offx = 1
-        offy = 1
-        curmap.startpos = [int((curmap.width - 1) / 2) - offx, int((curmap.height - 1) / 2) - offy]
+    curmap = Map()
+    curmap.width = random.choice([3, 5]) * 2 + 1
+    curmap.height = random.choice([3, 5]) * 2 + 1
+    curmap.rooms = []
+    offx = 1
+    offy = 1
+    curmap.startpos = [int((curmap.width - 1) / 2) - offx, int((curmap.height - 1) / 2) - offy]
 
-        # set map to all 0s
-        curmap.tiles = []
-        for y in range(0, curmap.height):
-            temp = []
-            for x in range(0, curmap.width):
-                temp.append(items.index("void"))
-            curmap.tiles.append(temp)
+    # set map to all 0s
+    curmap.tiles = []
+    for y in range(0, curmap.height):
+        temp = []
+        for x in range(0, curmap.width):
+            temp.append(tilenames.index("void"))
+        curmap.tiles.append(temp)
 
-        # generate rooms
-        roomlist = []
-        genroom(0, 0, curmap.height - 2, curmap.width - 2, roomtraits.index("entrance"))
-        for i in range(0, rooms - 1):
-            generatevalidroom()
+    # generate rooms
+    roomlist = []
+    genroom(0, 0, curmap.height - 2, curmap.width - 2, roomtraits.index("entrance"))
+    for i in range(0, rooms - 1):
+        generatevalidroom()
 
-        # apply final changes
-        curmap.startpos[0] = curmap.startpos[0] + offx
-        curmap.startpos[1] = curmap.startpos[1] + offy
+    # apply final changes
+    curmap.startpos[0] = curmap.startpos[0] + offx
+    curmap.startpos[1] = curmap.startpos[1] + offy
 
-        if debug:
-            for i in range(0, curmap.height):
-                print(curmap.tiles[i])
-            for i in range(0, len(curmap.rooms)):
-                print(curmap.rooms[i])
-
-        matrix = []
+    if debug:
         for i in range(0, curmap.height):
-            temp = []
-            for j in range(0, curmap.width):
-                temp.append(weight(curmap.tiles[i][j]))
-            matrix.append(temp)
-        curmap.grid = Grid(matrix=matrix)
-        curmap.clean = True
+            print(curmap.tiles[i])
+        for i in range(0, len(curmap.rooms)):
+            print(curmap.rooms[i])
+
+    curmap.items = []
+    curmap.entities = []
+    for i in range(0, curmap.height):
+        temp1 = []
+        temp2 = []
+        for j in range(0, curmap.width):
+            temp1.append(-1)
+            temp2.append(-1)
+        curmap.items.append(temp1)
+        curmap.entities.append(temp2)
+
+    matrix = []
+    for i in range(0, curmap.height):
+        temp = []
+        for j in range(0, curmap.width):
+            temp.append(tilesprot[curmap.tiles[i][j]].collision)
+        matrix.append(temp)
+    curmap.grid = Grid(matrix=matrix)
+    curmap.clean = True
+
+
+def loadtiles(path):
+    global tilesprot, tilenames
+
+    files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+    for file in files:
+        ret = TilePrototype()
+        ret.name = file.split('.', 1)[0]
+        with open(path + '/' + file) as f:
+            file = f.read()
+
+        i = 0
+        var = ''
+        for ch in file:
+            if ch == ' ':
+                if i == 0:
+                    ret.collision = float(var)
+                i += 1
+                var = ''
+            else:
+                var += ch
+        ret.texture = image.load(os.getcwd() + '/' + var)
+        tilesprot.append(ret)
+        tilenames.append(ret.name)
+
+
+def init():
+    projectpath = os.getcwd()  # .split('\\', 1)[0]
+    loadtiles(projectpath + '/resources/tiles')
+    genmap()
+    print(curmap)
+    print(curmap.height)
 
     return curmap

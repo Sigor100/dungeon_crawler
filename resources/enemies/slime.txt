@@ -1,0 +1,1 @@
+10 15 5 7 2 4 resources/textures/slime.png 1
