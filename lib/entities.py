@@ -86,22 +86,23 @@ class Player(Entity):
         self.thirdUsable = []
         self.charm = []
         self.hunger = 100  # from 0 to 100
-        self.primaryWeapon = 0
-        self.secondaryWeapon = 0
+        self.Weapon = [0, 0]
         self.headArmor = 0
         self.bodyArmor = 0
         self.boots = 0
-        self.firstUsable = 0
-        self.secondUsable = 0
-        self.thirdUsable = 0
+        self.Usable = [0, 0, 0]
         self.charm = 0
         self.hunger = 100 # from 0 to 100
         self.x = generation.curmap.startpos[0]
         self.y = generation.curmap.startpos[1]
         self.state = 0  # 0 - walking, 1 - choosing weapon, 2 - aiming
         self.choice = [0, 0]
-        self.maxchoice = [0, 0]
-        self.minchoice = [0, 0]
+        self.maxchoice = [-1, -1]
+        self.minchoice = [1, 1]
+        self.choices = [[0, 0, 0],
+                        [0, 0, 0],
+                        [0, 0, 0]]
+        self.using = 0
         generation.curmap.entities[self.y][self.x] = self
         player = self
 
@@ -130,7 +131,14 @@ class Player(Entity):
 
     def action(self, n):
         if n == 1:
-            self.state += 1
+            if self.state == 0:
+                self.choices = [[0, 0, 0], [self.Weapon[0], -1, self.Weapon[1]],
+                                [self.Usable[0], self.Usable[1], self.Usable[2]]]
+                self.choice = [0, 0]
+                self.state = 1
+            elif self.state == 1:
+                self.using = self.choices[self.choice[1] - self.minchoice[1]][self.choice[0] - self.minchoice[0]]
+                print(self.using)
         if n == 2:
             self.state -= 1
 

@@ -17,6 +17,8 @@ diry = (-1, 0, 1, 0)
 projectpath = os.getcwd()
 os.path.exists(projectpath)
 shadow_texture = pygame.image.load(projectpath + directory + '/resources/textures/void.png')
+UI_textures = [['slot', 'slot_selected'],
+               [['move_NW', 'move_N', 'move_NE'], ['move_W', 'move_stay', 'move_E'], ['move_SW', 'move_S', 'move_SE']]]
 
 view_range = 4
 
@@ -113,6 +115,16 @@ def draw_hud():  # todo
     pygame.draw.rect(gameDisplay, s.red, (250, 100, 225, 20))  # x, y, height, width
     # pygame.draw.rect(gameDisplay, red, (250, 100, 2.25*player_hp, 20))  # x, y, height, width
     # pygame.draw.circle(gameDisplay, white, (100, 100), 100)  # x, y, radius
+    draw_selection(s.display_width - 3 * s.box_size, s.display_height - 3 * s.box_size)
+
+
+def draw_selection(x, y):
+    for i in range(0, 3):
+        for j in range(0, 3):
+            if entities.player.choice == [i, j]:
+                gameDisplay.blit(UI_textures[0][1], [x + i * s.box_size, y + j * s.box_size])
+            else:
+                gameDisplay.blit(UI_textures[0][0], [x + i * s.box_size, y + j * s.box_size])
 
 
 def draw_enemie_hp(camx, camy):
@@ -125,11 +137,21 @@ def draw_enemie_hp(camx, camy):
 
 """def drawbackpack():
 gameDisplay.fill(background)
-	#gameDisplay.blit(img_list[1], 100, 100)
+    #gameDisplay.blit(img_list[1], 100, 100)
 
-	pygame.display.update()"""  # todo this sometime
+    pygame.display.update()"""  # todo this sometime
+
+
+def loadresinlist(l):
+    for i in range(0, len(l)):
+        if isinstance(l[i], list):
+            loadresinlist(l[i])
+        else:
+            l[i] = pygame.image.load(projectpath + '/resources/textures/UI/' + l[i] + '.png')
 
 
 def init():
-    global shadow_map
+    global shadow_map, UI_textures
+
     shadow_map = getmap(shadow_mode)
+    loadresinlist(UI_textures)
