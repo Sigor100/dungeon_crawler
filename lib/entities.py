@@ -67,6 +67,15 @@ class Player(Entity):
         self.moves = []
         self.hp = 15
         self.lvl = 1
+        self.primaryWeapon = []
+        self.secondaryWeapon = []
+        self.headArmor = []
+        self.bodyArmor = []
+        self.boots = []
+        self.firstUsable = []
+        self.secondUsable = []
+        self.thirdUsable = []
+        self.charm = []
         self.x = generation.curmap.startpos[0]
         self.y = generation.curmap.startpos[1]
         generation.curmap.entities[self.y][self.x] = self.id

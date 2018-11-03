@@ -8,7 +8,7 @@ pygame.init()
 
 class ItemPrototype:
     def __init__(self):
-        self.name = ''
+        self.name = ""
         self.width = 0
         self.height = 0
         self.value = 0
@@ -21,6 +21,22 @@ class Item:
         self.x = x
         self.y = y
         self.rotation = False
+
+
+class PrimaryWeapon:
+    def __init__(self, id, x, y):
+        self.mindmg = 0
+        self.maxdmg = 1
+        self.id = id
+        self.x = x
+        self.y = y
+        self.rotation = False
+
+
+#class Armor:
+    #def __init__(self):
+        #self.
+
 
 
 itemprot = []
