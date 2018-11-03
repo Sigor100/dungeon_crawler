@@ -45,7 +45,7 @@ def drawscreen(x, y):
                     # print("alpha")
                     blit_alpha(gameDisplay, t, [(j * s.box_size - x), i * s.box_size - y], 50)
                 else:
-                    blit_alpha(gameDisplay, t, [(j * s.box_size - x), i * s.box_size - y], 200)
+                    gameDisplay.blit(t, [(j * s.box_size - x), i * s.box_size - y])
 
     draw_hud()
     pygame.display.update()
@@ -58,7 +58,6 @@ def blit_alpha(target, source, location, opacity):
     temp = pygame.Surface((source.get_width(), source.get_height())).convert()
     temp.blit(target, (-x, -y))
     temp.blit(source, (0, 0))
-    temp.set_colorkey((0, 226, 0))
     temp.set_alpha(opacity)
     target.blit(temp, location)
 
