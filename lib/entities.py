@@ -48,7 +48,7 @@ class Entity:
 
     def step(self):
         print(self.moves)
-        if not len(self.moves) == 0:
+        if not len(self.moves) == 0:  # and not generation.curmap.entities[self.moves[1]][self.moves[0]] == 0:
             generation.curmap.entities[self.y][self.x] = -1
             self.x = self.moves[0][0]
             self.y = self.moves[0][1]

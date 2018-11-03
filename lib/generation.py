@@ -41,7 +41,7 @@ class Map:
         for i in range(0, curmap.height):
             temp = []
             for j in range(0, curmap.width):
-                if curmap.entities[i][j] == -1:
+                if curmap.entities[i][j] <= 0:
                     temp.append(tilesprot[curmap.tiles[i][j]].collision)
                 else:
                     temp.append(0.0)
