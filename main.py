@@ -6,6 +6,7 @@ import equipment as e2
 import generation as g
 import settings as s
 import visuals as v
+import combat as c2
 
 py.init()
 g.init()
@@ -13,8 +14,10 @@ e.init()
 e2.init()
 e.Player()
 v.init()
+c2.init()
 
 box_size = 32
+turn_no = 0
 
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -68,9 +71,11 @@ def gameloop():
 
                     # actions
                     elif event.key == py.K_q:
-                        e.player.action(1)
+                        if e.player.action(1) == -1:
+                            turn = False
                     elif event.key == py.K_e:
-                        e.player.action(2)
+                        if e.player.action(2) == -1:
+                            turn = False
 
                     # begin camera movement
                     elif event.key == py.K_RIGHT:
@@ -87,7 +92,8 @@ def gameloop():
                         cam_offset = [0, 0]
 
                     # skip turn
-                    elif event.key == py.K_q:
+                    elif event.key == py.K_z:
+                        print('turn skip', e.player.state)
                         turn = False
 
                     elif event.key == py.K_c:
@@ -144,8 +150,6 @@ def gameloop():
             if game_exit:
                 break
             temp = 1
-        if direction[0] != 0 or direction[1] != 0:
-            turn = False
         # move the player
         e.player.resolve([direction[1], direction[0]])
 
@@ -156,6 +160,7 @@ def gameloop():
 
         # todo: do turn shit
         if not turn:  # and len(e.alive_enemies_list) > 0:
+            global turn_no
             # if r.randint(0,100) < 10:
             #    e.random_spawn(1)
             # e.random_spawn(1)
@@ -163,6 +168,9 @@ def gameloop():
             # print("alive: ", len(e.alive_enemies_list))
             e.turn()  # todo: still working on it (or am I)
             turn = True
+            c2.applydamage()
+            print('turn', turn_no)
+            turn_no += 1
         # SCREEN
         v.drawscreen(e.player.x * box_size + box_size / 2 + cam_offset[0] - s.display_width / 2,
                      e.player.y * box_size + box_size / 2 + cam_offset[1] - s.display_height / 2)

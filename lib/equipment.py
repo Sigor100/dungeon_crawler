@@ -1,6 +1,7 @@
 import pygame
 from generation import smartrand
 import combat
+import settings as s
 import os
 
 projectpath = ''
@@ -17,7 +18,6 @@ class ItemPrototype:
         self.value = 0
         self.texture = 0
         self.type = 0
-        self.choices = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.data = []
 
 
@@ -39,7 +39,7 @@ class Weapon:
         self.mindmg = smartrand(int(itemprot[id].data[0]), int(itemprot[id].data[1]))
         self.maxdmg = smartrand(int(itemprot[id].data[2]), int(itemprot[id].data[3]))
         self.range = float(itemprot[id].data[4])
-        self.attacks = [combat.Attack([[0, 0]])]
+        self.attack = combat.Attack([[0, 0, 100]], 10)
 
 
 class Usable:
@@ -120,7 +120,6 @@ def loaditems(path):
                     itemnames.append(ret.name)
             else:
                 var += ch
-    print('prototypes: ', itemprot)
 
 
 def init():

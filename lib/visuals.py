@@ -19,7 +19,8 @@ os.path.exists(projectpath)
 shadow_texture = pygame.image.load(projectpath + directory + '/resources/textures/void.png')
 UI_textures = [['slot', 'slot_selected'],
                [['move_NW', 'move_N', 'move_NE'], ['move_W', 'move_stay', 'move_E'], ['move_SW', 'move_S', 'move_SE']],
-               [['blank', 'blank', 'blank'], ['sword', 'blankds', 'shield'], ['potion', 'potion', 'potion']]]
+               [['blank', 'backpack', 'blank'], ['sword', 'blank', 'shield'], ['potion', 'potion', 'potion']],
+               'crosshair']
 
 view_range = 4
 
@@ -47,11 +48,13 @@ def drawscreen(x, y):
                 texture.append(shadow_texture)
             for t in texture:
                 if shadow_map[i][j] == 1:
-                    # print("alpha")
                     blit_alpha(gameDisplay, t, [(j * s.box_size - x), i * s.box_size - y], 50)
                 else:
                     gameDisplay.blit(t, [(j * s.box_size - x), i * s.box_size - y])
 
+    if entities.player.state == 2:
+        gameDisplay.blit(UI_textures[3], [(entities.player.x + entities.player.target[0]) * s.box_size - x,
+                                          (entities.player.y + entities.player.target[1]) * s.box_size - y])
     draw_hud()
     draw_enemie_hp(x, y)
     pygame.display.update()
@@ -81,8 +84,6 @@ def calculateshadows():
     for i in range(0, len(dirx)):
         if check_distance(x, y, x + dirx[i], y + diry[i]) < view_range:
             tocheck.append([x + dirx[i], y + diry[i]])
-        else:
-            print(x, y, x + dirx[i], y + diry[i])
     for i in tocheck:
         if not checked[i[1]][i[0]] == 1:
             checked[i[1]][i[0]] = 1

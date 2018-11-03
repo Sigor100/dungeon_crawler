@@ -51,7 +51,6 @@ class Map:
                 elif curmap.entities[i][j].id == 0:
                     temp.append(1.0)
                 else:
-                    print(curmap.entities[i][j])
                     temp.append(0.0)
             matrix.append(temp)
         curmap.grid = Grid(matrix=matrix)

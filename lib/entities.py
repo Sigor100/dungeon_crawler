@@ -6,6 +6,7 @@ import random
 import settings as s
 from collisions import getpath
 import equipment
+from math import sqrt
 
 entitiesprot = []
 entitynames = []
@@ -34,8 +35,6 @@ class EntityPrototype:
 
 class Entity:
     def __init__(self, id, x, y):
-        print(entitiesprot)
-        print('entity', id, x, y)
         self.id = id
         self.x = x
         self.y = y
@@ -56,7 +55,6 @@ class Entity:
         generation.curmap.entities[self.y][self.x] = self
 
     def step(self):
-        print(self.moves)
         if not len(self.moves) == 0:  # and not generation.curmap.alive[self.moves[1]][self.moves[0]] == 0:
             generation.curmap.entities[self.y][self.x] = -1
             self.x = self.moves[0][0]
@@ -65,9 +63,11 @@ class Entity:
             del self.moves[0]
 
     def hurt(self, hp):
+        if not hp == 0:
+            print('hell yeah!')
         self.hp -= hp
         if self.hp <= 0:
-            generation.curmap.entities[self.y][self.x] = 0
+            generation.curmap.entities[self.y][self.x] = -1
             alive.remove(self)
 
 
@@ -132,10 +132,12 @@ class Player(Entity):
                         self.choice[1] = self.minchoice[1]
                     self.pressed = True
             elif self.state == 2:
-                self.choice = direction
-                self.move(direction)
-                self.choice[0] += direction[0]
-                self.choice[1] += direction[1]
+                if not self.pressed:# and dist(self.target[0] + direction[0], self.target[1] + direction[1],
+                                     #        self.x, self.y) <= self.using.attack.range:
+                    self.choice = direction
+                    self.target[0] += direction[0]
+                    self.target[1] += direction[1]
+                    self.pressed = True
 
     def changestate(self, n):
         if n == 0:
@@ -150,37 +152,38 @@ class Player(Entity):
             self.choice = [0, 0]
             self.state = 1
         if n == 2:
-            self.choices = equipment.itemprot[self.using.id].choices
+            self.choices = [0, 0, 0, 0, 0, 0, 0, 0, 0]
             self.choice = [0, 0]
             self.target = [0, 0]
             self.state = 2
-        print(self.state)
 
     def action(self, n):
         if n == 1:
             if self.state == 0:
                 self.changestate(1)
             elif self.state == 1:
-                print(self.choice)
                 self.using = self.choices[s.directions.index(self.choice)]
                 if not self.using == 0:
                     self.changestate(2)
-                    print(self.using)
             elif self.state == 2:
-                a = self.using.choose(self.choice)
-                if not a == 0:
-                    self.using.attacks[a].use(self.target[0], self.target[1], self.calculateforce())
-                    self.changestate(0)
-        if n == 2:
+                self.using.attack.use(self.target[0] + self.x, self.target[1] + self.y, self.calculateforce())
+                self.changestate(0)
+                return -1
+        elif n == 2:
             if self.state == 0:
                 visuals.exitmenu()
             elif self.state == 1:
                 self.changestate(0)
             elif self.state == 2:
                 self.changestate(1)
+        return 0
 
     def calculateforce(self):
         return 1
+
+
+def dist(x1, y1, x2, y2):
+    return sqrt(abs(x1 - x2) ** 2 + abs(y1 - y2) ** 2)
 
 
 def loadenemies(path):
@@ -256,5 +259,3 @@ def random_spawn(id):
                     print("couldn't randomly spawn enemy")
                     break
                 spawnrange -= 1
-
-
