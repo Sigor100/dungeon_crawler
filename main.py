@@ -128,7 +128,8 @@ def gameloop():
             if game_exit:
                 break
             temp = 1
-
+        if direction[0] != 0 or direction[1] != 0:
+            turn = False
         # move the player
         if not direction == [0, 0]:
             e.player.move([direction[1], direction[0]])
@@ -140,8 +141,8 @@ def gameloop():
 
         # todo: do turn shit
         if not turn:  # and len(e.alive_enemies_list) > 0:
-            if r.randint(0,100) < 10:
-                e.random_spawn(1)
+            #if r.randint(0,100) < 10:
+                #e.random_spawn(1)
             # print("enemy turn")
             # print("alive: ", len(e.alive_enemies_list))
             e.turn()  # todo: still working on it (or am I)
