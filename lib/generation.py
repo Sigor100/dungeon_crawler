@@ -2,6 +2,7 @@ import random
 from pygame import image
 from pathfinding.core.grid import Grid
 import os
+import collisions
 
 r = "nodebug"
 debug = False
@@ -18,6 +19,7 @@ class TilePrototype:
 
 tilesprot = []
 tilenames = []
+all_maps = []
 curmap = 0
 roomtraits = ["entrance", "corridor", "regular", "traproom", 'exit']
 roomlist = []
@@ -241,6 +243,7 @@ def genmap():
     global curmap
     global roomlist
     global offx, offy
+    curmap = 0
     curmap = Map()
     curmap.width = random.choice([3, 5]) * 2 + 1
     curmap.height = random.choice([3, 5]) * 2 + 1
@@ -312,10 +315,25 @@ def loadtiles(path):
 
 
 def init():
+    global curmap
     projectpath = os.getcwd()  # .split('\\', 1)[0]
     loadtiles(projectpath + '/resources/tiles')
-    genmap()
+    curmap = get_map()
     print(curmap)
     print(curmap.height)
+    return curmap
 
+
+def get_map():
+    global curmap
+    while True:
+        genmap()
+        if len(collisions.getpath([curmap.startpos[0], curmap.startpos[1]], [curmap.endpos[0], curmap.endpos[1]])) > 0:
+            break
+    all_maps.append(curmap)
+    return curmap
+
+def show_map(n):
+    global curmap
+    curmap = all_maps(n)
     return curmap

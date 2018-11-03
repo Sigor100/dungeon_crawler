@@ -157,7 +157,9 @@ def gameloop():
         if not cam_dir == [0, 0]:
             cam_offset[0] += cam_dir[0]
             cam_offset[1] += cam_dir[1]
-
+        # check for stairs
+        if g.curmap.startpos[0] == e.player.x and g.curmap.startpos[1] == e.player.y:
+            g.get_map()
         # todo: do turn shit
         if not turn:  # and len(e.alive_enemies_list) > 0:
             global turn_no

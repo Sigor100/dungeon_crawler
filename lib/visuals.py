@@ -8,7 +8,7 @@ from math import sqrt
 
 directory = '/debug'
 
-shadow_mode = 0  # set to 2 for the whole map to be visible from the start
+shadow_mode = 2  # set to 2 for the whole map to be visible from the start
 
 # IMPORTANT: Don't delete comments in this file
 shadow_map = []
@@ -19,8 +19,12 @@ os.path.exists(projectpath)
 shadow_texture = pygame.image.load(projectpath + directory + '/resources/textures/void.png')
 UI_textures = [['slot', 'slot_selected'],
                [['move_NW', 'move_N', 'move_NE'], ['move_W', 'move_stay', 'move_E'], ['move_SW', 'move_S', 'move_SE']],
+<<<<<<< HEAD
                [['blank', 'backpack', 'blank'], ['sword', 'blank', 'shield'], ['potion', 'potion', 'potion']],
                'crosshair']
+=======
+               [['blank', 'blank', 'blank'], ['sword', 'blank', 'shield'], ['potion', 'potion', 'potion']]]
+>>>>>>> 02b18f9faf976d726d11d210c366a65aabd3110b
 
 view_range = 4
 
@@ -40,6 +44,7 @@ def drawscreen(x, y):
     for i in range(0, generation.curmap.height):
         for j in range(0, generation.curmap.width):
             texture = []
+            print("i, j: ", i, j, generation.curmap.height, generation.curmap.width)
             if shadow_map[i][j] != 0:
                 texture.append(generation.tilesprot[generation.curmap.tiles[i][j]].texture)
                 if not generation.curmap.entities[i][j] == -1 and shadow_map[i][j] == 2:
