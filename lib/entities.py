@@ -42,21 +42,21 @@ class Entity:
         self.moves = []
         self.x = x
         self.y = y
-        generation.curmap.alive[y][x] = self.id
+        generation.curmap.entities[y][x] = self.id
         alive.append(self)
 
     def goto(self, x, y):
-        generation.curmap.alive[self.y][self.x] = -1
+        generation.curmap.entities[self.y][self.x] = -1
         self.moves = getpath([self.x, self.y], [x, y])
-        generation.curmap.alive[self.y][self.x] = self.id
+        generation.curmap.entities[self.y][self.x] = self.id
 
     def step(self):
         print(self.moves)
         if not len(self.moves) == 0:  # and not generation.curmap.alive[self.moves[1]][self.moves[0]] == 0:
-            generation.curmap.alive[self.y][self.x] = -1
+            generation.curmap.entities[self.y][self.x] = -1
             self.x = self.moves[0][0]
             self.y = self.moves[0][1]
-            generation.curmap.alive[self.y][self.x] = self.id
+            generation.curmap.entities[self.y][self.x] = self.id
             del self.moves[0]
 
 
@@ -69,16 +69,16 @@ class Player(Entity):
         self.lvl = 1
         self.x = generation.curmap.startpos[0]
         self.y = generation.curmap.startpos[1]
-        generation.curmap.alive[self.y][self.x] = self.id
+        generation.curmap.entities[self.y][self.x] = self.id
         player = self
 
     def move(self, pos):
         if not generation.tilesprot[generation.curmap.tiles[self.y + pos[1]][self.x + pos[0]]].collision == 0 \
-                and generation.curmap.alive[self.y + pos[1]][self.x + pos[0]] == -1:
-            generation.curmap.alive[self.y][self.x] = -1
+                and generation.curmap.entities[self.y + pos[1]][self.x + pos[0]] == -1:
+            generation.curmap.entities[self.y][self.x] = -1
             self.x += pos[0]
             self.y += pos[1]
-            generation.curmap.alive[self.y][self.x] = 0
+            generation.curmap.entities[self.y][self.x] = 0
 
 
 def loadenemies(path):
