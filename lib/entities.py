@@ -4,6 +4,7 @@ import generation
 import pygame
 import random
 import settings as s
+import util as u
 from collisions import getpath
 import equipment
 from math import sqrt
@@ -82,10 +83,15 @@ class Player(Entity):
         self.lvl = 1
         self.hunger = 100  # from 0 to 100
         self.wearing = [0, 0, 0, 0]
-        self.usable = [0, 0, 0, 0, 0]  # main weapon, off-hand weapon, slots 1 - 3
+        self.usable = [equipment.makeitem(equipment.itemnames.index('dagger'), 0, 0),
+                       equipment.makeitem(equipment.itemnames.index('round shield'), 0, 0),
+                       equipment.makeitem(equipment.itemnames.index('potion'), 0, 0),
+                       equipment.makeitem(equipment.itemnames.index('potion'), 0, 0),
+                       equipment.makeitem(equipment.itemnames.index('potion'), 0, 0)]
         self.hunger = 100  # from 0 to 100
         self.x = generation.curmap.startpos[0]
         self.y = generation.curmap.startpos[1]
+        self.backpack = equipment.Backpack()
 
         self.state = 0  # 0 - walking, 1 - choosing weapon, 2 - aiming
         self.choice = 0
@@ -148,7 +154,7 @@ class Player(Entity):
             self.state = 0
             self.using = 0
         elif n == 1:
-            self.choices = [0, 0, 0, self.usable[0], 0, self.usable[1], self.usable[2], self.usable[3], self.usable[4]]
+            self.choices = [self.usable[0], self.usable[1], self.usable[2], self.usable[3], self.usable[4], self.backpack]
             self.choice = 0
             self.state = 1
         if n == 2:
@@ -165,7 +171,7 @@ class Player(Entity):
             elif self.state == 1:
                 self.using = self.choices[self.choice]
                 if not self.using == 0:
-                    self.changestate(2)
+                    self.using.use()
             elif self.state == 2:
                 self.using.attack.use(self.target[0] + self.x, self.target[1] + self.y, self.calculateforce())
                 self.changestate(0)
@@ -177,6 +183,8 @@ class Player(Entity):
                 self.changestate(0)
             elif self.state == 2:
                 self.changestate(1)
+            elif self.state == 4:
+                self.changestate(0)
         return 0
 
     def calculateforce(self):
@@ -247,7 +255,7 @@ def random_spawn(id):
         x = random.randint(0, generation.curmap.width)
         y = random.randint(0, generation.curmap.height)
         for a in generation.curmap.alive:
-            if visuals.check_distance(x, y, generation.curmap.alive[a][2], generation.curmap.alive[a][3]) > spawnrange \
+            if u.dist(x, y, generation.curmap.alive[a][2], generation.curmap.alive[a][3]) > spawnrange \
                     and generation.curmap.tiles[y][x] == 2:
                 Entity(id, x, y)
                 break

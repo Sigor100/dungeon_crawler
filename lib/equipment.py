@@ -1,14 +1,14 @@
 import pygame
 from generation import smartrand
 import combat
+import entities as e
 import settings as s
-from util import *
+import util as u
 import itemstats as l
 import os
 
 projectpath = ''
 directory = ''
-backpack = []
 
 pygame.init()
 
@@ -22,6 +22,12 @@ class ItemPrototype:
         self.texture = 0
         self.type = 0
         self.data = []
+
+    def use(self):
+        if e.player.state != 4:
+            e.player.changestate(4)
+        else:
+            e.player.changestate(0)
 
 
 class Item:
@@ -45,7 +51,7 @@ class Weapon:
         self.attack = combat.Attack([[0, 0, 100]], 10)'''
 
 
-class Usable:
+class Potion:
     def __init__(self, id, x, y):
         self.id = id
         self.x = x
@@ -54,6 +60,20 @@ class Usable:
 
         self.effect = 0
         self.range = 0
+
+
+class Backpack:
+    def __init__(self):
+        self.texture = pygame.image.load(s.directory + '/textures/UI/backpack.png')
+        self.items = []
+        self.space = u.getmap(0, 7, 10)
+        self.id = 0
+
+    def use(self):
+        if e.player.state != 4:
+            e.player.changestate(4)
+        else:
+            e.player.changestate(0)
 
 
 '''class Armor:
@@ -76,23 +96,24 @@ itemnames = []
 
 
 def makeitem(id, x, y):
+    if itemprot[id].type == 0:
+        return Item(id, x, y)
     if itemprot[id].type == 1:
         return Weapon(id, x, y)
-    # if itemprot[id].type == 0:
-    #    return Item(id, x, y)
-    if itemprot[id].type == 1:
+    elif itemprot[id].type == 2:
         return Weapon(id, x, y)
-    # elif itemprot[id].type == 2:
-    #    return Usable(id, x, y)
+    elif itemprot[id].type == 3:
+        return Potion(id, x, y)
     else:
         print('wtf')
+        return 0
 
 
 def loaditems(path):
     global itemprot
     files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
     for file in files:
-        f = Parser(path + '/' + file)
+        f = u.Parser(path + '/' + file)
         att = f.readall()
 
         ret = ItemPrototype()
@@ -103,29 +124,21 @@ def loaditems(path):
         ret.texture = pygame.image.load(s.directory + att['texture'])
         ret.type = l.types.index(att['type'])
         itemprot.append(ret)
+        itemnames.append(ret.name)
 
 
 def init():
-    global projectpath
-    global backpack
+    itemprot.append(Backpack())
+    itemnames.append('backpack')
     loaditems(s.directory + '/items')
-    makeitem(0, 2, 3)
-    temp = []
-
-    for p in range(0, s.backpack_max_y):
-        for p1 in range(0, s.backpack_max_x):
-            temp.append(0)
-        backpack.append(temp)
-        temp = []
 
 
-def add_to_bp(id, x, y):
-    global backpack
+def add_to_bp(item):
     obj = itemprot[id]
-    for p in range(y, y + obj.height):
-        for p1 in range(x, x + obj.width):
-            backpack[p][p1] = 1
-    backpack[y][x] = obj
+    for i in range(0, obj.height):
+        for j in range(0, obj.width):
+            itemprot[0].space[i + item.y][j + item.x] = 1
+    itemprot[0].items.add(item)
 
 
 '''def refresh_backpack():

@@ -22,10 +22,10 @@ def applydamage():
         for j in range(0, g.curmap.width):
             if not g.curmap.entities[i][j] == -1:
                 g.curmap.entities[i][j].hurt(damagemap[i][j])
-    damagemap = u.getmap(0)
+    damagemap = u.getmap(0, g.curmap.height, g.curmap.width)
 
 
 def init():
     global damagemap
 
-    damagemap = u.getmap(0)
+    damagemap = u.getmap(0, g.curmap.height, g.curmap.width)

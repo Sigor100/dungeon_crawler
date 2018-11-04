@@ -80,7 +80,7 @@ def blit_alpha(target, source, location, opacity):
 
 def calculateshadows():
     global shadow_map
-    checked = u.getmap(0)
+    checked = u.getmap(0, generation.curmap.height, generation.curmap.width)
     x = entities.player.x
     y = entities.player.y
     for p in range(0, len(shadow_map), 1):
@@ -102,43 +102,24 @@ def calculateshadows():
 
 
 def draw_hud():  # todo
-    pygame.draw.rect(gameDisplay, s.grey, (245, 95, 235, 30))  # x, y, height, width
-    pygame.draw.rect(gameDisplay, s.red, (250, 100, 225, 20))  # x, y, height, width
-    # pygame.draw.rect(gameDisplay, red, (250, 100, 2.25*player_hp, 20))  # x, y, height, width
-
-
-def draw_hud():  # todo
     pygame.draw.rect(gameDisplay, s.grey, (245, 95, (2.25 * entities.player.max_hp) + 10, 30))  # x, y, height, width
     # pygame.draw.rect(gameDisplay, s.red, (250, 100, 225, 20))  # x, y, height, width
     pygame.draw.rect(gameDisplay, s.red, (250, 100, 2.25 * entities.player.hp, 20))  # x, y, height, width
     # pygame.draw.circle(gameDisplay, white, (100, 100), 100)  # x, y, radius
     if entities.player.state == 1:
-        draw_selection_circle(UI_textures[2])
+        draw_selection_circle()
     if entities.player.state == 4:
         draw_backpack()
 
 
-def draw_selection(x, y):
-    for i in range(0, 3):
-        for j in range(0, 3):
-            if entities.player.choice == [i + entities.player.minchoice[0], j + entities.player.minchoice[1]]:
-                gameDisplay.blit(UI_textures[0][1], [x + i * s.box_size, y + j * s.box_size])
-            else:
-                gameDisplay.blit(UI_textures[0][0], [x + i * s.box_size, y + j * s.box_size])
-            if entities.player.state == 0 or entities.player.state == 2:
-                gameDisplay.blit(UI_textures[1][j][i], [x + i * s.box_size, y + j * s.box_size])
-            elif entities.player.state == 1:
-                gameDisplay.blit(UI_textures[2][j][i], [x + i * s.box_size, y + j * s.box_size])
-
-
-def draw_selection_circle(textures):
+def draw_selection_circle():
     midx = int(s.display_width / 2)
     midy = int(s.display_height / 2)
     r = 100
     # pygame.draw.circle(gameDisplay, s.grey, [int(s.display_width / 2), int(s.display_height / 2)], r)
 
-    for i in range(0, len(textures)):
-        angle = int((360 / len(textures)) * i) * (pi / 180)
+    for i in range(0, len(entities.player.choices)):
+        angle = int((360 / len(entities.player.choices)) * i) * (pi / 180)
         y = r * cos(angle)
         x = r * sin(angle)
 
@@ -147,7 +128,8 @@ def draw_selection_circle(textures):
         if entities.player.choice == i:
             gameDisplay.blit(UI_textures[0][1], [finx, finy])
 
-        gameDisplay.blit(textures[i], [finx, finy])
+        if not entities.player.choices[i] == 0:
+            gameDisplay.blit(equipment.itemprot[entities.player.choices[i].id].texture, [finx, finy])
 
 
 def draw_enemie_hp(camx, camy):
@@ -192,5 +174,5 @@ def exitmenu():
 def init():
     global shadow_map, UI_textures
 
-    shadow_map = u.getmap(shadow_mode)
+    shadow_map = u.getmap(shadow_mode, generation.curmap.height, generation.curmap.width)
     loadresinlist(UI_textures)

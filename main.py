@@ -116,11 +116,6 @@ def gameloop():
                         turn = False
                     elif event.key == py.K_l:
                         print(len(g.curmap.active))
-                    elif event.key == py.K_b:
-                        if e.player.state != 4:
-                            e.player.changestate(4)
-                        else:
-                            e.player.changestate(0)
 
                     elif event.key == py.K_c:
                         while True:
