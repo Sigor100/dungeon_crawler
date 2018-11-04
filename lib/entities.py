@@ -12,7 +12,6 @@ entitiesprot = []
 entitynames = []
 player = 0
 
-
 directory = '/debug'
 
 
@@ -38,7 +37,7 @@ class Entity:
         #    with random.randint as r:
         self.hp = random.randint(entitiesprot[id].minhp, entitiesprot[id].maxhp)
         self.dmg = random.randint(entitiesprot[id].mindmg, entitiesprot[id].maxdmg)
-        #self.ac = r(e.minac, e.maxac)
+        # self.ac = r(e.minac, e.maxac)
         #    self.drops = e.drops
         self.moves = []
 
@@ -67,6 +66,7 @@ class Entity:
             if self in generation.curmap.alive:
                 generation.curmap.alive.remove(self)
             if self in generation.curmap.active:
+                print("entitie removed")
                 generation.curmap.active.remove(self)
             print(generation.curmap.alive)
             print(generation.curmap.active)
@@ -81,7 +81,7 @@ class Player(Entity):
         self.lvl = 1
         self.hunger = 100  # from 0 to 100
         self.Armor = [0, 0, 0]
-        self.Usable = [equipment.makeitem(1, 0, 0), 2, 3, 4, 5] # main weapon, off-hand weapon, slots 1 - 3
+        self.Usable = [equipment.makeitem(1, 0, 0), 2, 3, 4, 5]  # main weapon, off-hand weapon, slots 1 - 3
         self.charm = 0
         self.hunger = 100  # from 0 to 100
         self.x = generation.curmap.startpos[0]
@@ -132,8 +132,8 @@ class Player(Entity):
                         self.choice[1] = self.minchoice[1]
                     self.pressed = True
             elif self.state == 2:
-                if not self.pressed:# and dist(self.target[0] + direction[0], self.target[1] + direction[1],
-                                     #        self.x, self.y) <= self.using.attack.range:
+                if not self.pressed:  # and dist(self.target[0] + direction[0], self.target[1] + direction[1],
+                    #        self.x, self.y) <= self.using.attack.range:
                     self.choice = direction
                     self.target[0] += direction[0]
                     self.target[1] += direction[1]
@@ -245,7 +245,7 @@ def loadenemies(path):
 def turn():
     for i in generation.curmap.alive:
         generation.curmap.generategrid()
-        if visuals.shadow_map[i.y][i.x] == 2:
+        if visuals.shadow_map[i.y][i.x] == 2:       # todo: w active pojawiają sie duplikaty (trzeba naprawic)
             generation.curmap.active.append(i)
             i.goto(player.x, player.y)
         i.step()
@@ -262,7 +262,8 @@ def random_spawn(id):
         x = random.randint(0, generation.curmap.width)
         y = random.randint(0, generation.curmap.height)
         for a in generation.curmap.alive:
-            if visuals.check_distance(x, y, generation.curmap.alive[a][2], generation.curmap.alive[a][3]) > spawnrange and curmap.tiles[y][x] == 2:
+            if visuals.check_distance(x, y, generation.curmap.alive[a][2], generation.curmap.alive[a][3]) > spawnrange \
+                    and generation.curmap.tiles[y][x] == 2:
                 Entity(id, x, y)
                 break
             else:

@@ -108,6 +108,8 @@ def gameloop():
                     elif event.key == py.K_z:
                         print('turn skip', e.player.state)
                         turn = False
+                    elif event.key == py.K_l:
+                        print(len(g.curmap.active))
 
                     elif event.key == py.K_c:
                         while True:
@@ -177,7 +179,6 @@ def gameloop():
                 turn = False
         e.player.resolve([direction[1], direction[0]])
 
-
         # move the camera
         if not cam_dir == [0, 0]:
             cam_offset[0] += cam_dir[0]
@@ -192,8 +193,8 @@ def gameloop():
         # todo: do turn shit
         if not turn:  # and len(e.alive_enemies_list) > 0:
             # check for stairs
-            print(e.player.x, e.player.y)
-            print(g.curmap.endpos)
+            # print(e.player.x, e.player.y)
+            # print(g.curmap.endpos)
             if g.curmap.startpos[0] == e.player.x and g.curmap.startpos[1] == e.player.y:
                 e.player.sleep()
 
@@ -216,7 +217,7 @@ def gameloop():
 
             e.turn()
             turn = True
-            print('turn')
+            # print('turn')
             c2.applydamage()
         # SCREEN
         v.drawscreen(e.player.x * box_size + box_size / 2 + cam_offset[0] - s.display_width / 2,

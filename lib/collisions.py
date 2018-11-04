@@ -3,14 +3,14 @@ from pathfinding.core.diagonal_movement import DiagonalMovement
 from pathfinding.finder.a_star import AStarFinder
 
 disablecollisions = False  # set to true for debug
-pathfindingdebug = True
+pathfindingdebug = False
 
 dirx = (0, 1, 1, 1, 0, -1, -1, -1)
 diry = (-1, -1, 0, 1, 1, 1, 0, -1)
 
 
 def collisions(x, y, d):
-    a = generation.curmap.tiles[int((y + d[1])/32)][int((x + d[0])/32)]
+    a = generation.curmap.tiles[int((y + d[1]) / 32)][int((x + d[0]) / 32)]
     if generation.tilesprot[a].collision > 0 or disablecollisions:
         return True
     else:
@@ -19,9 +19,9 @@ def collisions(x, y, d):
 
 def getpath(spos, epos):
     generation.curmap.generategrid()
-    print('getpath')
-    print(spos, epos)
-    print(generation.matrix[spos[1]][spos[0]], generation.matrix[epos[1]][epos[0]])
+    # print('getpath')
+    # print(spos, epos)
+    # print(generation.matrix[spos[1]][spos[0]], generation.matrix[epos[1]][epos[0]])
     finder = AStarFinder(diagonal_movement=DiagonalMovement.always)
     path, runs = finder.find_path(generation.curmap.grid.node(spos[0], spos[1]),
                                   generation.curmap.grid.node(epos[0], epos[1]),

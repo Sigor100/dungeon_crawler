@@ -10,7 +10,7 @@ directory = '/debug'
 shadow_mode = 2  # set to 2 for the whole map to be visible from the start
 
 # IMPORTANT: Don't delete comments in this file
-selection_type = False  # false = box    true = circle
+selection_type = True  # false = box    true = circle
 shadow_map = []
 dirx = (0, 1, 0, -1)
 diry = (-1, 0, 1, 0)
@@ -21,8 +21,9 @@ UI_textures = [['slot', 'slot_selected'],
                [['move_NW', 'move_N', 'move_NE'], ['move_W', 'move_stay', 'move_E'], ['move_SW', 'move_S', 'move_SE']],
                [['blank', 'backpack', 'blank'], ['sword', 'blank', 'shield'], ['potion', 'potion', 'potion']],
                'crosshair',
-               #['sword', 'shield'],
-               ['sword', 'shield', 'potion', 'potion', 'potion', 'backpack', 'potion', 'potion']]
+               # ['sword', 'shield'],
+               ['sword', 'shield', 'potion', 'potion', 'potion', 'backpack', 'potion', 'potion'],
+               ['move_N', 'move_NE', 'move_E', 'move_SE', 'move_S', 'move_SW', 'move_W', 'move_NW']]
 
 view_range = 4
 
@@ -121,7 +122,7 @@ def draw_hud(selected):  # todo
     # pygame.draw.circle(gameDisplay, white, (100, 100), 100)  # x, y, radius
     if not selection_type:
         draw_selection(s.display_width - 3 * s.box_size, s.display_height - 3 * s.box_size)
-    elif entities.player.state == 1 and selection_type is True:
+    elif selection_type and entities.player.state == 1 or entities.player.state == 2:
         draw_selection_circle(selected)
 
 
@@ -141,10 +142,16 @@ def draw_selection(x, y):
 def draw_selection_circle(selected):
     # circle_list = []
     r = 100
-    #pygame.draw.circle(gameDisplay, s.grey, [int(s.display_width / 2), int(s.display_height / 2)], r)
-    for p in range(0, len(UI_textures[4])):
-        angle = int((360 / len(UI_textures[4])) * p)* (pi/180)
-        #angle = (60*p) * (pi/180)
+    # pygame.draw.circle(gameDisplay, s.grey, [int(s.display_width / 2), int(s.display_height / 2)], r)
+    if entities.player.state == 1:
+        n = 4
+    elif entities.player.state == 2:
+        n = 5
+    else:
+        print('Error: entities.player.state out of range')
+        n = -1
+    for p in range(0, len(UI_textures[n])):
+        angle = int((360 / len(UI_textures[n])) * p) * (pi / 180)
         if 0 <= angle <= 90:
             y = r * cos(angle)
             x = r * sin(angle)
@@ -157,12 +164,15 @@ def draw_selection_circle(selected):
         elif 270 < angle <= 360:
             y = r * sin(angle)
             x = r * cos(angle) * -1
+        else:
+            x = -1
+            y = -1
+            print("Error: angle out of range")
         finy = int((s.display_height / 2) - 16 - y)
         finx = int((s.display_width / 2) - 16 + x)
         if selected == p:
             gameDisplay.blit(UI_textures[0][1], [finx, finy])
-            print(x, y, angle)
-        gameDisplay.blit(UI_textures[4][p], [finx, finy])
+        gameDisplay.blit(UI_textures[n][p], [finx, finy])
 
 
 def draw_enemie_hp(camx, camy):
