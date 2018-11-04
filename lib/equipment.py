@@ -90,9 +90,9 @@ def makeitem(id, x, y):
 
 def loaditems(path):
     global itemprot
-    files = [path]
+    files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
     for file in files:
-        f = Parser(file)
+        f = Parser(path + '/' + file)
         att = f.readall()
 
         ret = ItemPrototype()
@@ -108,8 +108,7 @@ def loaditems(path):
 def init():
     global projectpath
     global backpack
-    projectpath = os.getcwd()  # .split('\\', 1)[0]
-    loaditems(projectpath + directory + '/resources/items')
+    loaditems(s.directory + '/items')
     temp = []
 
     for p in range(0,s.backpack_max_y):
@@ -126,13 +125,3 @@ def add_to_bp(id, x, y):
         for p1 in range(x, x + obj.width):
             backpack[p1][p] = 1
     backpack[y][x] = obj
-
-    loaditems(s.directory + '/items/excalibur.txt')
-
-    for ret in itemprot:
-        print(ret.name)
-        print(ret.height)
-        print(ret.width)
-        print(ret.value)
-        print(ret.texture)
-        print(ret.type)
