@@ -85,7 +85,7 @@ def makeitem(id, x, y):
 
 
 def loaditems(path):
-
+    print('xd')
 
 
 def init():

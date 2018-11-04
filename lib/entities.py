@@ -194,10 +194,6 @@ class Player(Entity):
         return 1
 
 
-def dist(x1, y1, x2, y2):
-    return sqrt(abs(x1 - x2) ** 2 + abs(y1 - y2) ** 2)
-
-
 def loadenemies(path):
     global entitiesprot
 
