@@ -69,14 +69,22 @@ class Food:
         self.y = y
         self.satiation = 0'''  # from 0 to 100
 
-
 itemprot = []
 itemnames = []
 
 
 def makeitem(id, x, y):
+<<<<<<< HEAD
     if itemprot[id].type == 1:
         return Weapon(id, x, y)
+=======
+    # if itemprot[id].type == 0:
+    #    return Item(id, x, y)
+    if itemprot[id].type == 1:
+        return Weapon(id, x, y)
+    # elif itemprot[id].type == 2:
+    #    return Usable(id, x, y)
+>>>>>>> e0e9fe9acf1163ce1a4af383409e93c1eca8d1a6
     else:
         print('wtf')
 
@@ -101,6 +109,7 @@ def loaditems(path):
 def init():
     global projectpath
 
+<<<<<<< HEAD
     loaditems(s.directory + '/items/excalibur.txt')
 
     for ret in itemprot:
@@ -110,3 +119,14 @@ def init():
         print(ret.value)
         print(ret.texture)
         print(ret.type)
+=======
+    projectpath = os.getcwd()  # .split('\\', 1)[0]
+    loaditems(projectpath + directory + '/resources/items')
+    temp = []
+    backpack = []
+    for p in range(0,s.backpack_max_y):
+        for p1 in range(0, s.backpack_max_x):
+            temp.append(0)
+        backpack.append(temp)
+        temp = []
+>>>>>>> e0e9fe9acf1163ce1a4af383409e93c1eca8d1a6
