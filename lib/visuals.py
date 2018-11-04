@@ -145,7 +145,7 @@ def draw_selection(x, y):
 
 def draw_selection_circle(selected):
     midx = int(s.display_width / 2)
-    midy = int(s.display_height / 2)
+    midy = int(s.display_height / 2) 
     r = 100
     #pygame.draw.circle(gameDisplay, s.grey, [int(s.display_width / 2), int(s.display_height / 2)], r)
     if entities.player.state == 1:
