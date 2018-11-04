@@ -1,2 +1,17 @@
-1 excalibur 2 5 1000 /resources/textures/weapons/excalibur.png 10 10 15 15 1.5
-1 wand 2 5 1000 /resources/textures/weapons/wand.png 10 10 15 15 10
+"name" "excalibur"
+"height" = "5"
+"width" = "2"
+"value" = "1000"
+"type" = "weapon"
+"subtype" = "heavymelee"
+
+"attack0" = "stab(0)"
+"attack1" = "diagstab(1)"
+"attack2" = "Lslash(0)"
+"attack3" = "none"
+"attack4" = "none"
+"attack5" = "none"
+"attack6" = "Rslash(0)"
+"attack7" = "diagstab(7)"
+"texture" = "/textures/weapons/excalibur.png"
+
