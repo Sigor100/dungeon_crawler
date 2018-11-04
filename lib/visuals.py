@@ -10,7 +10,7 @@ directory = '/debug'
 shadow_mode = 2  # set to 2 for the whole map to be visible from the start
 
 # IMPORTANT: Don't delete comments in this file
-selection_type = True  # false = box    true = circle
+selection_type = False  # false = box    true = circle
 shadow_map = []
 dirx = (0, 1, 0, -1)
 diry = (-1, 0, 1, 0)
@@ -166,7 +166,7 @@ def draw_selection_circle(selected):
 
 
 def draw_enemie_hp(camx, camy):
-    for p in entities.active:
+    for p in generation.curmap.active:
         x = p.x * s.box_size - camx
         y = (p.y * s.box_size - camy) + s.box_size
         pygame.draw.rect(gameDisplay, s.black, (x - 2, y - 2, 44, 8))  # x, y, height, width

@@ -10,14 +10,10 @@ from math import sqrt
 
 entitiesprot = []
 entitynames = []
-alive = []
-active = []
 player = 0
 
 
 directory = '/debug'
-
-curmap = generation.curmap
 
 
 class EntityPrototype:
@@ -47,7 +43,7 @@ class Entity:
         self.moves = []
 
         generation.curmap.entities[y][x] = self
-        alive.append(self)
+        generation.curmap.alive.append(self)
 
     def goto(self, x, y):
         generation.curmap.entities[self.y][self.x] = -1
@@ -68,7 +64,12 @@ class Entity:
         self.hp -= hp
         if self.hp <= 0:
             generation.curmap.entities[self.y][self.x] = -1
-            alive.remove(self)
+            if self in generation.curmap.alive:
+                generation.curmap.alive.remove(self)
+            if self in generation.curmap.active:
+                generation.curmap.active.remove(self)
+            print(generation.curmap.alive)
+            print(generation.curmap.active)
 
 
 class Player(Entity):
@@ -242,11 +243,10 @@ def loadenemies(path):
 
 
 def turn():
-    global active
-    for i in alive:
+    for i in generation.curmap.alive:
         generation.curmap.generategrid()
         if visuals.shadow_map[i.y][i.x] == 2:
-            active.append(i)
+            generation.curmap.active.append(i)
             i.goto(player.x, player.y)
         i.step()
 
@@ -261,8 +261,8 @@ def random_spawn(id):
     while True:
         x = random.randint(0, generation.curmap.width)
         y = random.randint(0, generation.curmap.height)
-        for a in alive:
-            if visuals.check_distance(x, y, alive[a][2], alive[a][3]) > spawnrange and curmap.tiles[y][x] == 2:
+        for a in generation.curmap.alive:
+            if visuals.check_distance(x, y, generation.curmap.alive[a][2], generation.curmap.alive[a][3]) > spawnrange and curmap.tiles[y][x] == 2:
                 Entity(id, x, y)
                 break
             else:

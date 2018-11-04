@@ -40,6 +40,8 @@ class Map:
         self.endpos = [0, 0]
         self.rooms = []
         self.grid = 0
+        self.active = []
+        self.alive = []
         self.clean = True
 
     def generategrid(self):
@@ -256,6 +258,8 @@ def genmap():
     offy = 1
     curmap = 0
     curmap = Map()
+    curmap.alive = []
+    curmap.active = []
     curmap.index = len(maps)
     curmap.width = random.choice([3, 5]) * 2 + 1
     curmap.height = random.choice([3, 5]) * 2 + 1

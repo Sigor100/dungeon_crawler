@@ -200,7 +200,7 @@ def gameloop():
                 if g.previousmap():
                     v.shadow_map = v.getmap(v.shadow_mode)
                     c2.setmap(c2.damagemap, 0)
-                    e.player.awake(g.curmap.startpos[0], g.curmap.startpos[1])
+                    e.player.awake(g.curmap.endpos[0], g.curmap.endpos[1])
                 else:
                     e.player.awake()
 
