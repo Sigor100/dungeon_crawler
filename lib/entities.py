@@ -245,7 +245,7 @@ def loadenemies(path):
 def turn():
     for i in generation.curmap.alive:
         generation.curmap.generategrid()
-        if visuals.shadow_map[i.y][i.x] == 2:       # todo: w active pojawiają sie duplikaty (trzeba naprawic)
+        if visuals.shadow_map[i.y][i.x] == 2:       # todo: w active pojawiają sie duplikaty (trzeba naprawic )
             generation.curmap.active.append(i)
             i.goto(player.x, player.y)
         i.step()
