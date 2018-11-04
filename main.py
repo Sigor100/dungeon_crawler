@@ -29,8 +29,8 @@ selected = 0
 
 
 def reset():
-    v.shadow_map = v.getmap(v.shadow_mode)
-    c2.setmap(c2.damagemap, 0)
+    v.shadow_map = u.getmap(v.shadow_mode)
+    c2.setmap = u.getmap(0)
 
 
 def gameloop():
@@ -207,8 +207,6 @@ def gameloop():
         # todo: do turn shit
         if not turn:  # and len(e.alive_enemies_list) > 0:
             # check for stairs
-            # print(e.player.x, e.player.y)
-            # print(g.curmap.endpos)
             if g.curmap.startpos[0] == e.player.x and g.curmap.startpos[1] == e.player.y:
                 e.player.sleep()
 
