@@ -85,41 +85,7 @@ def makeitem(id, x, y):
 
 
 def loaditems(path):
-    global itemprot, itemnames
-    files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
-    for file in files:
-        ret = ItemPrototype()
-        ret.name = file.split('.', 1)[0]
-        with open(path + '/' + file) as f:
-            file = f.read()
 
-        i = 0
-        var = ''
-        for ch in file:
-            if ch == ' ' or ch == '\n':
-                if i == 0:
-                    ret.type = int(var)
-                elif i == 1:
-                    ret.name = var
-                elif i == 2:
-                    ret.width = int(var)
-                elif i == 3:
-                    ret.height = int(var)
-                elif i == 4:
-                    ret.value = int(var)
-                elif i == 5:
-                    ret.texture = pygame.image.load(projectpath + var)
-                else:
-                    ret.data.append(var)
-                i += 1
-                var = ''
-
-                if ch == '\n':
-                    i = 0
-                    itemprot.append(ret)
-                    itemnames.append(ret.name)
-            else:
-                var += ch
 
 
 def init():

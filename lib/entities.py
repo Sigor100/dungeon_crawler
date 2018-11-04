@@ -80,8 +80,8 @@ class Player(Entity):
         self.hp = 25
         self.lvl = 1
         self.hunger = 100  # from 0 to 100
-        self.Armor = [0, 0, 0]
-        self.Usable = [equipment.makeitem(1, 0, 0), 2, 3, 4, 5]  # main weapon, off-hand weapon, slots 1 - 3
+        self.armor = [0, 0, 0]
+        self.usable = [0, 0, 0, 0, 0]  # main weapon, off-hand weapon, slots 1 - 3
         self.charm = 0
         self.hunger = 100  # from 0 to 100
         self.x = generation.curmap.startpos[0]
