@@ -7,6 +7,8 @@ fps = 30
 
 # unchangeable
 box_size = 32
+backpack_max_x = 15
+backpack_max_y = 7
 directory = os.getcwd() + '/resources'
 
 # colors

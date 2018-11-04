@@ -68,17 +68,16 @@ class Food:
         self.y = y
         self.satiation = 0'''  # from 0 to 100
 
-
 itemprot = []
 itemnames = []
 
 
 def makeitem(id, x, y):
-    #if itemprot[id].type == 0:
+    # if itemprot[id].type == 0:
     #    return Item(id, x, y)
     if itemprot[id].type == 1:
         return Weapon(id, x, y)
-    #elif itemprot[id].type == 2:
+    # elif itemprot[id].type == 2:
     #    return Usable(id, x, y)
     else:
         print('wtf')
@@ -91,5 +90,12 @@ def loaditems(path):
 def init():
     global projectpath
 
-    projectpath = os.getcwd()#.split('\\', 1)[0]
+    projectpath = os.getcwd()  # .split('\\', 1)[0]
     loaditems(projectpath + directory + '/resources/items')
+    temp = []
+    backpack = []
+    for p in range(0,s.backpack_max_y):
+        for p1 in range(0, s.backpack_max_x):
+            temp.append(0)
+        backpack.append(temp)
+        temp = []

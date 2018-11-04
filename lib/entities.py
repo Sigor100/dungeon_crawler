@@ -160,7 +160,7 @@ class Player(Entity):
             self.choices = [0, 0, 0, 0, 0, 0, 0, 0, 0]
             self.using = 0
         elif n == 1:
-            self.choices = [0, 0, 0, self.Usable[0], 0, self.Usable[1], self.Usable[2], self.Usable[3], self.Usable[4]]
+            self.choices = [0, 0, 0, self.usable[0], 0, self.usable[1], self.usable[2], self.usable[3], self.usable[4]]
             self.choice = [0, 0]
             self.state = 1
         if n == 2:
@@ -168,6 +168,8 @@ class Player(Entity):
             self.choice = [0, 0]
             self.target = [0, 0]
             self.state = 2
+        if n == 4:
+            self.state = 4
 
     def action(self, n):
         if n == 1:

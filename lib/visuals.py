@@ -62,6 +62,7 @@ def drawscreen(x, y, selected):
     if entities.player.state == 2:
         gameDisplay.blit(UI_textures[3], [(entities.player.x + entities.player.target[0]) * s.box_size - x,
                                           (entities.player.y + entities.player.target[1]) * s.box_size - y])
+
     draw_hud(selected)
     draw_enemie_hp(x, y)
     pygame.display.update()
@@ -128,6 +129,8 @@ def draw_hud(selected):  # todo
         draw_selection(s.display_width - 3 * s.box_size, s.display_height - 3 * s.box_size)
     elif selection_type and entities.player.state == 1 or entities.player.state == 2:
         draw_selection_circle(selected)
+    if entities.player.state == 4:
+        draw_backpack()
 
 
 def draw_selection(x, y):
@@ -145,9 +148,9 @@ def draw_selection(x, y):
 
 def draw_selection_circle(selected):
     midx = int(s.display_width / 2)
-    midy = int(s.display_height / 2) 
+    midy = int(s.display_height / 2)
     r = 100
-    #pygame.draw.circle(gameDisplay, s.grey, [int(s.display_width / 2), int(s.display_height / 2)], r)
+    # pygame.draw.circle(gameDisplay, s.grey, [int(s.display_width / 2), int(s.display_height / 2)], r)
     if entities.player.state == 1:
         n = 4
     elif entities.player.state == 2:
@@ -199,11 +202,10 @@ def message(text, x, y, color):
 # for p in range(0, r):
 
 
-"""def drawbackpack():
-gameDisplay.fill(background)
-    #gameDisplay.blit(img_list[1], 100, 100)
-
-    pygame.display.update()"""  # todo this sometime
+def draw_backpack():
+    for p in range(0, s.backpack_max_y):
+        for p1 in range(0, s.backpack_max_x):
+            gameDisplay.blit(UI_textures[0][0], [p1 * s.box_size, p * s.box_size])
 
 
 def loadresinlist(l):
