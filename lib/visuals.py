@@ -3,13 +3,14 @@ import generation
 import os
 import entities
 import settings as s
-from math import sqrt
+from math import sqrt, sin, cos
 
 directory = '/debug'
 
 shadow_mode = 2  # set to 2 for the whole map to be visible from the start
 
 # IMPORTANT: Don't delete comments in this file
+selection_type = True  # false = box    true = circle
 shadow_map = []
 dirx = (0, 1, 0, -1)
 diry = (-1, 0, 1, 0)
@@ -19,7 +20,9 @@ shadow_texture = pygame.image.load(projectpath + directory + '/resources/texture
 UI_textures = [['slot', 'slot_selected'],
                [['move_NW', 'move_N', 'move_NE'], ['move_W', 'move_stay', 'move_E'], ['move_SW', 'move_S', 'move_SE']],
                [['blank', 'backpack', 'blank'], ['sword', 'blank', 'shield'], ['potion', 'potion', 'potion']],
-               'crosshair']
+               'crosshair',
+               # ['sword'],
+               ['sword', 'shield', 'potion', 'potion', 'potion', 'backpack']]
 
 view_range = 4
 
@@ -33,7 +36,7 @@ pygame.display.set_caption("dungeon crawler")
 gameDisplay.fill(s.background)
 
 
-def drawscreen(x, y):
+def drawscreen(x, y, selected):
     global shadow_map
     calculateshadows()
     for i in range(0, generation.curmap.height):
@@ -54,7 +57,7 @@ def drawscreen(x, y):
     if entities.player.state == 2:
         gameDisplay.blit(UI_textures[3], [(entities.player.x + entities.player.target[0]) * s.box_size - x,
                                           (entities.player.y + entities.player.target[1]) * s.box_size - y])
-    draw_hud()
+    draw_hud(selected)
     draw_enemie_hp(x, y)
     pygame.display.update()
     gameDisplay.fill(s.background)
@@ -111,12 +114,15 @@ def getmap(n):
     return ret_map
 
 
-def draw_hud():  # todo
+def draw_hud(selected):  # todo
     pygame.draw.rect(gameDisplay, s.grey, (245, 95, 235, 30))  # x, y, height, width
     pygame.draw.rect(gameDisplay, s.red, (250, 100, 225, 20))  # x, y, height, width
     # pygame.draw.rect(gameDisplay, red, (250, 100, 2.25*player_hp, 20))  # x, y, height, width
     # pygame.draw.circle(gameDisplay, white, (100, 100), 100)  # x, y, radius
-    draw_selection(s.display_width - 3 * s.box_size, s.display_height - 3 * s.box_size)
+    if not selection_type:
+        draw_selection(s.display_width - 3 * s.box_size, s.display_height - 3 * s.box_size)
+    elif entities.player.state == 1 and selection_type is True:
+        draw_selection_circle(selected)
 
 
 def draw_selection(x, y):
@@ -132,12 +138,42 @@ def draw_selection(x, y):
                 gameDisplay.blit(UI_textures[2][j][i], [x + i * s.box_size, y + j * s.box_size])
 
 
+def draw_selection_circle(selected):
+    # circle_list = []
+    r = 100
+    pygame.draw.circle(gameDisplay, s.grey, [int(s.display_width / 2), int(s.display_height / 2)], r)
+    for p in range(0, len(UI_textures[4])):
+        angle = int((360 / len(UI_textures[4])) * p)
+        if 0 <= angle <= 90:
+            y = r * cos(angle)
+            x = r * sin(angle)
+        elif 90 < angle <= 180:
+            y = r * sin(angle) * -1
+            x = r * cos(angle)
+        elif 180 < angle <= 270:
+            y = r * cos(angle) * -1
+            x = r * sin(angle) * -1
+        elif 270 < angle <= 360:
+            y = r * sin(angle)
+            x = r * cos(angle) * -1
+        finy = int((s.display_height / 2) - 16 - y)
+        finx = int((s.display_width / 2) - 16 + x)
+        if selected == p:
+            gameDisplay.blit(UI_textures[0][1], [finx, finy])
+            print(finx, finy, angle)
+        gameDisplay.blit(UI_textures[4][p], [finx, finy])
+
+
 def draw_enemie_hp(camx, camy):
     for p in entities.active:
         x = p.x * s.box_size - camx
         y = (p.y * s.box_size - camy) + s.box_size
         pygame.draw.rect(gameDisplay, s.black, (x - 2, y - 2, 44, 8))  # x, y, height, width
         pygame.draw.rect(gameDisplay, s.red, (x, y, 40, 4))  # x, y, height, width
+
+
+# def draw_aim(x, y, direction, r):   # r = range
+# for p in range(0, r):
 
 
 """def drawbackpack():

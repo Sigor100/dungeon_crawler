@@ -2,7 +2,7 @@ import random as r
 import pygame as py
 import collisions as c
 import entities as e
-import equipment as e2
+import equipment as eq
 import generation as g
 import settings as s
 import visuals as v
@@ -11,7 +11,7 @@ import combat as c2
 py.init()
 g.init()
 e.init()
-e2.init()
+eq.init()
 e.Player()
 v.init()
 c2.init()
@@ -20,6 +20,7 @@ box_size = 32
 
 white = (255, 255, 255)
 black = (0, 0, 0)
+selected = 0
 
 '''numpad = (py.K_KP1, py.K_KP2, py.K_KP3,
           py.K_KP4, py.K_KP5, py.K_KP6,
@@ -27,11 +28,13 @@ black = (0, 0, 0)
 
 
 def gameloop():
+    global selected
     game_exit = False
     game_over = False
     direction = [0, 0]  # 0 - y axis; 1 - z axis
     cam_dir = [0, 0]
     cam_offset = [0, 0]
+
     clock = py.time.Clock()
 
     turn = True  # true = my turn   false = enemy turn
@@ -63,10 +66,21 @@ def gameloop():
                         if e.player.state == 0:
                             turn = False
                         direction[1] -= 1
+                        selected -= 1
                     elif event.key == py.K_d:
                         if e.player.state == 0:
                             turn = False
                         direction[1] += 1
+                        selected += 1
+                        # num pad
+                        """if event.key == py.K_KP8 and e.player.state == 1:
+                            direction[0] -= 1
+                        elif event.key == py.K_KP2 and e.player.state == 1:
+                            direction[0] += 1
+                        elif event.key == py.K_KP4 and e.player.state == 1:
+                            direction[1] -= 1
+                        elif event.key == py.K_KP6 and e.player.state == 1:
+                            direction[1] += 1 """
 
                     # actions
                     elif event.key == py.K_q:
@@ -135,6 +149,14 @@ def gameloop():
                         direction[1] += 1
                     if event.key == py.K_d:
                         direction[1] -= 1
+                    """if event.key == py.K_KP8:
+                        direction[0] += 1
+                    if event.key == py.K_KP2:
+                        direction[0] -= 1
+                    if event.key == py.K_KP6:
+                        direction[1] += 1
+                    if event.key == py.K_KP4:
+                        direction[1] -= 1"""
 
                     # stop camera
                     if event.key == py.K_RIGHT:
@@ -150,12 +172,22 @@ def gameloop():
                 break
             temp = 1
         # move the player
+        if direction[0] != 0 or direction[1] != 0:
+            if e.player.state == 0:
+                turn = False
         e.player.resolve([direction[1], direction[0]])
+
 
         # move the camera
         if not cam_dir == [0, 0]:
             cam_offset[0] += cam_dir[0]
             cam_offset[1] += cam_dir[1]
+
+        # selecting
+        if selected == len(v.UI_textures[4]):
+            selected = 0
+        elif selected == -1:
+            selected = len(v.UI_textures[4]) - 1
 
         # todo: do turn shit
         if not turn:  # and len(e.alive_enemies_list) > 0:
@@ -190,7 +222,7 @@ def gameloop():
             c2.applydamage()
         # SCREEN
         v.drawscreen(e.player.x * box_size + box_size / 2 + cam_offset[0] - s.display_width / 2,
-                     e.player.y * box_size + box_size / 2 + cam_offset[1] - s.display_height / 2)
+                     e.player.y * box_size + box_size / 2 + cam_offset[1] - s.display_height / 2, selected)
         clock.tick(s.fps)
     py.quit()
     quit()
