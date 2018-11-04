@@ -3,7 +3,7 @@ import generation
 import os
 import entities
 import settings as s
-from math import sqrt, sin, cos
+from math import sqrt, sin, cos, pi
 
 directory = '/debug'
 
@@ -21,8 +21,8 @@ UI_textures = [['slot', 'slot_selected'],
                [['move_NW', 'move_N', 'move_NE'], ['move_W', 'move_stay', 'move_E'], ['move_SW', 'move_S', 'move_SE']],
                [['blank', 'backpack', 'blank'], ['sword', 'blank', 'shield'], ['potion', 'potion', 'potion']],
                'crosshair',
-               # ['sword'],
-               ['sword', 'shield', 'potion', 'potion', 'potion', 'backpack']]
+               #['sword', 'shield'],
+               ['sword', 'shield', 'potion', 'potion', 'potion', 'backpack', 'potion', 'potion']]
 
 view_range = 4
 
@@ -141,9 +141,10 @@ def draw_selection(x, y):
 def draw_selection_circle(selected):
     # circle_list = []
     r = 100
-    pygame.draw.circle(gameDisplay, s.grey, [int(s.display_width / 2), int(s.display_height / 2)], r)
+    #pygame.draw.circle(gameDisplay, s.grey, [int(s.display_width / 2), int(s.display_height / 2)], r)
     for p in range(0, len(UI_textures[4])):
-        angle = int((360 / len(UI_textures[4])) * p)
+        angle = int((360 / len(UI_textures[4])) * p)* (pi/180)
+        #angle = (60*p) * (pi/180)
         if 0 <= angle <= 90:
             y = r * cos(angle)
             x = r * sin(angle)
@@ -160,7 +161,7 @@ def draw_selection_circle(selected):
         finx = int((s.display_width / 2) - 16 + x)
         if selected == p:
             gameDisplay.blit(UI_textures[0][1], [finx, finy])
-            print(finx, finy, angle)
+            print(x, y, angle)
         gameDisplay.blit(UI_textures[4][p], [finx, finy])
 
 
