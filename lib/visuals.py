@@ -121,9 +121,9 @@ def getmap(n):
 
 
 def draw_hud(selected):  # todo
-    pygame.draw.rect(gameDisplay, s.grey, (245, 95, 235, 30))  # x, y, height, width
-    pygame.draw.rect(gameDisplay, s.red, (250, 100, 225, 20))  # x, y, height, width
-    # pygame.draw.rect(gameDisplay, red, (250, 100, 2.25*player_hp, 20))  # x, y, height, width
+    pygame.draw.rect(gameDisplay, s.grey, (245, 95, (2.25 * entities.player.max_hp) + 10, 30))  # x, y, height, width
+    # pygame.draw.rect(gameDisplay, s.red, (250, 100, 225, 20))  # x, y, height, width
+    pygame.draw.rect(gameDisplay, s.red, (250, 100, 2.25 * entities.player.hp, 20))  # x, y, height, width
     # pygame.draw.circle(gameDisplay, white, (100, 100), 100)  # x, y, radius
     if not selection_type:
         draw_selection(s.display_width - 3 * s.box_size, s.display_height - 3 * s.box_size)

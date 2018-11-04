@@ -313,7 +313,7 @@ def genvalidmap():
         genmap()
         if not len(collisions.getpath(curmap.startpos, curmap.endpos)) == 0:
             break
-
+# todo: mozna zrobic zeby odleglosc miedzy start a end pos byla min jakas zeby poziomy nie byly za ktotkie
 
 # load resources from a directory
 def loadtiles(path):
