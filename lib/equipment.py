@@ -112,7 +112,7 @@ def init():
     makeitem(0, 2, 3)
     temp = []
 
-    for p in range(0,s.backpack_max_y):
+    for p in range(0, s.backpack_max_y):
         for p1 in range(0, s.backpack_max_x):
             temp.append(0)
         backpack.append(temp)
@@ -126,3 +126,18 @@ def add_to_bp(id, x, y):
         for p1 in range(x, x + obj.width):
             backpack[p][p1] = 1
     backpack[y][x] = obj
+
+
+'''def refresh_backpack():
+    global backpack
+    backpack = []
+    temp = []
+    for p in range(0, s.backpack_max_y):
+        for p1 in range(0, s.backpack_max_x):
+            temp.append(0)
+        backpack.append(temp)
+        temp = []
+    for p in range(0, s.backpack_max_y):
+        if type(object) in backpack[p]:
+            for p1 in range(0, s.backpack_max_x):
+                if type(object) in backpack[p][p1]:'''

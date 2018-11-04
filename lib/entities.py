@@ -78,6 +78,7 @@ class Player(Entity):
         self.id = 0
         self.moves = []
         self.hp = 25
+        self.max_hp = 25
         self.lvl = 1
         self.hunger = 100  # from 0 to 100
         self.wearing = [0, 0, 0, 0]

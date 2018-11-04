@@ -101,10 +101,17 @@ def calculateshadows():
                         tocheck.append([i[0] + dirx[j], i[1] + diry[j]])
 
 
+<<<<<<< HEAD
 def draw_hud():  # todo
     pygame.draw.rect(gameDisplay, s.grey, (245, 95, 235, 30))  # x, y, height, width
     pygame.draw.rect(gameDisplay, s.red, (250, 100, 225, 20))  # x, y, height, width
     # pygame.draw.rect(gameDisplay, red, (250, 100, 2.25*player_hp, 20))  # x, y, height, width
+=======
+def draw_hud(selected):  # todo
+    pygame.draw.rect(gameDisplay, s.grey, (245, 95, (2.25 * entities.player.max_hp) + 10, 30))  # x, y, height, width
+    # pygame.draw.rect(gameDisplay, s.red, (250, 100, 225, 20))  # x, y, height, width
+    pygame.draw.rect(gameDisplay, s.red, (250, 100, 2.25 * entities.player.hp, 20))  # x, y, height, width
+>>>>>>> f6e0dbae717f9ad55b9a8b08b4161535f00486bf
     # pygame.draw.circle(gameDisplay, white, (100, 100), 100)  # x, y, radius
     if entities.player.state == 1:
         draw_selection_circle(UI_textures[2])
