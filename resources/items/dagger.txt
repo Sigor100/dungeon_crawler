@@ -1,0 +1,6 @@
+"name" = "dagger"
+"height" = "3"
+"width" = "2"
+"value" = "100"
+"type" = "weapon"
+"texture" = "/textures/items/dagger.png"

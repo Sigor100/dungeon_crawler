@@ -7,6 +7,7 @@ import generation as g
 import settings as s
 import visuals as v
 import combat as c2
+import util as u
 
 py.init()
 g.init()
@@ -25,6 +26,11 @@ selected = 0
 '''numpad = (py.K_KP1, py.K_KP2, py.K_KP3,
           py.K_KP4, py.K_KP5, py.K_KP6,
           py.K_KP7, py.K_KP8, py.K_KP9)'''
+
+
+def reset():
+    v.shadow_map = v.getmap(v.shadow_mode)
+    c2.setmap(c2.damagemap, 0)
 
 
 def gameloop():
@@ -207,8 +213,7 @@ def gameloop():
                 e.player.sleep()
 
                 if g.previousmap():
-                    v.shadow_map = v.getmap(v.shadow_mode)
-                    c2.setmap(c2.damagemap, 0)
+                    reset()
                     e.player.awake(g.curmap.endpos[0], g.curmap.endpos[1])
                 else:
                     e.player.awake()
@@ -217,8 +222,7 @@ def gameloop():
                 e.player.sleep()
 
                 if g.nextmap():
-                    v.shadow_map = v.getmap(v.shadow_mode)
-                    c2.setmap(c2.damagemap, 0)
+                    reset()
                     e.player.awake(g.curmap.startpos[0], g.curmap.startpos[1])
                 else:
                     e.player.awake()

@@ -346,8 +346,6 @@ def init():
     loadtiles(projectpath + '/resources/tiles')
     genvalidmap()
     maps.append(curmap)
-    print(maps)
-    print(curmap)
 
 
 # changes to an existing map

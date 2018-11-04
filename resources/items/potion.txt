@@ -1,0 +1,6 @@
+"name" = "potion"
+"height" = "3"
+"width" = "3"
+"value" = "100"
+"type" = "potion"
+"texture" = "/textures/items/red_potion.png"

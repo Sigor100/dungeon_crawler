@@ -1,1 +1,1 @@
-types = ('item', 'weapon')
+types = ('item', 'weapon', 'shield', 'potion')
