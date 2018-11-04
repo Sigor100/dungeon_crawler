@@ -123,6 +123,8 @@ def gameloop():
                             if g.tilesprot[g.curmap.tiles[y][x]].name == 'floor':
                                 break
                         e.Entity(1, x, y)
+                    elif event.key == py.K_n:
+                        eq.add_to_bp(0, 0, 0)
 
                     # pathfinding test
                     elif event.key == py.K_p:

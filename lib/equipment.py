@@ -6,6 +6,7 @@ import os
 
 projectpath = ''
 directory = ''
+backpack = []
 
 pygame.init()
 
@@ -89,13 +90,22 @@ def loaditems(path):
 
 def init():
     global projectpath
-
+    global backpack
     projectpath = os.getcwd()  # .split('\\', 1)[0]
     loaditems(projectpath + directory + '/resources/items')
     temp = []
-    backpack = []
+
     for p in range(0,s.backpack_max_y):
         for p1 in range(0, s.backpack_max_x):
             temp.append(0)
         backpack.append(temp)
         temp = []
+
+
+def add_to_bp(id, x, y):
+    global backpack
+    obj = itemprot[id]
+    for p in range(y, y + obj.height):
+        for p1 in range(x, x + obj.width):
+            backpack[p1][p] = 1
+    backpack[y][x] = obj
