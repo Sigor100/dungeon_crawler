@@ -198,12 +198,6 @@ def gameloop():
             cam_offset[0] += cam_dir[0]
             cam_offset[1] += cam_dir[1]
 
-        # selecting
-        if selected == len(v.UI_textures[4]):
-            selected = 0
-        elif selected == -1:
-            selected = len(v.UI_textures[4]) - 1
-
         # todo: do turn shit
         if not turn:  # and len(e.alive_enemies_list) > 0:
             # check for stairs
@@ -231,7 +225,7 @@ def gameloop():
             c2.applydamage()
         # SCREEN
         v.drawscreen(e.player.x * box_size + box_size / 2 + cam_offset[0] - s.display_width / 2,
-                     e.player.y * box_size + box_size / 2 + cam_offset[1] - s.display_height / 2, selected)
+                     e.player.y * box_size + box_size / 2 + cam_offset[1] - s.display_height / 2)
         clock.tick(s.fps)
     py.quit()
     quit()

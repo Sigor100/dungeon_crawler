@@ -80,17 +80,14 @@ class Player(Entity):
         self.hp = 25
         self.lvl = 1
         self.hunger = 100  # from 0 to 100
-        self.armor = [0, 0, 0]
+        self.wearing = [0, 0, 0, 0]
         self.usable = [0, 0, 0, 0, 0]  # main weapon, off-hand weapon, slots 1 - 3
-        self.charm = 0
         self.hunger = 100  # from 0 to 100
         self.x = generation.curmap.startpos[0]
         self.y = generation.curmap.startpos[1]
 
         self.state = 0  # 0 - walking, 1 - choosing weapon, 2 - aiming
-        self.choice = [0, 0]
-        self.maxchoice = [1, 1]
-        self.minchoice = [-1, -1]
+        self.choice = 0
         self.choices = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.using = 0
         self.pressed = False
@@ -120,21 +117,15 @@ class Player(Entity):
             #    self.choice = [direction[0] - self.minchoice[0], direction[1] - self.minchoice[1]]
             elif self.state == 1:
                 if not self.pressed:
-                    self.choice[0] += direction[0]
-                    self.choice[1] += direction[1]
-                    if self.choice[0] > self.maxchoice[0]:
-                        self.choice[0] = self.maxchoice[0]
-                    elif self.choice[0] < self.minchoice[0]:
-                        self.choice[0] = self.minchoice[0]
-                    if self.choice[1] > self.maxchoice[1]:
-                        self.choice[1] = self.maxchoice[1]
-                    elif self.choice[1] < self.minchoice[1]:
-                        self.choice[1] = self.minchoice[1]
+                    self.choice += direction[0]
+                    if self.choice < 0:
+                        self.choice = len(self.choices) - 1
+                    if self.choice >= len(self.choices):
+                        self.choice = 0
                     self.pressed = True
             elif self.state == 2:
                 if not self.pressed:  # and dist(self.target[0] + direction[0], self.target[1] + direction[1],
                     #        self.x, self.y) <= self.using.attack.range:
-                    self.choice = direction
                     self.target[0] += direction[0]
                     self.target[1] += direction[1]
                     self.pressed = True
@@ -154,18 +145,13 @@ class Player(Entity):
     def changestate(self, n):
         if n == 0:
             self.state = 0
-            self.choice = [0, 0]
-            self.maxchoice = [1, 1]
-            self.minchoice = [-1, -1]
-            self.choices = [0, 0, 0, 0, 0, 0, 0, 0, 0]
             self.using = 0
         elif n == 1:
             self.choices = [0, 0, 0, self.usable[0], 0, self.usable[1], self.usable[2], self.usable[3], self.usable[4]]
-            self.choice = [0, 0]
+            self.choice = 0
             self.state = 1
         if n == 2:
             self.choices = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-            self.choice = [0, 0]
             self.target = [0, 0]
             self.state = 2
         if n == 4:
@@ -176,7 +162,7 @@ class Player(Entity):
             if self.state == 0:
                 self.changestate(1)
             elif self.state == 1:
-                self.using = self.choices[s.directions.index(self.choice)]
+                self.using = self.choices[self.choice]
                 if not self.using == 0:
                     self.changestate(2)
             elif self.state == 2:
