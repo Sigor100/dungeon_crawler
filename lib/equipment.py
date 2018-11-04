@@ -21,7 +21,10 @@ class ItemPrototype:
         self.value = 0
         self.texture = 0
         self.type = 0
-        self.data = []
+
+        # weapon
+        self.damage = [0, 0, 0, 0]
+        self.range = 0
 
     def use(self):
         if e.player.state != 4:
@@ -36,6 +39,7 @@ class Item:
         self.x = x
         self.y = y
         self.rotation = False
+        self.owner = e.player
 
 
 class Weapon:
@@ -44,11 +48,15 @@ class Weapon:
         self.x = x
         self.y = y
         self.rotation = False
+        self.owner = e.player
 
-        '''self.mindmg = smartrand(int(itemprot[id].data[0]), int(itemprot[id].data[1]))
-        self.maxdmg = smartrand(int(itemprot[id].data[2]), int(itemprot[id].data[3]))
-        self.range = float(itemprot[id].data[4])
-        self.attack = combat.Attack([[0, 0, 100]], 10)'''
+        self.mindmg = smartrand(int(itemprot[id].damage[0]), int(itemprot[id].damage[1]))
+        self.maxdmg = smartrand(int(itemprot[id].damage[2]), int(itemprot[id].damage[3]))
+        self.range = float(itemprot[id].range)
+        self.attack = combat.Attack([[0, 0, 100]], 10)
+
+    def use(self):
+        self.attack.use(self.owner.x, self.owner.y, 1)
 
 
 class Potion:
@@ -57,6 +65,7 @@ class Potion:
         self.x = x
         self.y = y
         self.rotation = False
+        self.owner = e.player
 
         self.effect = 0
         self.range = 0
@@ -66,7 +75,7 @@ class Backpack:
     def __init__(self):
         self.texture = pygame.image.load(s.directory + '/textures/UI/backpack.png')
         self.items = []
-        self.space = u.getmap(0, 7, 10)
+        self.space = u.getmap(0, s.backpack_height, s.backpack_width)
         self.id = 0
 
     def use(self):

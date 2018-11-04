@@ -7,8 +7,8 @@ fps = 30
 
 # unchangeable
 box_size = 32
-backpack_max_x = 15
-backpack_max_y = 7
+backpack_width = 15
+backpack_height = 7
 directory = os.getcwd() + '/resources'
 
 # colors
@@ -22,5 +22,5 @@ blue = (0, 0, 255)
 # additional
 directions = ([-1, -1], [0, -1], [1, -1], [-1, 0], [0, 0], [1, 0], [-1, 1], [0, 1], [1, 1])
 #                NW        N        NE       W      Mid       E       SE       S       SE
-
+dirnodiag = ((0, -1), (1, 0), (0, 1), (-1, 0))
 

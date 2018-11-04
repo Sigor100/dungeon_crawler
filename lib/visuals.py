@@ -150,13 +150,14 @@ def message(text, x, y, color):
 
 
 def draw_backpack():
-    for p in range(0, s.backpack_max_y):
-        for p1 in range(0, s.backpack_max_x):
-            if equipment.backpack[p][p1] == 0:
-                gameDisplay.blit(UI_textures[0][0], [p1 * s.box_size, p * s.box_size])
-            elif equipment.backpack[p][p1] == 1 or type(
-                    equipment.backpack[p][p1]) == object:  # todo: fix object handling
-                gameDisplay.blit(UI_textures[0][1], [p1 * s.box_size, p * s.box_size])
+    for i in range(0, s.backpack_height):
+        for j in range(0, s.backpack_width):
+            if equipment.itemprot[0].space[i][j] == 0:
+                gameDisplay.blit(UI_textures[0][0], [j * s.box_size, i * s.box_size])
+            else:
+                gameDisplay.blit(UI_textures[0][1], [j * s.box_size, i * s.box_size])
+    for i in equipment.itemprot[0].items:
+        gameDisplay.blit(i.texture, [i.x * s.box_size, i.x * s.box_size])
 
 
 def loadresinlist(l):

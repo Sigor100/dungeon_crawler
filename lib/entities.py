@@ -34,12 +34,9 @@ class Entity:
         self.id = id
         self.x = x
         self.y = y
-        # with entitiesprot[id] as e:
-        #    with random.randint as r:
         self.hp = random.randint(entitiesprot[id].minhp, entitiesprot[id].maxhp)
         self.dmg = random.randint(entitiesprot[id].mindmg, entitiesprot[id].maxdmg)
-        # self.ac = r(e.minac, e.maxac)
-        #    self.drops = e.drops
+        self.direction = 2
         self.moves = []
 
         generation.curmap.entities[y][x] = self
@@ -76,22 +73,20 @@ class Entity:
 class Player(Entity):
     def __init__(self):
         global player
+
         self.id = 0
-        self.moves = []
+        self.x = generation.curmap.startpos[0]
+        self.y = generation.curmap.startpos[1]
+        generation.curmap.entities[self.y][self.x] = self
+        player = self
+
         self.hp = 25
         self.max_hp = 25
+        self.moves = []
         self.lvl = 1
         self.hunger = 100  # from 0 to 100
         self.wearing = [0, 0, 0, 0]
-        self.usable = [equipment.makeitem(equipment.itemnames.index('dagger'), 0, 0),
-                       equipment.makeitem(equipment.itemnames.index('round shield'), 0, 0),
-                       equipment.makeitem(equipment.itemnames.index('potion'), 0, 0),
-                       equipment.makeitem(equipment.itemnames.index('potion'), 0, 0),
-                       equipment.makeitem(equipment.itemnames.index('potion'), 0, 0)]
         self.hunger = 100  # from 0 to 100
-        self.x = generation.curmap.startpos[0]
-        self.y = generation.curmap.startpos[1]
-        self.backpack = equipment.Backpack()
 
         self.state = 0  # 0 - walking, 1 - choosing weapon, 2 - aiming
         self.choice = 0
@@ -100,8 +95,12 @@ class Player(Entity):
         self.pressed = False
         self.target = [self.x, self.y]
 
-        generation.curmap.entities[self.y][self.x] = self
-        player = self
+        self.backpack = equipment.itemprot[0]
+        self.usable = [equipment.makeitem(equipment.itemnames.index('dagger'), 0, 0),
+                       equipment.makeitem(equipment.itemnames.index('round shield'), 0, 0),
+                       equipment.makeitem(equipment.itemnames.index('potion'), 0, 0),
+                       equipment.makeitem(equipment.itemnames.index('potion'), 0, 0),
+                       equipment.makeitem(equipment.itemnames.index('potion'), 0, 0)]
 
     def move(self, pos):
         if not generation.tilesprot[generation.curmap.tiles[self.y + pos[1]][self.x + pos[0]]].collision == 0 \

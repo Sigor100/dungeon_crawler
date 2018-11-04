@@ -8,6 +8,7 @@ import settings as s
 import visuals as v
 import combat as c2
 import util as u
+from datetime import datetime
 
 py.init()
 g.init()
@@ -29,8 +30,28 @@ selected = 0
 
 
 def reset():
-    v.shadow_map = u.getmap(v.shadow_mode)
-    c2.setmap = u.getmap(0)
+    v.shadow_map = u.getmap(v.shadow_mode, g.curmap.height, g.curmap.width)
+    c2.setmap = u.getmap(0, g.curmap.height, g.curmap.width)
+
+
+def checkforstaris():
+    if g.curmap.startpos[0] == e.player.x and g.curmap.startpos[1] == e.player.y:
+        e.player.sleep()
+
+        if g.previousmap():
+            reset()
+            e.player.awake(g.curmap.endpos[0], g.curmap.endpos[1])
+        else:
+            e.player.awake()
+
+    elif g.curmap.endpos[0] == e.player.x and g.curmap.endpos[1] == e.player.y:
+        e.player.sleep()
+
+        if g.nextmap():
+            reset()
+            e.player.awake(g.curmap.startpos[0], g.curmap.startpos[1])
+        else:
+            e.player.awake()
 
 
 def gameloop():
@@ -44,14 +65,18 @@ def gameloop():
     clock = py.time.Clock()
 
     turn = True  # true = my turn   false = enemy turn
+    turn_data = 50
+    turn_no = 0
 
     while not game_exit:
+        times = []
+        times.append(datetime.now())
         while game_over:
             for event in py.event.get():
                 if event.type == py.KEYDOWN:
                     game_exit = True
                     game_over = False
-        # INPUTd
+        # INPUTS
         temp = 0
         while temp == 0:
             for event in py.event.get():
@@ -90,9 +115,11 @@ def gameloop():
 
                     # actions
                     elif event.key == py.K_q:
+                        checkforstaris()
                         if e.player.action(1) == -1:
                             turn = False
                     elif event.key == py.K_e:
+                        checkforstaris()
                         if e.player.action(2) == -1:
                             turn = False
 
@@ -114,8 +141,6 @@ def gameloop():
                     elif event.key == py.K_z:
                         print('turn skip', e.player.state)
                         turn = False
-                    elif event.key == py.K_l:
-                        print(len(g.curmap.active))
 
                     elif event.key == py.K_c:
                         while True:
@@ -124,9 +149,6 @@ def gameloop():
                             if g.tilesprot[g.curmap.tiles[y][x]].name == 'floor':
                                 break
                         e.Entity(1, x, y)
-                    elif event.key == py.K_n:
-                        eq.add_to_bp(0, 0, 0)
-                        print(eq.backpack)
 
                     # pathfinding test
                     elif event.key == py.K_p:
@@ -183,44 +205,35 @@ def gameloop():
                 break
             temp = 1
         # move the player
+        times.append(datetime.now())
         if direction[0] != 0 or direction[1] != 0:
             if e.player.state == 0:
                 turn = False
         e.player.resolve([direction[1], direction[0]])
 
         # move the camera
+        times.append(datetime.now())
         if not cam_dir == [0, 0]:
             cam_offset[0] += cam_dir[0]
             cam_offset[1] += cam_dir[1]
 
         # todo: do turn shit
+        times.append(datetime.now())
         if not turn:  # and len(e.alive_enemies_list) > 0:
-            # check for stairs
-            if g.curmap.startpos[0] == e.player.x and g.curmap.startpos[1] == e.player.y:
-                e.player.sleep()
-
-                if g.previousmap():
-                    reset()
-                    e.player.awake(g.curmap.endpos[0], g.curmap.endpos[1])
-                else:
-                    e.player.awake()
-
-            elif g.curmap.endpos[0] == e.player.x and g.curmap.endpos[1] == e.player.y:
-                e.player.sleep()
-
-                if g.nextmap():
-                    reset()
-                    e.player.awake(g.curmap.startpos[0], g.curmap.startpos[1])
-                else:
-                    e.player.awake()
-
             e.turn()
             turn = True
             # print('turn')
             c2.applydamage()
+            turn_no += 1
         # SCREEN
+        times.append(datetime.now())
         v.drawscreen(e.player.x * box_size + box_size / 2 + cam_offset[0] - s.display_width / 2,
                      e.player.y * box_size + box_size / 2 + cam_offset[1] - s.display_height / 2)
+        times.append(datetime.now())
+        if turn_data == turn_no:
+            print('times:')
+            for i in range(0, len(times)):
+                print(times[i] - times[i - 1])
         clock.tick(s.fps)
     py.quit()
     quit()
