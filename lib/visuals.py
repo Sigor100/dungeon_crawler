@@ -5,6 +5,7 @@ import entities
 import settings as s
 import equipment
 from math import sqrt, sin, cos, pi
+import util as u
 
 directory = '/debug'
 
@@ -81,7 +82,7 @@ def blit_alpha(target, source, location, opacity):
 
 def calculateshadows():
     global shadow_map
-    checked = getmap(0)
+    checked = u.getmap(0)
     x = entities.player.x
     y = entities.player.y
     for p in range(0, len(shadow_map), 1):
@@ -90,7 +91,7 @@ def calculateshadows():
                 shadow_map[p][p1] = 1
     tocheck = []
     for i in range(0, len(dirx)):
-        if check_distance(x, y, x + dirx[i], y + diry[i]) < view_range:
+        if u.dist(0, 0, dirx[i], diry[i]) < view_range:
             tocheck.append([x + dirx[i], y + diry[i]])
     for i in tocheck:
         if not checked[i[1]][i[0]] == 1:
@@ -98,26 +99,8 @@ def calculateshadows():
             shadow_map[i[1]][i[0]] = 2
             if generation.tilesprot[generation.curmap.tiles[i[1]][i[0]]].name == 'floor':
                 for j in range(0, len(dirx)):
-                    if check_distance(x, y, i[0] + dirx[j], i[1] + diry[j]) < view_range:
+                    if u.dist(x, y, i[0] + dirx[j], i[1] + diry[j]) < view_range:
                         tocheck.append([i[0] + dirx[j], i[1] + diry[j]])
-
-
-def check_distance(x1, y1, x2, y2):
-    a = int(abs(x1 - x2) ** 2)
-    b = int(abs(y1 - y2) ** 2)
-    c = int(sqrt(a + b))
-    # print("distance: ", c)
-    return c
-
-
-def getmap(n):
-    ret_map = []
-    for p in range(0, generation.curmap.height):
-        a = []
-        for q in range(0, generation.curmap.width):
-            a.append(n)
-        ret_map.append(a)
-    return ret_map
 
 
 def draw_hud(selected):  # todo
@@ -227,5 +210,5 @@ def exitmenu():
 def init():
     global shadow_map, UI_textures
 
-    shadow_map = getmap(shadow_mode)
+    shadow_map = u.getmap(shadow_mode)
     loadresinlist(UI_textures)

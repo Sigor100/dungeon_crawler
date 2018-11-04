@@ -1,4 +1,5 @@
 import math
+import generation
 
 
 class Parser:
@@ -33,3 +34,13 @@ class Parser:
 
 def dist(x1, y1, x2, y2):
     return math.sqrt(abs(x1 - x2) ** 2 + abs(y1 - y2) ** 2)
+
+
+def getmap(n):
+    ret_map = []
+    for p in range(0, generation.curmap.height):
+        a = []
+        for q in range(0, generation.curmap.width):
+            a.append(n)
+        ret_map.append(a)
+    return ret_map
