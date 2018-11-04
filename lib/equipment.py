@@ -109,6 +109,7 @@ def init():
     global projectpath
     global backpack
     loaditems(s.directory + '/items')
+    makeitem(0, 2, 3)
     temp = []
 
     for p in range(0,s.backpack_max_y):
@@ -123,5 +124,5 @@ def add_to_bp(id, x, y):
     obj = itemprot[id]
     for p in range(y, y + obj.height):
         for p1 in range(x, x + obj.width):
-            backpack[p1][p] = 1
+            backpack[p][p1] = 1
     backpack[y][x] = obj

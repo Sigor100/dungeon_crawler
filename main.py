@@ -125,6 +125,7 @@ def gameloop():
                         e.Entity(1, x, y)
                     elif event.key == py.K_n:
                         eq.add_to_bp(0, 0, 0)
+                        print(eq.backpack)
 
                     # pathfinding test
                     elif event.key == py.K_p:
