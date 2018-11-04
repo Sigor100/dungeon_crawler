@@ -3,6 +3,7 @@ import generation
 import os
 import entities
 import settings as s
+import equipment
 from math import sqrt, sin, cos, pi
 
 directory = '/debug'
@@ -28,6 +29,9 @@ UI_textures = [['slot', 'slot_selected'],
 view_range = 4
 
 pygame.init()
+
+# FONT IMPORT
+myfont = pygame.font.SysFont('Comic Sans MS', 30)
 
 # IMG IMPORT
 backpack_background = pygame.image.load(projectpath + "/resources/backpack.png")
@@ -140,9 +144,10 @@ def draw_selection(x, y):
 
 
 def draw_selection_circle(selected):
-    # circle_list = []
+    midx = int(s.display_width / 2)
+    midy = int(s.display_height / 2) 
     r = 100
-    # pygame.draw.circle(gameDisplay, s.grey, [int(s.display_width / 2), int(s.display_height / 2)], r)
+    #pygame.draw.circle(gameDisplay, s.grey, [int(s.display_width / 2), int(s.display_height / 2)], r)
     if entities.player.state == 1:
         n = 4
     elif entities.player.state == 2:
@@ -172,6 +177,8 @@ def draw_selection_circle(selected):
         finx = int((s.display_width / 2) - 16 + x)
         if selected == p:
             gameDisplay.blit(UI_textures[0][1], [finx, finy])
+            # message(entities.player.Usable[p], x,  y, s.red)
+            # print(equipment.itemprot[entities.player.Usable[p].id].name)
         gameDisplay.blit(UI_textures[n][p], [finx, finy])
 
 
@@ -181,6 +188,11 @@ def draw_enemie_hp(camx, camy):
         y = (p.y * s.box_size - camy) + s.box_size
         pygame.draw.rect(gameDisplay, s.black, (x - 2, y - 2, 44, 8))  # x, y, height, width
         pygame.draw.rect(gameDisplay, s.red, (x, y, 40, 4))  # x, y, height, width
+
+
+def message(text, x, y, color):
+    textsurface = myfont.render(text, False, color)
+    gameDisplay.blit(textsurface, (x, y))
 
 
 # def draw_aim(x, y, direction, r):   # r = range
