@@ -17,7 +17,6 @@ v.init()
 c2.init()
 
 box_size = 32
-turn_no = 0
 
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -157,22 +156,38 @@ def gameloop():
         if not cam_dir == [0, 0]:
             cam_offset[0] += cam_dir[0]
             cam_offset[1] += cam_dir[1]
-        # check for stairs
-        if g.curmap.startpos[0] == e.player.x and g.curmap.startpos[1] == e.player.y:
-            g.get_map()
+
         # todo: do turn shit
         if not turn:  # and len(e.alive_enemies_list) > 0:
-            global turn_no
-            # if r.randint(0,100) < 10:
-            #    e.random_spawn(1)
-            # e.random_spawn(1)
-            # print("enemy turn")
-            # print("alive: ", len(e.alive_enemies_list))
-            e.turn()  # todo: still working on it (or am I)
+            # check for stairs
+            print(e.player.x, e.player.y)
+            print(g.curmap.endpos)
+            if g.curmap.startpos[0] == e.player.x and g.curmap.startpos[1] == e.player.y:
+                g.curmap.entities[e.player.x][e.player.y] = -1
+
+                if g.previousmap():
+                    e.player.x = g.curmap.endpos[0]
+                    e.player.y = g.curmap.endpos[1]
+                    v.shadow_map = v.getmap(v.shadow_mode)
+                    c2.setmap(c2.damagemap, 0)
+
+                g.curmap.entities[e.player.x][e.player.y] = e.player
+
+            elif g.curmap.endpos[0] == e.player.x and g.curmap.endpos[1] == e.player.y:
+                g.curmap.entities[e.player.x][e.player.y] = -1
+
+                if g.nextmap():
+                    e.player.x = g.curmap.startpos[0]
+                    e.player.y = g.curmap.startpos[1]
+                    v.shadow_map = v.getmap(v.shadow_mode)
+                    c2.setmap(c2.damagemap, 0)
+
+                g.curmap.entities[e.player.x][e.player.y] = e.player
+
+            e.turn()
             turn = True
+            print('turn')
             c2.applydamage()
-            print('turn', turn_no)
-            turn_no += 1
         # SCREEN
         v.drawscreen(e.player.x * box_size + box_size / 2 + cam_offset[0] - s.display_width / 2,
                      e.player.y * box_size + box_size / 2 + cam_offset[1] - s.display_height / 2)

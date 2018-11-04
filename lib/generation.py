@@ -19,7 +19,7 @@ class TilePrototype:
 
 tilesprot = []
 tilenames = []
-all_maps = []
+maps = []
 curmap = 0
 roomtraits = ["entrance", "corridor", "regular", "traproom", 'exit']
 roomlist = []
@@ -31,6 +31,7 @@ matrix = []
 class Map:
     def __int__(self):
         self.height = 0
+        self.index = 0
         self.width = 0
         self.tiles = []
         self.curmap = []
@@ -171,7 +172,6 @@ def genroom(y, x, height, width, trait):
         cls.tiles[int(height / 2)][int(width / 2)] = tilenames.index("upstairs")
     if trait == roomtraits.index("exit"):
         cls.tiles[int(height / 2)][int(width / 2)] = tilenames.index("downstairs")
-        curmap.endpos = [int(height / 2), int(width / 2)]
     for y in range(0, cls.height):
         for x in range(0, cls.width):
             curmap.tiles[y + offy + cls.ypos][x + offx + cls.xpos] = cls.tiles[y][x]
@@ -243,8 +243,12 @@ def genmap():
     global curmap
     global roomlist
     global offx, offy
+    roomlist = []
+    offx = 1
+    offy = 1
     curmap = 0
     curmap = Map()
+    curmap.index = len(maps)
     curmap.width = random.choice([3, 5]) * 2 + 1
     curmap.height = random.choice([3, 5]) * 2 + 1
     curmap.rooms = []
@@ -268,8 +272,8 @@ def genmap():
     generatevalidroom(roomtraits.index("exit"))
 
     # apply final changes
-    curmap.startpos[0] = curmap.startpos[0] + offx
-    curmap.startpos[1] = curmap.startpos[1] + offy
+    curmap.startpos[0] += offx
+    curmap.startpos[1] += offy
 
     if debug:
         for i in range(0, curmap.height):
@@ -283,10 +287,19 @@ def genmap():
         temp1 = []
         temp2 = []
         for j in range(0, curmap.width):
+            if curmap.tiles[i][j] == tilenames.index("downstairs"):
+                curmap.endpos = [j, i]
             temp1.append(-1)
             temp2.append(-1)
         curmap.items.append(temp1)
         curmap.entities.append(temp2)
+
+
+def genvalidmap():
+    while True:
+        genmap()
+        if not len(collisions.getpath(curmap.startpos, curmap.endpos)) == 0:
+            break
 
 
 def loadtiles(path):
@@ -315,25 +328,33 @@ def loadtiles(path):
 
 
 def init():
-    global curmap
-    projectpath = os.getcwd()  # .split('\\', 1)[0]
+    projectpath = os.getcwd()
     loadtiles(projectpath + '/resources/tiles')
-    curmap = get_map()
+    genvalidmap()
+    maps.append(curmap)
+    print(maps)
     print(curmap)
-    print(curmap.height)
-    return curmap
 
 
-def get_map():
+def changemap(n):
     global curmap
-    while True:
-        genmap()
-        if len(collisions.getpath([curmap.startpos[0], curmap.startpos[1]], [curmap.endpos[0], curmap.endpos[1]])) > 0:
-            break
-    all_maps.append(curmap)
-    return curmap
+    curmap = maps[n]
+    print('changed map to', n)
 
-def show_map(n):
-    global curmap
-    curmap = all_maps(n)
-    return curmap
+
+def nextmap():
+    if curmap.index + 1 >= len(maps):
+        genvalidmap()
+        maps.append(curmap)
+    else:
+        changemap(curmap.index + 1)
+    return True
+
+
+def previousmap():
+    if curmap.index == 0:
+        print('could not go deeper')
+        return False
+    else:
+        changemap(curmap.index - 1)
+        return True
