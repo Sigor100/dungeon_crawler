@@ -115,12 +115,3 @@ def init():
         print(ret.value)
         print(ret.texture)
         print(ret.type)
-    projectpath = os.getcwd()  # .split('\\', 1)[0]
-    loaditems(projectpath + directory + '/resources/items')
-    temp = []
-    backpack = []
-    for p in range(0,s.backpack_max_y):
-        for p1 in range(0, s.backpack_max_x):
-            temp.append(0)
-        backpack.append(temp)
-        temp = []
