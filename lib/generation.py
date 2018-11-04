@@ -86,6 +86,7 @@ def wallxy(width, height, n):
     return coords
 
 
+# probably depreciated
 def doornumber(i, n):
     if i < 2 and (n == roomtraits.index("regular") or n == roomtraits.index("corridor")):
         return random.randint(0, 2)
@@ -95,6 +96,7 @@ def doornumber(i, n):
         return 0
 
 
+# randint() with better checks
 def smartrand(start, fin):
     if start >= fin:
         return start
@@ -107,12 +109,14 @@ def smartrand(start, fin):
             return random.randint(start, fin)
 
 
+# checks if a point is in a rectangle (room)
 def inside(a, b):
     if a[0] > b[0] and a[0] < b[0] + b[2] - 1 and a[1] > b[1] and a[1] < b[1] + b[3] - 1:
         return True
     return False
 
 
+# checks if two rectangles (rooms) intersect
 def intersection(a, b):
     if inside([a[0], a[1]], b) or inside([a[0] + a[2], a[1]], b) \
             or inside([a[0], a[1] + a[3]], b) or inside([a[0] + a[2], a[1] + a[3]], b):
@@ -120,6 +124,7 @@ def intersection(a, b):
     return False
 
 
+# makes the map wider or taller
 def addmaprow(dir):
     global curmap
     global offx, offy
@@ -145,6 +150,7 @@ def addmaprow(dir):
         offx += 1
 
 
+# generates a room with given coordinates
 def genroom(y, x, height, width, trait):
     # set variables
     cls = Room()
@@ -179,6 +185,7 @@ def genroom(y, x, height, width, trait):
     curmap.rooms.append([x + offx, y + offy, width, height])
 
 
+# smart-ish room generation - will generate a room only if it's connected to another one
 def generatevalidroom(t=roomtraits.index('regular')):
     pos = 0
     direc = 0
@@ -239,6 +246,7 @@ def generatevalidroom(t=roomtraits.index('regular')):
     return 0
 
 
+# replace curmap with a new map
 def genmap():
     global curmap
     global roomlist
@@ -295,6 +303,7 @@ def genmap():
         curmap.entities.append(temp2)
 
 
+# generate a room plus a few extra checks
 def genvalidmap():
     while True:
         genmap()
@@ -302,6 +311,7 @@ def genvalidmap():
             break
 
 
+# load resources from a directory
 def loadtiles(path):
     global tilesprot, tilenames
 
@@ -336,6 +346,7 @@ def init():
     print(curmap)
 
 
+# changes to an existing map
 def changemap(n):
     global curmap
     curmap = maps[n]

@@ -163,26 +163,24 @@ def gameloop():
             print(e.player.x, e.player.y)
             print(g.curmap.endpos)
             if g.curmap.startpos[0] == e.player.x and g.curmap.startpos[1] == e.player.y:
-                g.curmap.entities[e.player.x][e.player.y] = -1
+                e.player.sleep()
 
                 if g.previousmap():
-                    e.player.x = g.curmap.endpos[0]
-                    e.player.y = g.curmap.endpos[1]
                     v.shadow_map = v.getmap(v.shadow_mode)
                     c2.setmap(c2.damagemap, 0)
-
-                g.curmap.entities[e.player.x][e.player.y] = e.player
+                    e.player.awake(g.curmap.startpos[0], g.curmap.startpos[1])
+                else:
+                    e.player.awake()
 
             elif g.curmap.endpos[0] == e.player.x and g.curmap.endpos[1] == e.player.y:
-                g.curmap.entities[e.player.x][e.player.y] = -1
+                e.player.sleep()
 
                 if g.nextmap():
-                    e.player.x = g.curmap.startpos[0]
-                    e.player.y = g.curmap.startpos[1]
                     v.shadow_map = v.getmap(v.shadow_mode)
                     c2.setmap(c2.damagemap, 0)
-
-                g.curmap.entities[e.player.x][e.player.y] = e.player
+                    e.player.awake(g.curmap.startpos[0], g.curmap.startpos[1])
+                else:
+                    e.player.awake()
 
             e.turn()
             turn = True

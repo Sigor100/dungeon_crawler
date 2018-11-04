@@ -78,7 +78,6 @@ class Player(Entity):
         self.moves = []
         self.hp = 25
         self.lvl = 1
-        self.charm = []
         self.hunger = 100  # from 0 to 100
         self.Armor = [0, 0, 0]
         self.Usable = [equipment.makeitem(1, 0, 0), 2, 3, 4, 5] # main weapon, off-hand weapon, slots 1 - 3
@@ -138,6 +137,18 @@ class Player(Entity):
                     self.target[0] += direction[0]
                     self.target[1] += direction[1]
                     self.pressed = True
+
+    # remove ~kebab~ player from the map
+    def sleep(self):
+        generation.curmap.entities[self.y][self.x] = -1
+        self.moves = []
+
+    def awake(self, x=-1, y=-1):
+        if not x == -1:
+            self.x = x
+        if not y == -1:
+            self.y = y
+        generation.curmap.entities[self.y][self.x] = self
 
     def changestate(self, n):
         if n == 0:
